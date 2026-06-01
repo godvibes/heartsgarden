@@ -87,26 +87,11 @@
       width: 100%;
     }
 
-    /* ── parchment scroll — decorative, tap to annotate ── */
-    .scroll-wrap {
-      display: block;
-      cursor: pointer;
-      margin: 0 auto 0;
-      max-width: 520px;
-      filter: drop-shadow(4px 8px 20px rgba(60,35,10,0.28));
-      transition: filter 0.2s, transform 0.15s;
-    }
-    .scroll-wrap:hover {
-      transform: translateY(-2px);
-      filter: drop-shadow(6px 12px 26px rgba(60,35,10,0.36));
-    }
-    .scroll-img { width: 100%; display: block; }
-
-    /* ── verse text sits below the scroll ─────────── */
+    /* ── verse text ───────────────────────────────── */
     .verse-below {
-      margin-top: 1.4rem;
+      margin-top: 0;
       text-align: center;
-      cursor: pointer;          /* tap here also opens annotation */
+      cursor: pointer;
     }
 
     .verse-tags-row {
@@ -452,12 +437,7 @@
 
   <div class="verse-section">
 
-    <!-- Parchment scroll — tap to annotate -->
-    <div class="scroll-wrap" id="scrollImg" role="img" aria-label="parchment scroll">
-      <img class="scroll-img" src="assets/images/parchment.png" alt="parchment scroll" />
-    </div>
-
-    <!-- Verse text, reference, refresh — all below the scroll -->
+    <!-- Verse text, reference, refresh -->
     <div class="verse-below" id="verseBelow">
       <span class="verse-tags-row" id="cardTagsRow" style="display:none"></span>
       <span class="verse-text" id="verseText">gathering the word…</span>
@@ -842,8 +822,7 @@ document.getElementById('newTagInput').addEventListener('keydown', e => {
 // EVENTS
 // ─────────────────────────────────────────────────────────────
 
-// Tap scroll image or verse text → open annotation modal
-document.getElementById('scrollImg').addEventListener('click', openModal);
+// Tap verse text → open annotation modal
 document.getElementById('verseBelow').addEventListener('click', e => {
   if (e.target !== document.getElementById('refreshBtn')) openModal();
 });
