@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hearts Garden · The Living Word</title>
+  <style>
+    @font-face {
+      font-family: 'GoodHand';
+      src: url('assets/fonts/GoodHandFont-Regular.ttf') format('truetype');
+    }
+
+    :root {
+      --cream:  #faf6ef;
+      --parch:  #f4ede0;
+      --ink:    #1a1a18;
+      --muted:  #7a7870;
+      --border: #dedad4;
+      --accent: #8a7560;
+      --sage:   #8a9858;
+      --serif:  'Times New Roman', Times, serif;
+      --hand:   'GoodHand', cursive;
+      --mono:   'Courier New', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--serif);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .mark {
+      font-family: var(--hand);
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      line-height: 1;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      margin-bottom: 2.5rem;
+    }
+
+    .rule {
+      width: 50px;
+      height: 1px;
+      background: var(--accent);
+      margin: 0 auto 2.5rem;
+    }
+
+    .enter-link {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--cream);
+      background: var(--ink);
+      padding: 0.9rem 2.4rem;
+      transition: background 0.2s;
+    }
+    .enter-link:hover { background: var(--accent); }
+
+    .foot {
+      position: fixed;
+      bottom: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--border);
+    }
+  </style>
+</head>
+<body>
+  <p class="mark">Hearts Garden</p>
+  <p class="tagline">a spiritual gardening guide · rooted in the living word</p>
+  <div class="rule"></div>
+  <a class="enter-link" href="/word/">enter the living word →</a>
+  <p class="foot">heartsgarden.cc</p>
+</body>
+</html>

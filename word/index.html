@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Living Word · Hearts Garden</title>
+  <style>
+    @font-face {
+      font-family: 'GoodHand';
+      src: url('../assets/fonts/GoodHandFont-Regular.ttf') format('truetype');
+    }
+
+    :root {
+      --cream:  #faf6ef;
+      --parch:  #f4ede0;
+      --parch2: #ede4d2;
+      --ink:    #1a1a18;
+      --muted:  #7a7870;
+      --border: #dedad4;
+      --accent: #8a7560;
+      --serif:  'Times New Roman', Times, serif;
+      --hand:   'GoodHand', cursive;
+      --mono:   'Courier New', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── header ─────────────────────────────────── */
+    header {
+      text-align: center;
+      padding: 3.5rem 1.5rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 1.6rem; left: 1.8rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--ink); }
+
+    .wordmark {
+      font-family: var(--hand);
+      font-size: clamp(3rem, 7vw, 5rem);
+      letter-spacing: 0.01em;
+      line-height: 1;
+      display: block;
+    }
+
+    .subtitle {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      letter-spacing: 0.06em;
+    }
+
+    .subtitle-rule {
+      width: 60px; height: 1px;
+      background: var(--accent);
+      margin: 1.4rem auto 0;
+    }
+
+    /* ── main ────────────────────────────────────── */
+    main {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 8rem;
+    }
+
+    /* ── search ──────────────────────────────────── */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 0.55rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.9rem 3rem 0.9rem 1.2rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(138,117,96,0.12);
+    }
+    .search-input::placeholder { color: #b0aba4; font-style: italic; }
+    .search-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .clear-btn {
+      position: absolute;
+      right: 0.9rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 0.85rem; line-height: 1;
+      display: none;
+    }
+    .clear-btn:hover { color: var(--ink); }
+
+    .search-hint {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 1.8rem;
+    }
+
+    /* ── mode tabs ───────────────────────────────── */
+    .mode-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .mode-tab {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.3rem;
+      background: none; border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+    /* ── tag bar ─────────────────────────────────── */
+    .tag-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.38rem;
+      margin-bottom: 2rem;
+    }
+
+    .tag-chip {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      border: 1px solid;
+      background: white;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    /* ── status ──────────────────────────────────── */
+    .result-status {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      min-height: 1em;
+    }
+
+    /* ── verse cards ─────────────────────────────── */
+    .verse-grid { display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .verse-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border);
+      padding: 1.1rem 1.3rem;
+      cursor: pointer;
+      transition: border-left-color 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+    .verse-card:hover {
+      border-left-color: var(--accent);
+      box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+    }
+    .verse-card.annotated {
+      background: var(--parch);
+      border-left-color: var(--accent);
+    }
+
+    .verse-ref {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.45rem;
+    }
+
+    .ann-star { color: var(--accent); font-size: 0.75rem; }
+
+    .verse-text {
+      font-style: italic;
+      font-size: 0.98rem;
+      line-height: 1.68;
+    }
+
+    mark {
+      background: rgba(200,160,32,0.22);
+      color: inherit;
+      padding: 0 2px;
+      border-radius: 1px;
+    }
+
+    .verse-tags {
+      display: flex; flex-wrap: wrap; gap: 0.28rem;
+      margin-top: 0.65rem;
+    }
+    .verse-tag {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.06em;
+      padding: 0.16rem 0.5rem;
+      border-radius: 20px;
+      border: 1px solid;
+    }
+
+    .verse-note-preview {
+      font-size: 0.84rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 0.55rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--border);
+      line-height: 1.5;
+    }
+
+    /* ── states ──────────────────────────────────── */
+    .state-block {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--muted);
+    }
+    .state-block .glyph {
+      font-family: var(--hand);
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 1rem;
+      animation: breathe 2.4s ease-in-out infinite;
+    }
+    .state-block p { font-style: italic; font-size: 1rem; }
+
+    @keyframes breathe {
+      0%,100% { opacity:0.35; transform:scale(0.95); }
+      50%      { opacity:1;    transform:scale(1.02); }
+    }
+
+    /* ── modal ───────────────────────────────────── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,26,24,0.5);
+      z-index: 200;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3.5rem 1rem 2rem;
+      overflow-y: auto;
+    }
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: var(--parch);
+      border: 1px solid var(--border);
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+    }
+
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1rem; line-height: 1;
+    }
+    .modal-close:hover { color: var(--ink); }
+
+    .modal-ref {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-verse {
+      font-style: italic;
+      line-height: 1.68;
+      font-size: 1rem;
+      margin-bottom: 1.6rem;
+      padding-bottom: 1.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .field-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.55rem;
+    }
+
+    .modal-tag-grid {
+      display: flex; flex-wrap: wrap; gap: 0.38rem;
+      margin-bottom: 1.5rem;
+    }
+    .modal-tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.07em;
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      border: 1px solid;
+      background: white;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .modal-note {
+      width: 100%;
+      min-height: 110px;
+      padding: 0.8rem 1rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+      margin-bottom: 1.3rem;
+      transition: border-color 0.2s;
+    }
+    .modal-note:focus { border-color: var(--accent); }
+    .modal-note::placeholder { color: #b5b0a8; font-style: italic; }
+
+    .modal-actions { display: flex; align-items: center; gap: 0.7rem; }
+
+    .btn-save {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.72rem 1.8rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-save:hover { background: var(--accent); }
+
+    .btn-remove {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      padding: 0.72rem 1rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-remove:hover { color: #c84820; border-color: #c84820; }
+
+    @media (max-width: 580px) {
+      .wordmark { font-size: 2.8rem; }
+      main { padding: 1.8rem 1rem 6rem; }
+      .modal { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="back-link" href="/">← hearts garden</a>
+  <span class="wordmark">The Living Word</span>
+  <p class="subtitle">a study companion for the spiritual gardening guide &middot; KJV</p>
+  <div class="subtitle-rule"></div>
+</header>
+
+<main>
+
+  <div class="search-wrap">
+    <input id="searchInput" class="search-input" type="text" disabled
+      placeholder="search a word, theme, or concept… love, water, harvest, patience"
+      autocomplete="off" spellcheck="false" />
+    <button class="clear-btn" id="clearBtn" aria-label="Clear">✕</button>
+  </div>
+  <p class="search-hint" id="searchHint">gathering the scripture — one moment…</p>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="search">search</button>
+    <button class="mode-tab" data-mode="garden">my garden</button>
+  </div>
+
+  <div class="tag-bar" id="tagBar"></div>
+  <div class="result-status" id="resultStatus"></div>
+  <div class="verse-grid" id="verseGrid">
+    <div class="state-block">
+      <span class="glyph">✦</span>
+      <p>gathering the word…</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- Annotation modal -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <p class="modal-ref" id="modalRef"></p>
+    <p class="modal-verse" id="modalVerse"></p>
+
+    <label class="field-label">gardening themes</label>
+    <div class="modal-tag-grid" id="modalTagGrid"></div>
+
+    <label class="field-label" for="modalNote">your reflection</label>
+    <textarea class="modal-note" id="modalNote"
+      placeholder="write your thoughts, connections, or questions… this is your living word."></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-save" id="btnSave">save</button>
+      <button class="btn-remove" id="btnRemove">remove annotation</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────
+
+const KJV_URL   = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/t_kjv.json';
+const BOOKS_URL = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/key_english.json';
+const STORE_KEY = 'heartsgarden-word-v1';
+const MAX_RESULTS = 80;
+
+const TAGS = [
+  'trees','life','love','heart','mind','body','soul','ideas','talk','forgiveness',
+  'sunlight','plants','herbs','animals','earth','wind','fire','water','clouds',
+  'garden','birds','harvest','fruit','weeds','seeds'
+];
+
+const TAG_COLORS = {
+  trees:'#4a7850', life:'#8a9858', love:'#c8909a', heart:'#9b6050',
+  mind:'#8090b0', body:'#c47a55', soul:'#5aadcf', ideas:'#a8a818',
+  talk:'#8c8a88', forgiveness:'#d9937a', sunlight:'#c8a020', plants:'#8a9828',
+  herbs:'#6a8840', animals:'#9b7050', earth:'#7a4030', wind:'#7090a0',
+  fire:'#c84820', water:'#4898b8', clouds:'#909890', garden:'#3a7040',
+  birds:'#7080a8', harvest:'#b89010', fruit:'#b84010', weeds:'#80901a',
+  seeds:'#a07040'
+};
+
+const CONCEPTS = {
+  trees:       ['tree','trees','cedar','oak','fig','palm','olive','branch','branches','root','roots','wood','forest','bough','timber','grove','vine'],
+  life:        ['life','live','living','alive','breath','eternal','everlasting','quicken','quickeneth','dwell'],
+  love:        ['love','loved','loveth','lovest','beloved','charity','compassion','affection','kindly','kindness'],
+  heart:       ['heart','hearts','soul','desire','longing','innermost','inward','inwardly'],
+  mind:        ['mind','thought','think','wisdom','understanding','knowledge','discern','meditate','counsel','consider'],
+  body:        ['body','flesh','bones','hand','hands','foot','feet','eye','eyes','ear','ears','face','skin','member','members'],
+  soul:        ['soul','spirit','spirits','breath','inner','inward','inwardly'],
+  ideas:       ['wisdom','understanding','knowledge','thought','counsel','plan','purpose','conceive','discernment'],
+  talk:        ['speak','spake','spoken','said','saith','word','words','voice','cry','tongue','lips','mouth','proclaim','declare','utterance','utter'],
+  forgiveness: ['forgive','forgiven','forgiveth','pardon','mercy','merciful','grace','redeem','cleanse','sin','repent','atonement','reconcile','iniquity','transgress'],
+  sunlight:    ['light','lights','sun','shine','shineth','bright','glory','dawn','morning','lamp','torch','shining','brightness','radiant','candle'],
+  plants:      ['plant','plants','planted','herb','grass','flower','blossom','leaf','leaves','vine','green','grow','grew','spring','sprout'],
+  herbs:       ['herb','herbs','hyssop','mint','anise','cumin','coriander','aloe','spice','spices','spikenard'],
+  animals:     ['sheep','goat','goats','ox','oxen','lion','lions','bear','eagle','dove','serpent','beast','beasts','cattle','flock','herd','lamb','lambs','horse','horses','ass'],
+  earth:       ['earth','ground','soil','dust','clay','land','rock','stone','stones','mountain','mountains','hill','hills','field','fields'],
+  wind:        ['wind','breath','storm','whirlwind','tempest','gale','blow','blew','breathe','blast'],
+  fire:        ['fire','flame','flames','burn','burning','burneth','consume','smoke','ash','coal','furnace','refine','kindled','kindle'],
+  water:       ['water','waters','river','rivers','rain','flood','sea','seas','spring','fountain','well','dew','stream','brook','thirst','thirsty','drink'],
+  clouds:      ['cloud','clouds','mist','fog','thunder','sky','heaven','heavens','vapor','smoke','pillar'],
+  garden:      ['garden','gardens','eden','orchard','vineyard','vineyards','field','cultivate','till','plant','sow','sown','reap','planted','husbandman'],
+  birds:       ['bird','birds','dove','doves','eagle','eagles','sparrow','sparrows','raven','ravens','owl','fowl','fowls','wing','wings','nest','fly','flew','feather','feathers'],
+  harvest:     ['harvest','reap','reaper','reapers','thresh','barn','storehouse','gather','glean','abundance','yield','increase','firstfruits'],
+  fruit:       ['fruit','fruits','firstfruits','vine','fig','figs','grape','grapes','berry','pomegranate','produce','bringeth forth'],
+  weeds:       ['thorn','thorns','thistle','thistles','brier','briers','weed','weeds','chaff','stubble','bramble','nettle','prickle'],
+  seeds:       ['seed','seeds','sow','sown','sowing','grain','corn','wheat','barley','mustard','plant','planting']
+};
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+
+let verses      = [];
+let bookNames   = {};
+let annotations = {};
+let mode        = 'search';
+let tagFilter   = null;
+let activeVerse = null;
+let debounce    = null;
+
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
+
+async function init() {
+  annotations = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+  buildTagBar();
+  buildModalTags();
+
+  try {
+    const [vRes, bRes] = await Promise.all([fetch(KJV_URL), fetch(BOOKS_URL)]);
+    const vRaw = await vRes.json();
+    const bRaw = await bRes.json();
+
+    // Parse book names
+    const bookRows = bRaw?.resultset?.row ?? bRaw;
+    bookRows.forEach(r => {
+      const f   = r.field ?? r;
+      const num  = Array.isArray(f) ? f[0] : (r.b ?? f[0]);
+      const name = Array.isArray(f) ? f[1] : (r.n ?? f[1]);
+      bookNames[num] = name;
+    });
+
+    // Parse verses
+    const vRows = vRaw?.resultset?.row ?? vRaw;
+    verses = vRows.map(r => {
+      const f    = r.field ?? r;
+      const b    = Array.isArray(f) ? f[1] : (r.b ?? f[1]);
+      const c    = Array.isArray(f) ? f[2] : (r.c ?? f[2]);
+      const v    = Array.isArray(f) ? f[3] : (r.v ?? f[3]);
+      const text = Array.isArray(f) ? f[4] : (r.t ?? f[4]);
+      return { id:`${b}_${c}_${v}`, bookNum:+b, book:bookNames[+b]||`Book ${b}`, chapter:+c, verse:+v, text };
+    });
+
+    document.getElementById('searchInput').disabled = false;
+    document.getElementById('searchHint').textContent =
+      `${verses.length.toLocaleString()} verses · KJV · search a word or click a theme to begin`;
+    showWelcome();
+
+  } catch (err) {
+    document.getElementById('searchHint').textContent = 'could not reach the scripture — check your connection and refresh';
+    console.error('KJV load error:', err);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// SEARCH
+// ─────────────────────────────────────────────────────────────
+
+function doSearch(raw) {
+  if (!raw.trim()) { showWelcome(); return; }
+  const q     = raw.toLowerCase().trim();
+  const terms = CONCEPTS[q] ?? [q];
+  const seen  = new Set();
+  const results = [];
+
+  for (const v of verses) {
+    if (results.length >= MAX_RESULTS) break;
+    const t = v.text.toLowerCase();
+    if (terms.some(term => t.includes(term)) && !seen.has(v.id)) {
+      seen.add(v.id);
+      results.push(v);
+    }
+  }
+  renderResults(results, q);
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────
+
+function renderResults(results, highlight = '') {
+  const status = document.getElementById('resultStatus');
+  const grid   = document.getElementById('verseGrid');
+
+  if (!results.length) {
+    status.textContent = '';
+    grid.innerHTML = `<div class="state-block"><p>no verses found — try another word or theme</p></div>`;
+    return;
+  }
+
+  const cap = results.length >= MAX_RESULTS ? `${MAX_RESULTS}+` : results.length;
+  status.textContent = `${cap} verses`;
+  grid.innerHTML = results.map(v => cardHTML(v, highlight)).join('');
+  grid.querySelectorAll('.verse-card').forEach(card => {
+    card.addEventListener('click', () => openModal(card.dataset.id));
+  });
+}
+
+function cardHTML(v, hl = '') {
+  const ann    = annotations[v.id];
+  const hasAnn = ann && (ann.note || ann.tags?.length);
+  const terms  = hl ? (CONCEPTS[hl] ?? [hl]) : [];
+
+  let text = escHtml(v.text);
+  terms.forEach(term => {
+    const re = new RegExp(`(${escRe(term)})`, 'gi');
+    text = text.replace(re, '<mark>$1</mark>');
+  });
+
+  const tagsHTML = ann?.tags?.length
+    ? `<div class="verse-tags">${ann.tags.map(t =>
+        `<span class="verse-tag" style="color:${TAG_COLORS[t]};border-color:${TAG_COLORS[t]}">${t}</span>`
+      ).join('')}</div>`
+    : '';
+
+  const noteHTML = ann?.note
+    ? `<div class="verse-note-preview">${escHtml(ann.note.slice(0,130))}${ann.note.length>130?'…':''}</div>`
+    : '';
+
+  return `
+    <article class="verse-card${hasAnn?' annotated':''}" data-id="${v.id}">
+      <div class="verse-ref">
+        <span>${v.book} ${v.chapter}:${v.verse}</span>
+        ${hasAnn ? '<span class="ann-star">✦</span>' : ''}
+      </div>
+      <p class="verse-text">${text}</p>
+      ${tagsHTML}${noteHTML}
+    </article>`;
+}
+
+function renderGarden() {
+  const status = document.getElementById('resultStatus');
+  const grid   = document.getElementById('verseGrid');
+
+  const list = verses.filter(v => {
+    const a = annotations[v.id];
+    if (!a || (!a.note && !a.tags?.length)) return false;
+    return tagFilter ? a.tags?.includes(tagFilter) : true;
+  });
+
+  if (!list.length) {
+    status.textContent = '';
+    grid.innerHTML = `<div class="state-block"><p>${tagFilter
+      ? `no verses tagged "${tagFilter}" yet`
+      : 'your garden is empty — search, annotate, and tag verses to grow it'}</p></div>`;
+    return;
+  }
+
+  status.textContent = `${list.length} ${tagFilter?`"${tagFilter}" `:''}verse${list.length!==1?'s':''} in your garden`;
+  grid.innerHTML = list.map(v => cardHTML(v)).join('');
+  grid.querySelectorAll('.verse-card').forEach(card => {
+    card.addEventListener('click', () => openModal(card.dataset.id));
+  });
+}
+
+function showWelcome() {
+  const count = Object.values(annotations).filter(a => a.note || a.tags?.length).length;
+  document.getElementById('resultStatus').textContent = '';
+  document.getElementById('verseGrid').innerHTML = `
+    <div class="state-block">
+      <span class="glyph">✦</span>
+      <p>${count
+        ? `you have ${count} annotated verse${count!==1?'s':''} · click <em>my garden</em> to see them`
+        : 'search a word or click a theme above to begin'}</p>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// TAG BAR
+// ─────────────────────────────────────────────────────────────
+
+function buildTagBar() {
+  const bar = document.getElementById('tagBar');
+  bar.innerHTML = TAGS.map(tag => {
+    const c      = TAG_COLORS[tag];
+    const active = tagFilter === tag;
+    return `<button class="tag-chip" data-tag="${tag}"
+      style="color:${active?'white':c};border-color:${c};background:${active?c:'white'}"
+    >${tag}</button>`;
+  }).join('');
+  bar.querySelectorAll('.tag-chip').forEach(chip => {
+    chip.addEventListener('click', () => onTagClick(chip.dataset.tag));
+  });
+}
+
+function onTagClick(tag) {
+  tagFilter = tagFilter === tag ? null : tag;
+  buildTagBar();
+
+  if (mode === 'garden') {
+    renderGarden();
+  } else {
+    if (tagFilter) {
+      const results = verses.filter(v => annotations[v.id]?.tags?.includes(tagFilter));
+      document.getElementById('resultStatus').textContent =
+        `${results.length} verse${results.length!==1?'s':''} tagged "${tagFilter}"`;
+      renderResults(results);
+    } else {
+      const q = document.getElementById('searchInput').value.trim();
+      if (q) doSearch(q); else showWelcome();
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// MODAL
+// ─────────────────────────────────────────────────────────────
+
+function buildModalTags() {
+  const grid = document.getElementById('modalTagGrid');
+  grid.innerHTML = TAGS.map(tag => {
+    const c = TAG_COLORS[tag];
+    return `<button class="modal-tag" data-tag="${tag}"
+      style="color:${c};border-color:${c};background:white">${tag}</button>`;
+  }).join('');
+  grid.querySelectorAll('.modal-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c   = TAG_COLORS[btn.dataset.tag];
+      btn.classList.toggle('selected');
+      const sel = btn.classList.contains('selected');
+      btn.style.background = sel ? c : 'white';
+      btn.style.color      = sel ? 'white' : c;
+    });
+  });
+}
+
+function openModal(verseId) {
+  const v = verses.find(v => v.id === verseId);
+  if (!v) return;
+  activeVerse = verseId;
+
+  const ann = annotations[verseId] ?? { tags:[], note:'' };
+  document.getElementById('modalRef').textContent   = `${v.book} ${v.chapter}:${v.verse}  ·  King James Version`;
+  document.getElementById('modalVerse').textContent = v.text;
+  document.getElementById('modalNote').value        = ann.note ?? '';
+
+  document.querySelectorAll('.modal-tag').forEach(btn => {
+    const tag = btn.dataset.tag;
+    const c   = TAG_COLORS[tag];
+    const sel = ann.tags?.includes(tag);
+    btn.classList.toggle('selected', !!sel);
+    btn.style.background = sel ? c : 'white';
+    btn.style.color      = sel ? 'white' : c;
+  });
+
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modalNote').focus(), 60);
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  activeVerse = null;
+}
+
+function saveAnnotation() {
+  if (!activeVerse) return;
+  const note = document.getElementById('modalNote').value.trim();
+  const tags = [...document.querySelectorAll('.modal-tag.selected')].map(b => b.dataset.tag);
+
+  if (!note && !tags.length) { delete annotations[activeVerse]; }
+  else { annotations[activeVerse] = { tags, note, savedAt: new Date().toISOString() }; }
+
+  persist(); closeModal(); refresh();
+}
+
+function removeAnnotation() {
+  if (!activeVerse) return;
+  delete annotations[activeVerse];
+  persist(); closeModal(); refresh();
+}
+
+function persist() { localStorage.setItem(STORE_KEY, JSON.stringify(annotations)); }
+
+function refresh() {
+  buildTagBar();
+  if (mode === 'garden') { renderGarden(); return; }
+  if (tagFilter) { const r = verses.filter(v => annotations[v.id]?.tags?.includes(tagFilter)); renderResults(r); return; }
+  const q = document.getElementById('searchInput').value.trim();
+  if (q) doSearch(q); else showWelcome();
+}
+
+// ─────────────────────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────────────────────
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+
+// ─────────────────────────────────────────────────────────────
+// EVENTS
+// ─────────────────────────────────────────────────────────────
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  const q = e.target.value;
+  document.getElementById('clearBtn').style.display = q ? 'block' : 'none';
+  clearTimeout(debounce);
+  if (!verses.length) return;
+  tagFilter = null; buildTagBar();
+  debounce = setTimeout(() => doSearch(q), 300);
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('clearBtn').style.display = 'none';
+  tagFilter = null; buildTagBar(); showWelcome();
+});
+
+document.querySelectorAll('.mode-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    mode = tab.dataset.mode;
+    document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    tagFilter = null; buildTagBar();
+    if (mode === 'garden') {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').style.display = 'none';
+      renderGarden();
+    } else { showWelcome(); }
+  });
+});
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('btnSave').addEventListener('click', saveAnnotation);
+document.getElementById('btnRemove').addEventListener('click', removeAnnotation);
+document.getElementById('overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('overlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
