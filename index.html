@@ -87,96 +87,80 @@
       width: 100%;
     }
 
-    .verse-label {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      min-height: 1em;
-    }
-
-    /* ── parchment scroll with text overlay ──────── */
+    /* ── parchment scroll — decorative, tap to annotate ── */
     .scroll-wrap {
-      position: relative;
       display: block;
       cursor: pointer;
-      margin: 0 auto;
-      max-width: 560px;
-      filter: drop-shadow(4px 8px 20px rgba(60, 35, 10, 0.30));
+      margin: 0 auto 0;
+      max-width: 520px;
+      filter: drop-shadow(4px 8px 20px rgba(60,35,10,0.28));
       transition: filter 0.2s, transform 0.15s;
     }
     .scroll-wrap:hover {
       transform: translateY(-2px);
-      filter: drop-shadow(6px 12px 28px rgba(60, 35, 10, 0.38));
+      filter: drop-shadow(6px 12px 26px rgba(60,35,10,0.36));
     }
+    .scroll-img { width: 100%; display: block; }
 
-    .scroll-img {
-      width: 100%;
-      display: block;
-    }
-
-    /* Text lives on top of the scroll, within its natural margins */
-    .scroll-overlay {
-      position: absolute;
-      top: 14%; bottom: 14%;
-      left: 13%; right: 13%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      pointer-events: none; /* clicks pass to scroll-wrap */
+    /* ── verse text sits below the scroll ─────────── */
+    .verse-below {
+      margin-top: 1.4rem;
+      text-align: center;
+      cursor: pointer;          /* tap here also opens annotation */
     }
 
     .verse-tags-row {
-      display: flex; flex-wrap: wrap; gap: 0.25rem;
+      display: flex; flex-wrap: wrap; gap: 0.28rem;
       justify-content: center;
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.6rem;
     }
     .verse-tag-chip {
       font-family: var(--mono);
-      font-size: 0.5rem;
+      font-size: 0.55rem;
       letter-spacing: 0.06em;
-      padding: 0.12rem 0.4rem;
+      padding: 0.14rem 0.45rem;
       border-radius: 20px;
       border: 1px solid;
-      background: rgba(255,255,255,0.35);
     }
 
     .verse-text {
       font-family: var(--serif);
       font-style: italic;
-      /* scales with the scroll width */
-      font-size: clamp(0.7rem, 2vw, 0.92rem);
-      line-height: 1.68;
-      color: #2a1a08;
-      text-align: center;
+      font-size: 1rem;
+      line-height: 1.72;
+      color: var(--ink);
       display: block;
+      margin-bottom: 0.9rem;
     }
 
-    /* Annotated star, top-right of scroll */
+    .verse-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .verse-ref {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
     .ann-star {
-      position: absolute;
-      top: 12%; right: 7%;
-      font-size: 0.9rem;
-      color: rgba(80, 45, 10, 0.5);
-      pointer-events: none;
+      font-size: 0.75rem;
+      color: var(--accent);
     }
 
-    /* ── refresh sits right under the scroll ─────── */
-    .refresh-wrap {
-      text-align: center;
-      margin: 0.7rem 0 0;
-    }
     .refresh-btn {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--border);
       transition: color 0.2s;
-      padding: 0.3rem; line-height: 1;
+      padding: 0; line-height: 1;
     }
     .refresh-btn:hover { color: var(--accent); }
 
@@ -468,25 +452,20 @@
 
   <div class="verse-section">
 
-    <!-- Reference lives here as the label above the scroll -->
-    <p class="verse-label" id="verseRef">&#x00B7; KJV</p>
-
-    <!-- Parchment scroll — verse text overlaid on image -->
-    <div class="scroll-wrap" id="verseCard" role="button" tabindex="0" aria-label="Tap to annotate this verse">
+    <!-- Parchment scroll — tap to annotate -->
+    <div class="scroll-wrap" id="scrollImg" role="img" aria-label="parchment scroll">
       <img class="scroll-img" src="assets/images/parchment.png" alt="parchment scroll" />
-
-      <!-- Text sits on top of the parchment -->
-      <div class="scroll-overlay">
-        <span class="verse-tags-row" id="cardTagsRow" style="display:none"></span>
-        <span class="verse-text loading" id="verseText">gathering the word…</span>
-      </div>
-
-      <span class="ann-star" id="annStar" style="display:none">✦</span>
     </div>
 
-    <!-- Refresh sits directly below the scroll -->
-    <div class="refresh-wrap">
-      <button class="refresh-btn" id="refreshBtn" title="another verse" aria-label="New verse">↻</button>
+    <!-- Verse text, reference, refresh — all below the scroll -->
+    <div class="verse-below" id="verseBelow">
+      <span class="verse-tags-row" id="cardTagsRow" style="display:none"></span>
+      <span class="verse-text" id="verseText">gathering the word…</span>
+      <div class="verse-meta">
+        <span class="verse-ref" id="verseRef"></span>
+        <span class="ann-star" id="annStar" style="display:none">✦</span>
+        <button class="refresh-btn" id="refreshBtn" title="another verse">↻</button>
+      </div>
     </div>
 
     <div class="picker-rule"></div>
@@ -660,19 +639,19 @@ function setCurrentVerse(f) {
 
   refreshCardTags();
 
-  const card = document.getElementById('verseCard');
-  const ann  = annotations[currentVerse.id];
-  card.classList.toggle('annotated', !!(ann && (ann.note || ann.tags?.length)));
+  const ann = annotations[currentVerse.id];
+  document.getElementById('annStar').style.display =
+    (ann && (ann.note || ann.tags?.length)) ? 'inline' : 'none';
 }
 
 function refreshCardTags() {
   const row  = document.getElementById('cardTagsRow');
   const star = document.getElementById('annStar');
   if (!currentVerse) { row.style.display = 'none'; star.style.display = 'none'; return; }
-  const ann = annotations[currentVerse.id];
+  const ann    = annotations[currentVerse.id];
   const hasAnn = !!(ann && (ann.note || ann.tags?.length));
 
-  star.style.display = hasAnn ? 'block' : 'none';
+  star.style.display = hasAnn ? 'inline' : 'none';
 
   if (!ann?.tags?.length) { row.style.display = 'none'; return; }
   row.style.display = 'flex';
@@ -863,10 +842,10 @@ document.getElementById('newTagInput').addEventListener('keydown', e => {
 // EVENTS
 // ─────────────────────────────────────────────────────────────
 
-document.getElementById('verseCard').addEventListener('click', openModal);
-document.getElementById('verseBelow').addEventListener('click', openModal);
-document.getElementById('verseCard').addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') openModal();
+// Tap scroll image or verse text → open annotation modal
+document.getElementById('scrollImg').addEventListener('click', openModal);
+document.getElementById('verseBelow').addEventListener('click', e => {
+  if (e.target !== document.getElementById('refreshBtn')) openModal();
 });
 document.getElementById('refreshBtn').addEventListener('click', showRandomVerse);
 document.getElementById('modalClose').addEventListener('click', closeModal);
