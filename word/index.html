@@ -460,6 +460,7 @@
 
 const KJV_URL   = 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json';
 const STORE_KEY = 'heartsgarden-word-v1';
+const CTAG_KEY  = 'heartsgarden-custom-tags-v1';
 const MAX_RESULTS = 80;
 
 const BOOK_NAMES = [
@@ -524,6 +525,7 @@ const CONCEPTS = {
 
 let verses      = [];
 let annotations = {};
+let customTags  = {};  // {name: color} — shared with home page
 let mode        = 'search';
 let tagFilter   = null;
 let activeVerse = null;
@@ -535,6 +537,7 @@ let debounce    = null;
 
 async function init() {
   annotations = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+  customTags  = JSON.parse(localStorage.getItem(CTAG_KEY)  || '{}');
   buildTagBar();
   buildModalTags();
 
@@ -707,13 +710,16 @@ function showWelcome() {
 // ─────────────────────────────────────────────────────────────
 
 function buildTagBar() {
-  const bar = document.getElementById('tagBar');
-  bar.innerHTML = TAGS.map(tag => {
-    const c      = TAG_COLORS[tag];
-    const active = tagFilter === tag;
-    return `<button class="tag-chip" data-tag="${tag}"
-      style="color:${active?'white':c};border-color:${c};background:${active?c:'white'}"
-    >${tag}</button>`;
+  const bar     = document.getElementById('tagBar');
+  const allTags = [
+    ...TAGS.map(t => ({ name: t, color: TAG_COLORS[t] })),
+    ...Object.entries(customTags).map(([t, c]) => ({ name: t, color: c }))
+  ];
+  bar.innerHTML = allTags.map(({ name, color }) => {
+    const active = tagFilter === name;
+    return `<button class="tag-chip" data-tag="${name}"
+      style="color:${active?'white':color};border-color:${color};background:${active?color:'white'}"
+    >${name}</button>`;
   }).join('');
   bar.querySelectorAll('.tag-chip').forEach(chip => {
     chip.addEventListener('click', () => onTagClick(chip.dataset.tag));
@@ -743,16 +749,21 @@ function onTagClick(tag) {
 // MODAL
 // ─────────────────────────────────────────────────────────────
 
-function buildModalTags() {
-  const grid = document.getElementById('modalTagGrid');
-  grid.innerHTML = TAGS.map(tag => {
-    const c = TAG_COLORS[tag];
-    return `<button class="modal-tag" data-tag="${tag}"
-      style="color:${c};border-color:${c};background:white">${tag}</button>`;
+function buildModalTags(selectedTags = []) {
+  const grid    = document.getElementById('modalTagGrid');
+  const allTags = [
+    ...TAGS.map(t => ({ name: t, color: TAG_COLORS[t] })),
+    ...Object.entries(customTags).map(([t, c]) => ({ name: t, color: c }))
+  ];
+  grid.innerHTML = allTags.map(({ name, color }) => {
+    const sel = selectedTags.includes(name);
+    return `<button class="modal-tag" data-tag="${name}"
+      style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
+      ${sel ? 'class="modal-tag selected"' : ''}>${name}</button>`;
   }).join('');
   grid.querySelectorAll('.modal-tag').forEach(btn => {
     btn.addEventListener('click', () => {
-      const c   = TAG_COLORS[btn.dataset.tag];
+      const c   = btn.style.borderColor;
       btn.classList.toggle('selected');
       const sel = btn.classList.contains('selected');
       btn.style.background = sel ? c : 'white';
@@ -771,14 +782,7 @@ function openModal(verseId) {
   document.getElementById('modalVerse').textContent = v.text;
   document.getElementById('modalNote').value        = ann.note ?? '';
 
-  document.querySelectorAll('.modal-tag').forEach(btn => {
-    const tag = btn.dataset.tag;
-    const c   = TAG_COLORS[tag];
-    const sel = ann.tags?.includes(tag);
-    btn.classList.toggle('selected', !!sel);
-    btn.style.background = sel ? c : 'white';
-    btn.style.color      = sel ? 'white' : c;
-  });
+  buildModalTags(ann.tags ?? []);
 
   document.getElementById('overlay').classList.add('open');
   setTimeout(() => document.getElementById('modalNote').focus(), 60);

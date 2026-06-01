@@ -77,7 +77,7 @@
     }
     .enter-link:hover { background: var(--accent); }
 
-    /* ── daily verse ──────────────────────────────── */
+    /* ── verse section ────────────────────────────── */
     .verse-section {
       margin-top: 3.5rem;
       max-width: 520px;
@@ -89,57 +89,142 @@
       font-size: 0.6rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--border);
+      color: var(--muted);
       margin-bottom: 1rem;
+      opacity: 0.7;
     }
 
+    /* ── parchment card ───────────────────────────── */
     .verse-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-top: 2px solid var(--accent);
-      padding: 1.5rem 1.8rem;
+      position: relative;
+      padding: 1.8rem 2rem 1.4rem;
       text-align: left;
+      cursor: pointer;
       margin-bottom: 0.5rem;
-      min-height: 80px;
+      overflow: hidden;
+
+      /* Parchment base + depth gradients */
+      background-color: #c9a97a;
+      background-image:
+        radial-gradient(ellipse at 18% 25%, rgba(255, 228, 160, 0.45) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 15%, rgba(210, 165, 85,  0.30) 0%, transparent 40%),
+        radial-gradient(ellipse at 88% 75%, rgba(155, 105, 45,  0.30) 0%, transparent 45%),
+        radial-gradient(ellipse at 25% 85%, rgba(220, 180, 105, 0.25) 0%, transparent 40%),
+        radial-gradient(ellipse at 55% 50%, rgba(255, 240, 195, 0.15) 0%, transparent 60%);
+
+      /* Worn edges: inner shadow */
+      box-shadow:
+        inset  6px  6px 22px rgba(120, 80, 20, 0.18),
+        inset -6px  6px 18px rgba(100, 65, 15, 0.12),
+        inset  6px -6px 18px rgba(100, 65, 15, 0.10),
+        inset -6px -6px 16px rgba(120, 80, 20, 0.14),
+             4px  6px 20px rgba(60, 35, 10, 0.22);
+
+      /* Subtle grain via repeating micro-gradients */
+      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      transition: box-shadow 0.2s, transform 0.15s;
     }
+
+    /* Grain overlay via pseudo-element */
+    .verse-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          87deg,
+          transparent 0px, transparent 2px,
+          rgba(90, 55, 15, 0.025) 2px, rgba(90, 55, 15, 0.025) 3px
+        ),
+        repeating-linear-gradient(
+          3deg,
+          transparent 0px, transparent 3px,
+          rgba(90, 55, 15, 0.02) 3px, rgba(90, 55, 15, 0.02) 4px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .verse-card:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset  6px  6px 22px rgba(120, 80, 20, 0.18),
+        inset -6px  6px 18px rgba(100, 65, 15, 0.12),
+        inset  6px -6px 18px rgba(100, 65, 15, 0.10),
+        inset -6px -6px 16px rgba(120, 80, 20, 0.14),
+             6px  8px 28px rgba(60, 35, 10, 0.28);
+    }
+
+    .verse-card.annotated::after {
+      content: '✦';
+      position: absolute;
+      top: 0.75rem; right: 1rem;
+      font-size: 0.75rem;
+      color: rgba(80, 45, 10, 0.5);
+      z-index: 1;
+    }
+
+    .verse-card > * { position: relative; z-index: 1; }
 
     .verse-text {
       font-style: italic;
       font-size: 1rem;
-      line-height: 1.7;
-      color: var(--ink);
+      line-height: 1.72;
+      color: #2a1a08;
       display: block;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.9rem;
     }
 
     .verse-ref {
       font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      color: var(--muted);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: rgba(80, 50, 15, 0.65);
       text-transform: uppercase;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
+    .verse-tags-row {
+      display: flex; flex-wrap: wrap; gap: 0.28rem;
+      margin-bottom: 0.65rem;
+    }
+    .verse-tag-chip {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.06em;
+      padding: 0.14rem 0.45rem;
+      border-radius: 20px;
+      border: 1px solid;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .tap-hint {
+      font-family: var(--mono);
+      font-size: 0.57rem;
+      letter-spacing: 0.1em;
+      color: rgba(80, 50, 15, 0.45);
+      text-align: right;
+      margin-top: 0.1rem;
+    }
+
     .refresh-btn {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 0.75rem;
-      color: var(--border);
+      font-size: 0.8rem;
+      color: rgba(80, 50, 15, 0.45);
       transition: color 0.2s;
-      padding: 0;
-      line-height: 1;
+      padding: 0; line-height: 1;
     }
-    .refresh-btn:hover { color: var(--accent); }
+    .refresh-btn:hover { color: rgba(80,50,15,0.8); }
 
     /* ── book + chapter picker ────────────────────── */
     .picker-rule {
       width: 30px; height: 1px;
       background: var(--border);
-      margin: 1.8rem auto;
+      margin: 2rem auto;
     }
 
     .picker-label {
@@ -205,14 +290,213 @@
       color: var(--border);
     }
 
-    /* ── loading shimmer ──────────────────────────── */
-    .loading { opacity: 0.4; font-style: italic; color: var(--muted); }
-
+    /* ── loading ──────────────────────────────────── */
     @keyframes breathe {
       0%,100% { opacity: 0.4; }
       50%      { opacity: 1; }
     }
-    .loading { animation: breathe 1.8s ease-in-out infinite; }
+    .loading { animation: breathe 1.8s ease-in-out infinite; color: rgba(80,50,15,0.5); }
+
+    /* ── annotation modal ─────────────────────────── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,26,24,0.5);
+      z-index: 200;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3.5rem 1rem 2rem;
+      overflow-y: auto;
+    }
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: var(--parch);
+      border: 1px solid var(--border);
+      max-width: 560px;
+      width: 100%;
+      padding: 2rem;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+    }
+
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1rem; line-height: 1;
+    }
+    .modal-close:hover { color: var(--ink); }
+
+    .modal-ref {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-verse {
+      font-style: italic;
+      line-height: 1.68;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .field-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.55rem;
+    }
+
+    /* Tag grid */
+    .modal-tag-grid {
+      display: flex; flex-wrap: wrap; gap: 0.35rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-tag {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.07em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      border: 1px solid;
+      background: white;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .modal-tag.custom-tag { font-style: italic; }
+
+    /* Add custom tag */
+    .add-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.3rem;
+      flex-wrap: wrap;
+    }
+
+    .add-tag-btn {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      border: 1px dashed var(--border);
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .add-tag-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .new-tag-form {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .new-tag-form.open { display: flex; }
+
+    .new-tag-input {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--ink);
+      outline: none;
+      width: 130px;
+      transition: border-color 0.15s;
+    }
+    .new-tag-input:focus { border-color: var(--accent); }
+
+    .color-swatches {
+      display: flex; gap: 0.3rem;
+    }
+    .color-swatch {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.1s;
+    }
+    .color-swatch:hover { transform: scale(1.2); }
+    .color-swatch.picked { border-color: var(--ink); }
+
+    .new-tag-save {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.7rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .new-tag-save:hover { background: var(--accent); }
+
+    /* Reflection textarea */
+    .modal-note {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem 1rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+      margin-bottom: 1.3rem;
+      transition: border-color 0.2s;
+    }
+    .modal-note:focus { border-color: var(--accent); }
+    .modal-note::placeholder { color: #b5b0a8; font-style: italic; }
+
+    .modal-actions { display: flex; align-items: center; gap: 0.7rem; }
+
+    .btn-save {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.8rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-save:hover { background: var(--accent); }
+
+    .btn-remove {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      padding: 0.7rem 1rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-remove:hover { color: #c84820; border-color: #c84820; }
+
+    @media (max-width: 520px) {
+      .modal { padding: 1.4rem; }
+    }
   </style>
 </head>
 <body>
@@ -222,12 +506,11 @@
   <div class="rule"></div>
   <a class="enter-link" href="/word/">enter the living word →</a>
 
-  <!-- Daily verse + book picker -->
   <div class="verse-section">
+    <p class="verse-label">a word for today · tap to reflect</p>
 
-    <p class="verse-label">a word for today</p>
-
-    <div class="verse-card">
+    <div class="verse-card" id="verseCard" role="button" tabindex="0" aria-label="Tap to annotate this verse">
+      <span class="verse-tags-row" id="cardTagsRow" style="display:none"></span>
       <span class="verse-text loading" id="verseText">gathering the word…</span>
       <div class="verse-ref">
         <span id="verseRef"></span>
@@ -247,14 +530,48 @@
       </select>
       <a class="go-btn" id="goBtn" href="/word/">open →</a>
     </div>
-
   </div>
 
   <p class="foot">heartsgarden.cc</p>
 
+  <!-- Annotation modal -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <p class="modal-ref" id="modalRef"></p>
+      <p class="modal-verse" id="modalVerse"></p>
+
+      <label class="field-label">gardening themes</label>
+      <div class="modal-tag-grid" id="modalTagGrid"></div>
+
+      <div class="add-tag-row">
+        <button class="add-tag-btn" id="addTagBtn">+ add tag</button>
+        <div class="new-tag-form" id="newTagForm">
+          <input class="new-tag-input" id="newTagInput" type="text" placeholder="tag name…" maxlength="20" />
+          <div class="color-swatches" id="colorSwatches"></div>
+          <button class="new-tag-save" id="newTagSave">add</button>
+        </div>
+      </div>
+
+      <label class="field-label" for="modalNote">your reflection</label>
+      <textarea class="modal-note" id="modalNote"
+        placeholder="write your thoughts, connections, or questions…"></textarea>
+
+      <div class="modal-actions">
+        <button class="btn-save" id="btnSave">save</button>
+        <button class="btn-remove" id="btnRemove">remove</button>
+      </div>
+    </div>
+  </div>
+
 <script>
-// ── Bible data ────────────────────────────────────────────────
-const KJV_URL = 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json';
+// ─────────────────────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────────────────────
+
+const KJV_URL    = 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json';
+const STORE_KEY  = 'heartsgarden-word-v1';        // shared with /word/ page
+const CTAG_KEY   = 'heartsgarden-custom-tags-v1'; // custom tags
 
 const BOOK_NAMES = [
   'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
@@ -268,15 +585,54 @@ const BOOK_NAMES = [
   'Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
 ];
 
-let verses  = [];   // flat [{b, c, v, text}]
-let bookMap = {};   // { bookIdx: { chapterIdx: [texts] } }
+const PRESET_TAGS = [
+  'trees','life','love','heart','mind','body','soul','ideas','talk','forgiveness',
+  'sunlight','plants','herbs','animals','earth','wind','fire','water','clouds',
+  'garden','birds','harvest','fruit','weeds','seeds'
+];
+
+const PRESET_COLORS = {
+  trees:'#4a7850', life:'#8a9858', love:'#c8909a', heart:'#9b6050',
+  mind:'#8090b0', body:'#c47a55', soul:'#5aadcf', ideas:'#a8a818',
+  talk:'#8c8a88', forgiveness:'#d9937a', sunlight:'#c8a020', plants:'#8a9828',
+  herbs:'#6a8840', animals:'#9b7050', earth:'#7a4030', wind:'#7090a0',
+  fire:'#c84820', water:'#4898b8', clouds:'#909890', garden:'#3a7040',
+  birds:'#7080a8', harvest:'#b89010', fruit:'#b84010', weeds:'#80901a',
+  seeds:'#a07040'
+};
+
+// Earthy palette for custom tag color picker
+const SWATCH_COLORS = [
+  '#5aadcf','#8090b0','#8a9858','#4a7850',
+  '#c8a020','#c47a55','#c8909a','#c84820',
+  '#9b6050','#7a4030','#8c8a88','#3a7040'
+];
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+
+let verses      = [];
+let bookMap     = {};
+let annotations = {};
+let customTags  = {};   // { name: color }
+let currentVerse = null;
+let pickedColor  = SWATCH_COLORS[4]; // default: golden amber
+
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
 
 async function init() {
+  annotations = JSON.parse(localStorage.getItem(STORE_KEY)  || '{}');
+  customTags  = JSON.parse(localStorage.getItem(CTAG_KEY)   || '{}');
+
+  buildColorSwatches();
+
   try {
     const res  = await fetch(KJV_URL);
     const data = await res.json();
 
-    // Parse: array of {abbrev, chapters:[[ verse texts ]]}
     data.forEach((book, bookIdx) => {
       bookMap[bookIdx] = {};
       book.chapters.forEach((chVerses, chIdx) => {
@@ -296,21 +652,59 @@ async function init() {
   }
 }
 
-// ── Random verse ──────────────────────────────────────────────
-function showRandomVerse() {
+// ─────────────────────────────────────────────────────────────
+// VERSE DISPLAY
+// ─────────────────────────────────────────────────────────────
+
+function showRandomVerse(ev) {
+  if (ev) ev.stopPropagation();
   if (!verses.length) return;
-  const v    = verses[Math.floor(Math.random() * verses.length)];
-  const name = BOOK_NAMES[v.b];
-  const el   = document.getElementById('verseText');
-  el.textContent = v.text;
-  el.classList.remove('loading');
-  document.getElementById('verseRef').textContent =
-    `${name} ${v.c + 1}:${v.v + 1}  ·  KJV`;
+
+  const v = verses[Math.floor(Math.random() * verses.length)];
+  setCurrentVerse(v);
 }
 
-document.getElementById('refreshBtn').addEventListener('click', showRandomVerse);
+function setCurrentVerse(v) {
+  currentVerse = {
+    b: v.b, c: v.c, v: v.v, text: v.text,
+    id:   `${v.b}_${v.c}_${v.v}`,
+    book: BOOK_NAMES[v.b],
+    chapter: v.c + 1,
+    verse:   v.v + 1
+  };
 
-// ── Book + chapter selects ────────────────────────────────────
+  const el = document.getElementById('verseText');
+  el.textContent = v.text;
+  el.classList.remove('loading');
+
+  document.getElementById('verseRef').textContent =
+    `${currentVerse.book} ${currentVerse.chapter}:${currentVerse.verse}  ·  KJV`;
+
+  // Show annotation tags if this verse is annotated
+  refreshCardTags();
+
+  const card = document.getElementById('verseCard');
+  const ann  = annotations[currentVerse.id];
+  card.classList.toggle('annotated', !!(ann && (ann.note || ann.tags?.length)));
+}
+
+function refreshCardTags() {
+  const row = document.getElementById('cardTagsRow');
+  if (!currentVerse) { row.style.display = 'none'; return; }
+  const ann = annotations[currentVerse.id];
+  if (!ann?.tags?.length) { row.style.display = 'none'; return; }
+
+  row.style.display = 'flex';
+  row.innerHTML = ann.tags.map(t => {
+    const c = PRESET_COLORS[t] || customTags[t] || '#8a7560';
+    return `<span class="verse-tag-chip" style="color:${c};border-color:${c}">${t}</span>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// BOOK / CHAPTER PICKER
+// ─────────────────────────────────────────────────────────────
+
 function populateBookSelect() {
   const sel = document.getElementById('bookSelect');
   BOOK_NAMES.forEach((name, idx) => {
@@ -327,7 +721,6 @@ document.getElementById('bookSelect').addEventListener('change', function () {
   chSel.innerHTML = '<option value="">— ch —</option>';
   updateGoBtn();
   if (this.value === '' || !bookMap[bookIdx]) return;
-
   const numChapters = Object.keys(bookMap[bookIdx]).length;
   for (let i = 0; i < numChapters; i++) {
     const opt = document.createElement('option');
@@ -343,7 +736,6 @@ function updateGoBtn() {
   const bookVal = document.getElementById('bookSelect').value;
   const chVal   = document.getElementById('chapterSelect').value;
   const btn     = document.getElementById('goBtn');
-
   if (bookVal !== '' && chVal !== '') {
     const name = BOOK_NAMES[+bookVal];
     btn.href = `/word/?book=${encodeURIComponent(name)}&chapter=${encodeURIComponent(+chVal + 1)}`;
@@ -352,6 +744,163 @@ function updateGoBtn() {
   }
 }
 
+// ─────────────────────────────────────────────────────────────
+// ANNOTATION MODAL
+// ─────────────────────────────────────────────────────────────
+
+function openModal() {
+  if (!currentVerse) return;
+  const ann = annotations[currentVerse.id] ?? { tags: [], note: '' };
+
+  document.getElementById('modalRef').textContent   =
+    `${currentVerse.book} ${currentVerse.chapter}:${currentVerse.verse}  ·  King James Version`;
+  document.getElementById('modalVerse').textContent = currentVerse.text;
+  document.getElementById('modalNote').value        = ann.note ?? '';
+
+  buildModalTags(ann.tags ?? []);
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modalNote').focus(), 80);
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('newTagForm').classList.remove('open');
+  document.getElementById('newTagInput').value = '';
+}
+
+function buildModalTags(selectedTags = []) {
+  const grid = document.getElementById('modalTagGrid');
+  const allTags = [
+    ...PRESET_TAGS.map(t => ({ name: t, color: PRESET_COLORS[t], custom: false })),
+    ...Object.entries(customTags).map(([t, c]) => ({ name: t, color: c, custom: true }))
+  ];
+
+  grid.innerHTML = allTags.map(({ name, color, custom }) => {
+    const sel = selectedTags.includes(name);
+    return `<button class="modal-tag${custom ? ' custom-tag' : ''}" data-tag="${name}"
+      style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
+    >${name}</button>`;
+  }).join('');
+
+  grid.querySelectorAll('.modal-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c   = btn.style.borderColor;
+      btn.classList.toggle('selected');
+      const sel = btn.classList.contains('selected');
+      btn.style.background = sel ? c : 'white';
+      btn.style.color      = sel ? 'white' : c;
+    });
+  });
+
+  // Restore selected state
+  selectedTags.forEach(tag => {
+    const btn = grid.querySelector(`[data-tag="${tag}"]`);
+    if (btn) btn.classList.add('selected');
+  });
+}
+
+function saveAnnotation() {
+  if (!currentVerse) return;
+  const note = document.getElementById('modalNote').value.trim();
+  const tags = [...document.querySelectorAll('.modal-tag.selected')].map(b => b.dataset.tag);
+
+  if (!note && !tags.length) { delete annotations[currentVerse.id]; }
+  else { annotations[currentVerse.id] = { tags, note, savedAt: new Date().toISOString() }; }
+
+  localStorage.setItem(STORE_KEY, JSON.stringify(annotations));
+  closeModal();
+  refreshCardTags();
+
+  const card = document.getElementById('verseCard');
+  const ann  = annotations[currentVerse.id];
+  card.classList.toggle('annotated', !!(ann && (ann.note || ann.tags?.length)));
+}
+
+function removeAnnotation() {
+  if (!currentVerse) return;
+  delete annotations[currentVerse.id];
+  localStorage.setItem(STORE_KEY, JSON.stringify(annotations));
+  closeModal();
+  refreshCardTags();
+  document.getElementById('verseCard').classList.remove('annotated');
+}
+
+// ─────────────────────────────────────────────────────────────
+// CUSTOM TAGS
+// ─────────────────────────────────────────────────────────────
+
+function buildColorSwatches() {
+  const wrap = document.getElementById('colorSwatches');
+  wrap.innerHTML = SWATCH_COLORS.map((c, i) =>
+    `<span class="color-swatch${i === 4 ? ' picked' : ''}" data-color="${c}"
+      style="background:${c}" title="${c}"></span>`
+  ).join('');
+
+  wrap.querySelectorAll('.color-swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      wrap.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('picked'));
+      s.classList.add('picked');
+      pickedColor = s.dataset.color;
+    });
+  });
+}
+
+document.getElementById('addTagBtn').addEventListener('click', () => {
+  document.getElementById('newTagForm').classList.toggle('open');
+  if (document.getElementById('newTagForm').classList.contains('open')) {
+    document.getElementById('newTagInput').focus();
+  }
+});
+
+document.getElementById('newTagSave').addEventListener('click', () => {
+  const name = document.getElementById('newTagInput').value.trim().toLowerCase();
+  if (!name || PRESET_COLORS[name] || customTags[name]) return;
+
+  customTags[name] = pickedColor;
+  localStorage.setItem(CTAG_KEY, JSON.stringify(customTags));
+
+  // Add to current modal grid immediately, pre-selected
+  const grid = document.getElementById('modalTagGrid');
+  const btn  = document.createElement('button');
+  btn.className = 'modal-tag custom-tag selected';
+  btn.dataset.tag = name;
+  btn.style.cssText = `color:white;border-color:${pickedColor};background:${pickedColor}`;
+  btn.textContent = name;
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('selected');
+    const sel = btn.classList.contains('selected');
+    btn.style.background = sel ? pickedColor : 'white';
+    btn.style.color      = sel ? 'white' : pickedColor;
+  });
+  grid.appendChild(btn);
+
+  document.getElementById('newTagInput').value = '';
+  document.getElementById('newTagForm').classList.remove('open');
+});
+
+document.getElementById('newTagInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('newTagSave').click();
+  if (e.key === 'Escape') document.getElementById('newTagForm').classList.remove('open');
+});
+
+// ─────────────────────────────────────────────────────────────
+// EVENTS
+// ─────────────────────────────────────────────────────────────
+
+document.getElementById('verseCard').addEventListener('click', openModal);
+document.getElementById('verseCard').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') openModal();
+});
+document.getElementById('refreshBtn').addEventListener('click', showRandomVerse);
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('btnSave').addEventListener('click', saveAnnotation);
+document.getElementById('btnRemove').addEventListener('click', removeAnnotation);
+document.getElementById('overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('overlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─────────────────────────────────────────────────────────────
 init();
 </script>
 
