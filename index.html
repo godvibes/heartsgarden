@@ -596,32 +596,30 @@ let pickedColor  = SWATCH_COLORS[4];
 // ─────────────────────────────────────────────────────────────
 
 async function init() {
-  annotations = JSON.parse(localStorage.getItem(STORE_KEY)  || '{}');
-  customTags  = JSON.parse(localStorage.getItem(CTAG_KEY)   || '{}');
+  annotations = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+  customTags  = JSON.parse(localStorage.getItem(CTAG_KEY)  || '{}');
   buildColorSwatches();
 
-  // ── Step 1: verse on the scroll — tiny file, loads in ~100ms ──
+  // Only load the tiny featured list — verse appears immediately
   try {
-    const res      = await fetch(FEATURED_URL);
-    featured       = await res.json();
+    const res = await fetch(FEATURED_URL);
+    featured  = await res.json();
     showRandomVerse();
   } catch (e) {
     document.getElementById('verseText').textContent = 'could not load — check connection';
     console.error(e);
-    return;
   }
+  // Full KJV loads only when user opens the book dropdown (see loadKJVOnce below)
+}
 
-  // ── Step 2: full KJV for book/chapter picker — loads in background ──
+// Lazy-load the full KJV the first time the book select is touched
+let kjvLoaded = false;
+async function loadKJVOnce() {
+  if (kjvLoaded) return;
+  kjvLoaded = true;
   try {
-    const cached = sessionStorage.getItem('kjv-verses');
-    let data;
-    if (cached) {
-      data = JSON.parse(cached);
-    } else {
-      const res = await fetch(KJV_URL);
-      data = await res.json();
-      try { sessionStorage.setItem('kjv-verses', JSON.stringify(data)); } catch(_) {}
-    }
+    const res  = await fetch(KJV_URL);
+    const data = await res.json();
     data.forEach((book, bookIdx) => {
       bookMap[bookIdx] = {};
       book.chapters.forEach((chVerses, chIdx) => {
@@ -698,6 +696,7 @@ function populateBookSelect() {
   });
 }
 
+document.getElementById('bookSelect').addEventListener('focus', loadKJVOnce);
 document.getElementById('bookSelect').addEventListener('change', function () {
   const bookIdx = +this.value;
   const chSel   = document.getElementById('chapterSelect');
