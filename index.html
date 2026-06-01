@@ -537,7 +537,7 @@
 // CONSTANTS
 // ─────────────────────────────────────────────────────────────
 
-const KJV_URL    = 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json';
+const KJV_URL    = '/assets/data/kjv.json';
 const STORE_KEY  = 'heartsgarden-word-v1';        // shared with /word/ page
 const CTAG_KEY   = 'heartsgarden-custom-tags-v1'; // custom tags
 
@@ -598,8 +598,17 @@ async function init() {
   buildColorSwatches();
 
   try {
-    const res  = await fetch(KJV_URL);
-    const data = await res.json();
+    // Check sessionStorage first — same session = no re-fetch
+    const cached = sessionStorage.getItem('kjv-verses');
+    let data;
+
+    if (cached) {
+      data = JSON.parse(cached);
+    } else {
+      const res = await fetch(KJV_URL);
+      data = await res.json();
+      try { sessionStorage.setItem('kjv-verses', JSON.stringify(data)); } catch(_) {}
+    }
 
     data.forEach((book, bookIdx) => {
       bookMap[bookIdx] = {};

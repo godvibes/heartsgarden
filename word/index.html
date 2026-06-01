@@ -458,7 +458,7 @@
 // DATA
 // ─────────────────────────────────────────────────────────────
 
-const KJV_URL   = 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json';
+const KJV_URL   = '/assets/data/kjv.json';
 const STORE_KEY = 'heartsgarden-word-v1';
 const CTAG_KEY  = 'heartsgarden-custom-tags-v1';
 const MAX_RESULTS = 80;
@@ -542,8 +542,18 @@ async function init() {
   buildModalTags();
 
   try {
-    const res  = await fetch(KJV_URL);
-    const data = await res.json();
+    // sessionStorage cache — instant on second page in same session
+    const cached = sessionStorage.getItem('kjv-verses');
+    let data;
+
+    if (cached) {
+      data = JSON.parse(cached);
+    } else {
+      document.getElementById('searchHint').textContent = 'loading scripture… (~4 seconds first visit)';
+      const res = await fetch(KJV_URL);
+      data = await res.json();
+      try { sessionStorage.setItem('kjv-verses', JSON.stringify(data)); } catch(_) {}
+    }
 
     // Parse: [{abbrev, chapters:[[verse texts]]}]
     data.forEach((book, bookIdx) => {
