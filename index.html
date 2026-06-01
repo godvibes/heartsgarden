@@ -540,7 +540,8 @@
 // CONSTANTS
 // ─────────────────────────────────────────────────────────────
 
-const KJV_URL    = '/assets/data/kjv.json';
+const FEATURED_URL = '/assets/data/featured.json';  // home verse (tiny, fast)
+const KJV_URL      = '/assets/data/kjv.json';        // full bible for book picker
 const STORE_KEY  = 'heartsgarden-word-v1';        // shared with /word/ page
 const CTAG_KEY   = 'heartsgarden-custom-tags-v1'; // custom tags
 
@@ -583,12 +584,12 @@ const SWATCH_COLORS = [
 // STATE
 // ─────────────────────────────────────────────────────────────
 
-let verses      = [];
-let bookMap     = {};
-let annotations = {};
-let customTags  = {};   // { name: color }
+let featured     = [];   // [{ref, text}] — fast home verse pool
+let bookMap      = {};   // for book/chapter picker
+let annotations  = {};
+let customTags   = {};
 let currentVerse = null;
-let pickedColor  = SWATCH_COLORS[4]; // default: golden amber
+let pickedColor  = SWATCH_COLORS[4];
 
 // ─────────────────────────────────────────────────────────────
 // INIT
@@ -597,14 +598,23 @@ let pickedColor  = SWATCH_COLORS[4]; // default: golden amber
 async function init() {
   annotations = JSON.parse(localStorage.getItem(STORE_KEY)  || '{}');
   customTags  = JSON.parse(localStorage.getItem(CTAG_KEY)   || '{}');
-
   buildColorSwatches();
 
+  // ── Step 1: verse on the scroll — tiny file, loads in ~100ms ──
   try {
-    // Check sessionStorage first — same session = no re-fetch
+    const res      = await fetch(FEATURED_URL);
+    featured       = await res.json();
+    showRandomVerse();
+  } catch (e) {
+    document.getElementById('verseText').textContent = 'could not load — check connection';
+    console.error(e);
+    return;
+  }
+
+  // ── Step 2: full KJV for book/chapter picker — loads in background ──
+  try {
     const cached = sessionStorage.getItem('kjv-verses');
     let data;
-
     if (cached) {
       data = JSON.parse(cached);
     } else {
@@ -612,23 +622,15 @@ async function init() {
       data = await res.json();
       try { sessionStorage.setItem('kjv-verses', JSON.stringify(data)); } catch(_) {}
     }
-
     data.forEach((book, bookIdx) => {
       bookMap[bookIdx] = {};
       book.chapters.forEach((chVerses, chIdx) => {
         bookMap[bookIdx][chIdx] = chVerses;
-        chVerses.forEach((text, vIdx) => {
-          verses.push({ b: bookIdx, c: chIdx, v: vIdx, text });
-        });
       });
     });
-
-    showRandomVerse();
     populateBookSelect();
-
   } catch (e) {
-    document.getElementById('verseText').textContent = 'could not load — check connection';
-    console.error(e);
+    console.warn('Book picker unavailable:', e);
   }
 }
 
@@ -638,29 +640,26 @@ async function init() {
 
 function showRandomVerse(ev) {
   if (ev) ev.stopPropagation();
-  if (!verses.length) return;
+  if (!featured.length) return;
 
-  const v = verses[Math.floor(Math.random() * verses.length)];
-  setCurrentVerse(v);
+  const f = featured[Math.floor(Math.random() * featured.length)];
+  setCurrentVerse(f);
 }
 
-function setCurrentVerse(v) {
+function setCurrentVerse(f) {
+  // f = { ref: "John 15:5", text: "..." }
   currentVerse = {
-    b: v.b, c: v.c, v: v.v, text: v.text,
-    id:   `${v.b}_${v.c}_${v.v}`,
-    book: BOOK_NAMES[v.b],
-    chapter: v.c + 1,
-    verse:   v.v + 1
+    id:   'feat_' + f.ref.replace(/[\s:]/g, '_'),
+    ref:  f.ref,
+    text: f.text
   };
 
   const el = document.getElementById('verseText');
-  el.textContent = v.text;
+  el.textContent = f.text;
   el.classList.remove('loading');
 
-  document.getElementById('verseRef').textContent =
-    `${currentVerse.book}  ${currentVerse.chapter}:${currentVerse.verse}  ·  KJV`;
+  document.getElementById('verseRef').textContent = `${f.ref}  ·  KJV`;
 
-  // Show annotation tags if this verse is annotated
   refreshCardTags();
 
   const card = document.getElementById('verseCard');
@@ -736,8 +735,7 @@ function openModal() {
   if (!currentVerse) return;
   const ann = annotations[currentVerse.id] ?? { tags: [], note: '' };
 
-  document.getElementById('modalRef').textContent   =
-    `${currentVerse.book} ${currentVerse.chapter}:${currentVerse.verse}  ·  King James Version`;
+  document.getElementById('modalRef').textContent   = `${currentVerse.ref}  ·  King James Version`;
   document.getElementById('modalVerse').textContent = currentVerse.text;
   document.getElementById('modalNote').value        = ann.note ?? '';
 
