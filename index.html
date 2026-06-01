@@ -17,7 +17,6 @@
       --muted:  #7a7870;
       --border: #dedad4;
       --accent: #8a7560;
-      --sage:   #8a9858;
       --serif:  'Times New Roman', Times, serif;
       --hand:   'GoodHand', cursive;
       --mono:   'Courier New', monospace;
@@ -35,10 +34,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 3rem 1.5rem;
+      padding: 3rem 1.5rem 5rem;
       text-align: center;
     }
 
+    /* ── wordmark ─────────────────────────────────── */
     .mark {
       font-family: var(--hand);
       font-size: clamp(3.5rem, 10vw, 6rem);
@@ -57,12 +57,12 @@
     }
 
     .rule {
-      width: 50px;
-      height: 1px;
+      width: 50px; height: 1px;
       background: var(--accent);
       margin: 0 auto 2.5rem;
     }
 
+    /* ── enter button ─────────────────────────────── */
     .enter-link {
       display: inline-block;
       font-family: var(--mono);
@@ -77,6 +77,125 @@
     }
     .enter-link:hover { background: var(--accent); }
 
+    /* ── daily verse ──────────────────────────────── */
+    .verse-section {
+      margin-top: 3.5rem;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .verse-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .verse-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--accent);
+      padding: 1.5rem 1.8rem;
+      text-align: left;
+      margin-bottom: 0.5rem;
+      min-height: 80px;
+    }
+
+    .verse-text {
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .verse-ref {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .refresh-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.75rem;
+      color: var(--border);
+      transition: color 0.2s;
+      padding: 0;
+      line-height: 1;
+    }
+    .refresh-btn:hover { color: var(--accent); }
+
+    /* ── book + chapter picker ────────────────────── */
+    .picker-rule {
+      width: 30px; height: 1px;
+      background: var(--border);
+      margin: 1.8rem auto;
+    }
+
+    .picker-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .picker-row {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .picker-select {
+      font-family: var(--serif);
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--ink);
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.6rem 2rem 0.6rem 0.8rem;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      outline: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a7870'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.7rem center;
+      transition: border-color 0.2s;
+      min-width: 160px;
+    }
+    .picker-select:focus { border-color: var(--accent); }
+
+    .go-btn {
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.4rem;
+      background: none;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .go-btn:hover { background: var(--ink); color: var(--cream); }
+
+    /* ── footer ───────────────────────────────────── */
     .foot {
       position: fixed;
       bottom: 1.5rem;
@@ -85,13 +204,166 @@
       letter-spacing: 0.1em;
       color: var(--border);
     }
+
+    /* ── loading shimmer ──────────────────────────── */
+    .loading { opacity: 0.4; font-style: italic; color: var(--muted); }
+
+    @keyframes breathe {
+      0%,100% { opacity: 0.4; }
+      50%      { opacity: 1; }
+    }
+    .loading { animation: breathe 1.8s ease-in-out infinite; }
   </style>
 </head>
 <body>
+
   <p class="mark">Hearts Garden</p>
   <p class="tagline">a spiritual gardening guide · rooted in the living word</p>
   <div class="rule"></div>
   <a class="enter-link" href="/word/">enter the living word →</a>
+
+  <!-- Daily verse + book picker -->
+  <div class="verse-section">
+
+    <p class="verse-label">a word for today</p>
+
+    <div class="verse-card">
+      <span class="verse-text loading" id="verseText">gathering the word…</span>
+      <div class="verse-ref">
+        <span id="verseRef"></span>
+        <button class="refresh-btn" id="refreshBtn" title="another verse" aria-label="New verse">↻</button>
+      </div>
+    </div>
+
+    <div class="picker-rule"></div>
+    <p class="picker-label">open a book &amp; chapter</p>
+
+    <div class="picker-row">
+      <select class="picker-select" id="bookSelect" aria-label="Select book">
+        <option value="">— book —</option>
+      </select>
+      <select class="picker-select" id="chapterSelect" aria-label="Select chapter" style="min-width:100px">
+        <option value="">— ch —</option>
+      </select>
+      <a class="go-btn" id="goBtn" href="/word/">open →</a>
+    </div>
+
+  </div>
+
   <p class="foot">heartsgarden.cc</p>
+
+<script>
+// ── Bible data ────────────────────────────────────────────────
+const KJV_URL   = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/t_kjv.json';
+const BOOKS_URL = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/key_english.json';
+
+let verses    = [];
+let bookNames = {};   // { 1: 'Genesis', … }
+let bookMap   = {};   // { 1: { 1: [verse,…], 2: […] }, … }  book → chapter → verses
+
+async function init() {
+  try {
+    const [vRes, bRes] = await Promise.all([fetch(KJV_URL), fetch(BOOKS_URL)]);
+    const vRaw = await vRes.json();
+    const bRaw = await bRes.json();
+
+    // Book names
+    const bookRows = bRaw?.resultset?.row ?? bRaw;
+    bookRows.forEach(r => {
+      const f    = r.field ?? r;
+      const num  = Array.isArray(f) ? f[0] : (r.b ?? f[0]);
+      const name = Array.isArray(f) ? f[1] : (r.n ?? f[1]);
+      bookNames[+num] = name;
+    });
+
+    // Verses
+    const vRows = vRaw?.resultset?.row ?? vRaw;
+    vRows.forEach(r => {
+      const f    = r.field ?? r;
+      const b    = +(Array.isArray(f) ? f[1] : (r.b ?? f[1]));
+      const c    = +(Array.isArray(f) ? f[2] : (r.c ?? f[2]));
+      const v    = +(Array.isArray(f) ? f[3] : (r.v ?? f[3]));
+      const text =   Array.isArray(f) ? f[4] : (r.t ?? f[4]);
+      verses.push({ b, c, v, text });
+      if (!bookMap[b]) bookMap[b] = {};
+      if (!bookMap[b][c]) bookMap[b][c] = [];
+      bookMap[b][c].push({ v, text });
+    });
+
+    showRandomVerse();
+    populateBookSelect();
+
+  } catch (e) {
+    document.getElementById('verseText').textContent = 'could not load — check connection';
+    console.error(e);
+  }
+}
+
+// ── Random verse ──────────────────────────────────────────────
+function showRandomVerse() {
+  if (!verses.length) return;
+  const v = verses[Math.floor(Math.random() * verses.length)];
+  const el = document.getElementById('verseText');
+  el.textContent = v.text;
+  el.classList.remove('loading');
+  document.getElementById('verseRef').textContent =
+    `${bookNames[v.b]} ${v.c}:${v.v}  ·  KJV`;
+}
+
+document.getElementById('refreshBtn').addEventListener('click', showRandomVerse);
+
+// ── Book + chapter selects ────────────────────────────────────
+function populateBookSelect() {
+  const sel = document.getElementById('bookSelect');
+  Object.keys(bookMap)
+    .map(Number)
+    .sort((a,b) => a - b)
+    .forEach(num => {
+      const opt = document.createElement('option');
+      opt.value = num;
+      opt.textContent = bookNames[num];
+      sel.appendChild(opt);
+    });
+}
+
+document.getElementById('bookSelect').addEventListener('change', function () {
+  const bookNum = +this.value;
+  const chSel   = document.getElementById('chapterSelect');
+  chSel.innerHTML = '<option value="">— ch —</option>';
+  updateGoBtn();
+  if (!bookNum || !bookMap[bookNum]) return;
+
+  Object.keys(bookMap[bookNum])
+    .map(Number)
+    .sort((a,b) => a - b)
+    .forEach(ch => {
+      const opt = document.createElement('option');
+      opt.value = ch;
+      opt.textContent = `Chapter ${ch}`;
+      chSel.appendChild(opt);
+    });
+});
+
+document.getElementById('chapterSelect').addEventListener('change', updateGoBtn);
+
+function updateGoBtn() {
+  const book = document.getElementById('bookSelect').value;
+  const ch   = document.getElementById('chapterSelect').value;
+  const btn  = document.getElementById('goBtn');
+  const bookName = bookNames[+book] || '';
+
+  if (book && ch) {
+    // Pass book+chapter as search query to the Living Word page
+    btn.href = `/word/?book=${encodeURIComponent(bookName)}&chapter=${encodeURIComponent(ch)}`;
+  } else if (book) {
+    btn.href = `/word/?book=${encodeURIComponent(bookName)}`;
+  } else {
+    btn.href = '/word/';
+  }
+}
+
+init();
+</script>
+
 </body>
 </html>

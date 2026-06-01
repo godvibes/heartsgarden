@@ -556,7 +556,27 @@ async function init() {
     document.getElementById('searchInput').disabled = false;
     document.getElementById('searchHint').textContent =
       `${verses.length.toLocaleString()} verses · KJV · search a word or click a theme to begin`;
-    showWelcome();
+
+    // If arriving from the home page picker, load that book/chapter
+    const params  = new URLSearchParams(window.location.search);
+    const qBook   = params.get('book');
+    const qChapter= params.get('chapter');
+
+    if (qBook && qChapter) {
+      const bookVerse = verses.filter(v =>
+        v.book.toLowerCase() === qBook.toLowerCase() && v.chapter === +qChapter
+      );
+      document.getElementById('searchInput').value = `${qBook} ${qChapter}`;
+      document.getElementById('resultStatus').textContent =
+        `${qBook} · Chapter ${qChapter}`;
+      renderResults(bookVerse);
+    } else if (qBook) {
+      const bookVerse = verses.filter(v => v.book.toLowerCase() === qBook.toLowerCase());
+      document.getElementById('searchInput').value = qBook;
+      renderResults(bookVerse, qBook.toLowerCase());
+    } else {
+      showWelcome();
+    }
 
   } catch (err) {
     document.getElementById('searchHint').textContent = 'could not reach the scripture — check your connection and refresh';
