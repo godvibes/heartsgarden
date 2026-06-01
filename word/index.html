@@ -458,10 +458,21 @@
 // DATA
 // ─────────────────────────────────────────────────────────────
 
-const KJV_URL   = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/t_kjv.json';
-const BOOKS_URL = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/key_english.json';
+const KJV_URL   = 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json';
 const STORE_KEY = 'heartsgarden-word-v1';
 const MAX_RESULTS = 80;
+
+const BOOK_NAMES = [
+  'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
+  '1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra',
+  'Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon',
+  'Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos',
+  'Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah',
+  'Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians',
+  '2 Corinthians','Galatians','Ephesians','Philippians','Colossians',
+  '1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon',
+  'Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
+];
 
 const TAGS = [
   'trees','life','love','heart','mind','body','soul','ideas','talk','forgiveness',
@@ -512,7 +523,6 @@ const CONCEPTS = {
 // ─────────────────────────────────────────────────────────────
 
 let verses      = [];
-let bookNames   = {};
 let annotations = {};
 let mode        = 'search';
 let tagFilter   = null;
@@ -529,28 +539,24 @@ async function init() {
   buildModalTags();
 
   try {
-    const [vRes, bRes] = await Promise.all([fetch(KJV_URL), fetch(BOOKS_URL)]);
-    const vRaw = await vRes.json();
-    const bRaw = await bRes.json();
+    const res  = await fetch(KJV_URL);
+    const data = await res.json();
 
-    // Parse book names
-    const bookRows = bRaw?.resultset?.row ?? bRaw;
-    bookRows.forEach(r => {
-      const f   = r.field ?? r;
-      const num  = Array.isArray(f) ? f[0] : (r.b ?? f[0]);
-      const name = Array.isArray(f) ? f[1] : (r.n ?? f[1]);
-      bookNames[num] = name;
-    });
-
-    // Parse verses
-    const vRows = vRaw?.resultset?.row ?? vRaw;
-    verses = vRows.map(r => {
-      const f    = r.field ?? r;
-      const b    = Array.isArray(f) ? f[1] : (r.b ?? f[1]);
-      const c    = Array.isArray(f) ? f[2] : (r.c ?? f[2]);
-      const v    = Array.isArray(f) ? f[3] : (r.v ?? f[3]);
-      const text = Array.isArray(f) ? f[4] : (r.t ?? f[4]);
-      return { id:`${b}_${c}_${v}`, bookNum:+b, book:bookNames[+b]||`Book ${b}`, chapter:+c, verse:+v, text };
+    // Parse: [{abbrev, chapters:[[verse texts]]}]
+    data.forEach((book, bookIdx) => {
+      const bookName = BOOK_NAMES[bookIdx] || book.abbrev;
+      book.chapters.forEach((chVerses, chIdx) => {
+        chVerses.forEach((text, vIdx) => {
+          verses.push({
+            id:      `${bookIdx}_${chIdx}_${vIdx}`,
+            bookNum: bookIdx + 1,
+            book:    bookName,
+            chapter: chIdx + 1,
+            verse:   vIdx + 1,
+            text
+          });
+        });
+      });
     });
 
     document.getElementById('searchInput').disabled = false;
@@ -558,22 +564,21 @@ async function init() {
       `${verses.length.toLocaleString()} verses · KJV · search a word or click a theme to begin`;
 
     // If arriving from the home page picker, load that book/chapter
-    const params  = new URLSearchParams(window.location.search);
-    const qBook   = params.get('book');
-    const qChapter= params.get('chapter');
+    const params   = new URLSearchParams(window.location.search);
+    const qBook    = params.get('book');
+    const qChapter = params.get('chapter');
 
     if (qBook && qChapter) {
-      const bookVerse = verses.filter(v =>
+      const results = verses.filter(v =>
         v.book.toLowerCase() === qBook.toLowerCase() && v.chapter === +qChapter
       );
       document.getElementById('searchInput').value = `${qBook} ${qChapter}`;
-      document.getElementById('resultStatus').textContent =
-        `${qBook} · Chapter ${qChapter}`;
-      renderResults(bookVerse);
+      document.getElementById('resultStatus').textContent = `${qBook} · Chapter ${qChapter}`;
+      renderResults(results);
     } else if (qBook) {
-      const bookVerse = verses.filter(v => v.book.toLowerCase() === qBook.toLowerCase());
+      const results = verses.filter(v => v.book.toLowerCase() === qBook.toLowerCase());
       document.getElementById('searchInput').value = qBook;
-      renderResults(bookVerse, qBook.toLowerCase());
+      renderResults(results);
     } else {
       showWelcome();
     }

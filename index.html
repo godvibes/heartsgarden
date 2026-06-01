@@ -254,40 +254,37 @@
 
 <script>
 // ── Bible data ────────────────────────────────────────────────
-const KJV_URL   = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/t_kjv.json';
-const BOOKS_URL = 'https://cdn.jsdelivr.net/gh/scrollmapper/bible_databases@master/json/key_english.json';
+const KJV_URL = 'https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json';
 
-let verses    = [];
-let bookNames = {};   // { 1: 'Genesis', … }
-let bookMap   = {};   // { 1: { 1: [verse,…], 2: […] }, … }  book → chapter → verses
+const BOOK_NAMES = [
+  'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
+  '1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra',
+  'Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon',
+  'Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos',
+  'Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah',
+  'Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians',
+  '2 Corinthians','Galatians','Ephesians','Philippians','Colossians',
+  '1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon',
+  'Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
+];
+
+let verses  = [];   // flat [{b, c, v, text}]
+let bookMap = {};   // { bookIdx: { chapterIdx: [texts] } }
 
 async function init() {
   try {
-    const [vRes, bRes] = await Promise.all([fetch(KJV_URL), fetch(BOOKS_URL)]);
-    const vRaw = await vRes.json();
-    const bRaw = await bRes.json();
+    const res  = await fetch(KJV_URL);
+    const data = await res.json();
 
-    // Book names
-    const bookRows = bRaw?.resultset?.row ?? bRaw;
-    bookRows.forEach(r => {
-      const f    = r.field ?? r;
-      const num  = Array.isArray(f) ? f[0] : (r.b ?? f[0]);
-      const name = Array.isArray(f) ? f[1] : (r.n ?? f[1]);
-      bookNames[+num] = name;
-    });
-
-    // Verses
-    const vRows = vRaw?.resultset?.row ?? vRaw;
-    vRows.forEach(r => {
-      const f    = r.field ?? r;
-      const b    = +(Array.isArray(f) ? f[1] : (r.b ?? f[1]));
-      const c    = +(Array.isArray(f) ? f[2] : (r.c ?? f[2]));
-      const v    = +(Array.isArray(f) ? f[3] : (r.v ?? f[3]));
-      const text =   Array.isArray(f) ? f[4] : (r.t ?? f[4]);
-      verses.push({ b, c, v, text });
-      if (!bookMap[b]) bookMap[b] = {};
-      if (!bookMap[b][c]) bookMap[b][c] = [];
-      bookMap[b][c].push({ v, text });
+    // Parse: array of {abbrev, chapters:[[ verse texts ]]}
+    data.forEach((book, bookIdx) => {
+      bookMap[bookIdx] = {};
+      book.chapters.forEach((chVerses, chIdx) => {
+        bookMap[bookIdx][chIdx] = chVerses;
+        chVerses.forEach((text, vIdx) => {
+          verses.push({ b: bookIdx, c: chIdx, v: vIdx, text });
+        });
+      });
     });
 
     showRandomVerse();
@@ -302,12 +299,13 @@ async function init() {
 // ── Random verse ──────────────────────────────────────────────
 function showRandomVerse() {
   if (!verses.length) return;
-  const v = verses[Math.floor(Math.random() * verses.length)];
-  const el = document.getElementById('verseText');
+  const v    = verses[Math.floor(Math.random() * verses.length)];
+  const name = BOOK_NAMES[v.b];
+  const el   = document.getElementById('verseText');
   el.textContent = v.text;
   el.classList.remove('loading');
   document.getElementById('verseRef').textContent =
-    `${bookNames[v.b]} ${v.c}:${v.v}  ·  KJV`;
+    `${name} ${v.c + 1}:${v.v + 1}  ·  KJV`;
 }
 
 document.getElementById('refreshBtn').addEventListener('click', showRandomVerse);
@@ -315,48 +313,40 @@ document.getElementById('refreshBtn').addEventListener('click', showRandomVerse)
 // ── Book + chapter selects ────────────────────────────────────
 function populateBookSelect() {
   const sel = document.getElementById('bookSelect');
-  Object.keys(bookMap)
-    .map(Number)
-    .sort((a,b) => a - b)
-    .forEach(num => {
-      const opt = document.createElement('option');
-      opt.value = num;
-      opt.textContent = bookNames[num];
-      sel.appendChild(opt);
-    });
+  BOOK_NAMES.forEach((name, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = name;
+    sel.appendChild(opt);
+  });
 }
 
 document.getElementById('bookSelect').addEventListener('change', function () {
-  const bookNum = +this.value;
+  const bookIdx = +this.value;
   const chSel   = document.getElementById('chapterSelect');
   chSel.innerHTML = '<option value="">— ch —</option>';
   updateGoBtn();
-  if (!bookNum || !bookMap[bookNum]) return;
+  if (this.value === '' || !bookMap[bookIdx]) return;
 
-  Object.keys(bookMap[bookNum])
-    .map(Number)
-    .sort((a,b) => a - b)
-    .forEach(ch => {
-      const opt = document.createElement('option');
-      opt.value = ch;
-      opt.textContent = `Chapter ${ch}`;
-      chSel.appendChild(opt);
-    });
+  const numChapters = Object.keys(bookMap[bookIdx]).length;
+  for (let i = 0; i < numChapters; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `Chapter ${i + 1}`;
+    chSel.appendChild(opt);
+  }
 });
 
 document.getElementById('chapterSelect').addEventListener('change', updateGoBtn);
 
 function updateGoBtn() {
-  const book = document.getElementById('bookSelect').value;
-  const ch   = document.getElementById('chapterSelect').value;
-  const btn  = document.getElementById('goBtn');
-  const bookName = bookNames[+book] || '';
+  const bookVal = document.getElementById('bookSelect').value;
+  const chVal   = document.getElementById('chapterSelect').value;
+  const btn     = document.getElementById('goBtn');
 
-  if (book && ch) {
-    // Pass book+chapter as search query to the Living Word page
-    btn.href = `/word/?book=${encodeURIComponent(bookName)}&chapter=${encodeURIComponent(ch)}`;
-  } else if (book) {
-    btn.href = `/word/?book=${encodeURIComponent(bookName)}`;
+  if (bookVal !== '' && chVal !== '') {
+    const name = BOOK_NAMES[+bookVal];
+    btn.href = `/word/?book=${encodeURIComponent(name)}&chapter=${encodeURIComponent(+chVal + 1)}`;
   } else {
     btn.href = '/word/';
   }
