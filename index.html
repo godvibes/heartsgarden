@@ -86,76 +86,71 @@
 
     .verse-label {
       font-family: var(--mono);
-      font-size: 0.6rem;
+      font-size: 0.62rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 1rem;
-      opacity: 0.7;
+      min-height: 1em;
     }
 
-    /* ── parchment card ───────────────────────────── */
-    .verse-card {
+    /* ── parchment scroll (image only, centered) ─── */
+    .scroll-wrap {
       position: relative;
-      padding: 2.2rem 2.2rem 1.6rem;
-      text-align: left;
+      display: block;
       cursor: pointer;
-      margin-bottom: 0.5rem;
-
-      /* Real parchment image — transparent edges float on cream */
-      background-image: url('assets/images/parchment.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-color: transparent;
-
-      /* Depth shadow beneath the scroll */
-      filter: drop-shadow(4px 6px 18px rgba(60, 35, 10, 0.28));
+      margin: 0 auto 0;
+      max-width: 520px;
+      filter: drop-shadow(4px 8px 20px rgba(60, 35, 10, 0.30));
       transition: filter 0.2s, transform 0.15s;
     }
-
-    /* No ::before grain needed — real texture from the image */
-    .verse-card::before { display: none; }
-
-    .verse-card:hover {
+    .scroll-wrap:hover {
       transform: translateY(-2px);
-      filter: drop-shadow(6px 10px 24px rgba(60, 35, 10, 0.36));
+      filter: drop-shadow(6px 12px 28px rgba(60, 35, 10, 0.38));
     }
-
-    .verse-card.annotated::after {
-      content: '✦';
-      position: absolute;
-      top: 0.75rem; right: 1rem;
-      font-size: 0.75rem;
-      color: rgba(80, 45, 10, 0.5);
-      z-index: 1;
-    }
-
-    .verse-card > * { position: relative; z-index: 1; }
-
-    .verse-text {
-      font-style: italic;
-      font-size: 1rem;
-      line-height: 1.72;
-      color: #2a1a08;
+    .scroll-img {
+      width: 100%;
       display: block;
-      margin-bottom: 0.9rem;
+    }
+    /* Annotated star sits on the scroll corner */
+    .ann-star {
+      position: absolute;
+      top: 14%; right: 6%;
+      font-size: 1rem;
+      color: rgba(80, 45, 10, 0.55);
+      pointer-events: none;
     }
 
-    .verse-ref {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      color: rgba(80, 50, 15, 0.65);
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* ── refresh sits right under the scroll ─────── */
+    .refresh-wrap {
+      text-align: center;
+      margin: 0.6rem 0 0;
+    }
+
+    .refresh-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--border);
+      transition: color 0.2s;
+      padding: 0.3rem; line-height: 1;
+    }
+    .refresh-btn:hover { color: var(--accent); }
+
+    /* ── verse text below scroll + refresh ────────── */
+    .verse-below {
+      max-width: 420px;
+      margin: 0 auto;
+      padding-top: 1rem;
+      text-align: center;
+      cursor: pointer;
     }
 
     .verse-tags-row {
       display: flex; flex-wrap: wrap; gap: 0.28rem;
-      margin-bottom: 0.65rem;
+      justify-content: center;
+      margin-bottom: 0.7rem;
     }
     .verse-tag-chip {
       font-family: var(--mono);
@@ -164,28 +159,15 @@
       padding: 0.14rem 0.45rem;
       border-radius: 20px;
       border: 1px solid;
-      background: rgba(255,255,255,0.35);
     }
 
-    .tap-hint {
-      font-family: var(--mono);
-      font-size: 0.57rem;
-      letter-spacing: 0.1em;
-      color: rgba(80, 50, 15, 0.45);
-      text-align: right;
-      margin-top: 0.1rem;
+    .verse-text {
+      font-style: italic;
+      font-size: 0.93rem;
+      line-height: 1.72;
+      color: var(--ink);
+      display: block;
     }
-
-    .refresh-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: rgba(80, 50, 15, 0.45);
-      transition: color 0.2s;
-      padding: 0; line-height: 1;
-    }
-    .refresh-btn:hover { color: rgba(80,50,15,0.8); }
 
     /* ── book + chapter picker ────────────────────── */
     .picker-rule {
@@ -474,15 +456,25 @@
   <a class="enter-link" href="/word/">enter the living word →</a>
 
   <div class="verse-section">
-    <p class="verse-label">a word for today · tap to reflect</p>
 
-    <div class="verse-card" id="verseCard" role="button" tabindex="0" aria-label="Tap to annotate this verse">
+    <!-- Reference lives here as the label above the scroll -->
+    <p class="verse-label" id="verseRef">&#x00B7; KJV</p>
+
+    <!-- Parchment scroll — tap to annotate -->
+    <div class="scroll-wrap" id="verseCard" role="button" tabindex="0" aria-label="Tap to annotate this verse">
+      <img class="scroll-img" src="assets/images/parchment.png" alt="parchment scroll" />
+      <span class="ann-star" id="annStar" style="display:none">✦</span>
+    </div>
+
+    <!-- Refresh sits directly below the scroll -->
+    <div class="refresh-wrap">
+      <button class="refresh-btn" id="refreshBtn" title="another verse" aria-label="New verse">↻</button>
+    </div>
+
+    <!-- Verse text below -->
+    <div class="verse-below" id="verseBelow">
       <span class="verse-tags-row" id="cardTagsRow" style="display:none"></span>
       <span class="verse-text loading" id="verseText">gathering the word…</span>
-      <div class="verse-ref">
-        <span id="verseRef"></span>
-        <button class="refresh-btn" id="refreshBtn" title="another verse" aria-label="New verse">↻</button>
-      </div>
     </div>
 
     <div class="picker-rule"></div>
@@ -645,7 +637,7 @@ function setCurrentVerse(v) {
   el.classList.remove('loading');
 
   document.getElementById('verseRef').textContent =
-    `${currentVerse.book} ${currentVerse.chapter}:${currentVerse.verse}  ·  KJV`;
+    `${currentVerse.book}  ${currentVerse.chapter}:${currentVerse.verse}  ·  KJV`;
 
   // Show annotation tags if this verse is annotated
   refreshCardTags();
@@ -656,11 +648,15 @@ function setCurrentVerse(v) {
 }
 
 function refreshCardTags() {
-  const row = document.getElementById('cardTagsRow');
-  if (!currentVerse) { row.style.display = 'none'; return; }
+  const row  = document.getElementById('cardTagsRow');
+  const star = document.getElementById('annStar');
+  if (!currentVerse) { row.style.display = 'none'; star.style.display = 'none'; return; }
   const ann = annotations[currentVerse.id];
-  if (!ann?.tags?.length) { row.style.display = 'none'; return; }
+  const hasAnn = !!(ann && (ann.note || ann.tags?.length));
 
+  star.style.display = hasAnn ? 'block' : 'none';
+
+  if (!ann?.tags?.length) { row.style.display = 'none'; return; }
   row.style.display = 'flex';
   row.innerHTML = ann.tags.map(t => {
     const c = PRESET_COLORS[t] || customTags[t] || '#8a7560';
@@ -777,10 +773,6 @@ function saveAnnotation() {
   localStorage.setItem(STORE_KEY, JSON.stringify(annotations));
   closeModal();
   refreshCardTags();
-
-  const card = document.getElementById('verseCard');
-  const ann  = annotations[currentVerse.id];
-  card.classList.toggle('annotated', !!(ann && (ann.note || ann.tags?.length)));
 }
 
 function removeAnnotation() {
@@ -789,7 +781,6 @@ function removeAnnotation() {
   localStorage.setItem(STORE_KEY, JSON.stringify(annotations));
   closeModal();
   refreshCardTags();
-  document.getElementById('verseCard').classList.remove('annotated');
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -855,6 +846,7 @@ document.getElementById('newTagInput').addEventListener('keydown', e => {
 // ─────────────────────────────────────────────────────────────
 
 document.getElementById('verseCard').addEventListener('click', openModal);
+document.getElementById('verseBelow').addEventListener('click', openModal);
 document.getElementById('verseCard').addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') openModal();
 });
