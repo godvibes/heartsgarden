@@ -3,3 +3,10 @@
 
 # Local planning docs — stay on your Mac, not in the web repo
 Spiritual Cultivation process./
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
