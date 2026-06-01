@@ -97,62 +97,29 @@
     /* ── parchment card ───────────────────────────── */
     .verse-card {
       position: relative;
-      padding: 1.8rem 2rem 1.4rem;
+      padding: 2.2rem 2.2rem 1.6rem;
       text-align: left;
       cursor: pointer;
       margin-bottom: 0.5rem;
-      overflow: hidden;
 
-      /* Parchment base + depth gradients */
-      background-color: #c9a97a;
-      background-image:
-        radial-gradient(ellipse at 18% 25%, rgba(255, 228, 160, 0.45) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 15%, rgba(210, 165, 85,  0.30) 0%, transparent 40%),
-        radial-gradient(ellipse at 88% 75%, rgba(155, 105, 45,  0.30) 0%, transparent 45%),
-        radial-gradient(ellipse at 25% 85%, rgba(220, 180, 105, 0.25) 0%, transparent 40%),
-        radial-gradient(ellipse at 55% 50%, rgba(255, 240, 195, 0.15) 0%, transparent 60%);
+      /* Real parchment image — transparent edges float on cream */
+      background-image: url('assets/images/parchment.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: transparent;
 
-      /* Worn edges: inner shadow */
-      box-shadow:
-        inset  6px  6px 22px rgba(120, 80, 20, 0.18),
-        inset -6px  6px 18px rgba(100, 65, 15, 0.12),
-        inset  6px -6px 18px rgba(100, 65, 15, 0.10),
-        inset -6px -6px 16px rgba(120, 80, 20, 0.14),
-             4px  6px 20px rgba(60, 35, 10, 0.22);
-
-      /* Subtle grain via repeating micro-gradients */
-      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-      transition: box-shadow 0.2s, transform 0.15s;
+      /* Depth shadow beneath the scroll */
+      filter: drop-shadow(4px 6px 18px rgba(60, 35, 10, 0.28));
+      transition: filter 0.2s, transform 0.15s;
     }
 
-    /* Grain overlay via pseudo-element */
-    .verse-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        repeating-linear-gradient(
-          87deg,
-          transparent 0px, transparent 2px,
-          rgba(90, 55, 15, 0.025) 2px, rgba(90, 55, 15, 0.025) 3px
-        ),
-        repeating-linear-gradient(
-          3deg,
-          transparent 0px, transparent 3px,
-          rgba(90, 55, 15, 0.02) 3px, rgba(90, 55, 15, 0.02) 4px
-        );
-      pointer-events: none;
-      z-index: 0;
-    }
+    /* No ::before grain needed — real texture from the image */
+    .verse-card::before { display: none; }
 
     .verse-card:hover {
       transform: translateY(-2px);
-      box-shadow:
-        inset  6px  6px 22px rgba(120, 80, 20, 0.18),
-        inset -6px  6px 18px rgba(100, 65, 15, 0.12),
-        inset  6px -6px 18px rgba(100, 65, 15, 0.10),
-        inset -6px -6px 16px rgba(120, 80, 20, 0.14),
-             6px  8px 28px rgba(60, 35, 10, 0.28);
+      filter: drop-shadow(6px 10px 24px rgba(60, 35, 10, 0.36));
     }
 
     .verse-card.annotated::after {
