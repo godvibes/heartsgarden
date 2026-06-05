@@ -87,13 +87,28 @@
       width: 100%;
     }
 
-    /* ── parchment card — background image, verse inside ── */
+    /* ── parchment card — fixed shape, text centered inside ── */
     .verse-card {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      aspect-ratio: 800 / 533;   /* matches actual parchment.png dimensions */
+
       background-image: url('assets/images/parchment.png');
-      background-size: cover;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
       background-position: center;
-      padding: 2.4rem 2.6rem 2rem;
-      text-align: center;
+
+      /* flex-center the text within the fixed space */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      /* inset padding keeps text off the torn edges */
+      padding: 14% 16%;
+
       cursor: pointer;
       filter: drop-shadow(3px 5px 14px rgba(60,35,10,0.22));
       transition: filter 0.2s, transform 0.15s;
@@ -106,7 +121,7 @@
     .verse-tags-row {
       display: flex; flex-wrap: wrap; gap: 0.28rem;
       justify-content: center;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.5rem;
     }
     .verse-tag-chip {
       font-family: var(--mono);
@@ -121,10 +136,13 @@
     .verse-text {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 1rem;
-      line-height: 1.75;
+      /* scales with the card width so it always fits */
+      font-size: clamp(0.68rem, 2.2vw, 0.94rem);
+      line-height: 1.7;
       color: #2a1a08;
+      text-align: center;
       display: block;
+      overflow: hidden;
     }
 
     /* ── below the card — ref, KJV, refresh ─────────── */
