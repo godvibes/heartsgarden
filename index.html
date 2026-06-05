@@ -87,17 +87,26 @@
       width: 100%;
     }
 
-    /* ── verse text ───────────────────────────────── */
-    .verse-below {
-      margin-top: 0;
+    /* ── parchment card — background image, verse inside ── */
+    .verse-card {
+      background-image: url('assets/images/parchment.png');
+      background-size: cover;
+      background-position: center;
+      padding: 2.4rem 2.6rem 2rem;
       text-align: center;
       cursor: pointer;
+      filter: drop-shadow(3px 5px 14px rgba(60,35,10,0.22));
+      transition: filter 0.2s, transform 0.15s;
+    }
+    .verse-card:hover {
+      transform: translateY(-1px);
+      filter: drop-shadow(4px 7px 18px rgba(60,35,10,0.3));
     }
 
     .verse-tags-row {
       display: flex; flex-wrap: wrap; gap: 0.28rem;
       justify-content: center;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.65rem;
     }
     .verse-tag-chip {
       font-family: var(--mono);
@@ -106,23 +115,25 @@
       padding: 0.14rem 0.45rem;
       border-radius: 20px;
       border: 1px solid;
+      background: rgba(255,255,255,0.4);
     }
 
     .verse-text {
       font-family: var(--serif);
       font-style: italic;
       font-size: 1rem;
-      line-height: 1.72;
-      color: var(--ink);
+      line-height: 1.75;
+      color: #2a1a08;
       display: block;
-      margin-bottom: 0.9rem;
     }
 
+    /* ── below the card — ref, KJV, refresh ─────────── */
     .verse-meta {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.8rem;
+      gap: 0.75rem;
+      padding-top: 0.9rem;
     }
 
     .verse-ref {
@@ -134,7 +145,7 @@
     }
 
     .ann-star {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--accent);
     }
 
@@ -437,15 +448,17 @@
 
   <div class="verse-section">
 
-    <!-- Verse text, reference, refresh -->
-    <div class="verse-below" id="verseBelow">
+    <!-- Parchment background card — verse text lives inside -->
+    <div class="verse-card" id="verseCard">
       <span class="verse-tags-row" id="cardTagsRow" style="display:none"></span>
       <span class="verse-text" id="verseText">gathering the word…</span>
-      <div class="verse-meta">
-        <span class="verse-ref" id="verseRef"></span>
-        <span class="ann-star" id="annStar" style="display:none">✦</span>
-        <button class="refresh-btn" id="refreshBtn" title="another verse">↻</button>
-      </div>
+    </div>
+
+    <!-- Reference, KJV label, refresh — outside the parchment -->
+    <div class="verse-meta">
+      <span class="verse-ref" id="verseRef"></span>
+      <span class="ann-star" id="annStar" style="display:none">✦</span>
+      <button class="refresh-btn" id="refreshBtn" title="another verse">↻</button>
     </div>
 
     <div class="picker-rule"></div>
@@ -822,10 +835,8 @@ document.getElementById('newTagInput').addEventListener('keydown', e => {
 // EVENTS
 // ─────────────────────────────────────────────────────────────
 
-// Tap verse text → open annotation modal
-document.getElementById('verseBelow').addEventListener('click', e => {
-  if (e.target !== document.getElementById('refreshBtn')) openModal();
-});
+// Tap parchment card → open annotation modal
+document.getElementById('verseCard').addEventListener('click', openModal);
 document.getElementById('refreshBtn').addEventListener('click', showRandomVerse);
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('btnSave').addEventListener('click', saveAnnotation);
