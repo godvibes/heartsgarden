@@ -107,7 +107,7 @@
       justify-content: center;
 
       /* inset padding keeps text off the torn edges */
-      padding: 14% 16%;
+      padding: 10% 16%;
 
       cursor: pointer;
       filter: drop-shadow(3px 5px 14px rgba(60,35,10,0.22));
@@ -136,8 +136,8 @@
     .verse-text {
       font-family: var(--serif);
       font-style: italic;
-      /* scales with the card width so it always fits */
-      font-size: clamp(0.68rem, 2.2vw, 0.94rem);
+      /* min 12pt (1rem/16px), target 14–18pt range */
+      font-size: clamp(1rem, 3.5vw, 1.2rem);
       line-height: 1.7;
       color: #2a1a08;
       text-align: center;
