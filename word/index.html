@@ -569,12 +569,22 @@ async function init() {
     document.getElementById('searchHint').textContent =
       `${verses.length.toLocaleString()} verses · KJV · search a word or click a theme to begin`;
 
-    // If arriving from the home page picker, load that book/chapter
+    // Handle URL params from homepage
     const params   = new URLSearchParams(window.location.search);
     const qBook    = params.get('book');
     const qChapter = params.get('chapter');
+    const qTag     = params.get('tag');
 
-    if (qBook && qChapter) {
+    if (qTag) {
+      // Arrived from a tag chip → open My Garden filtered to that tag
+      mode = 'garden';
+      tagFilter = qTag;
+      document.querySelectorAll('.mode-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.mode === 'garden')
+      );
+      buildTagBar();
+      renderGarden();
+    } else if (qBook && qChapter) {
       const results = verses.filter(v =>
         v.book.toLowerCase() === qBook.toLowerCase() && v.chapter === +qChapter
       );

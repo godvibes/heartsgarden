@@ -670,7 +670,8 @@ function refreshCardTags() {
   row.style.display = 'flex';
   row.innerHTML = ann.tags.map(t => {
     const c = PRESET_COLORS[t] || customTags[t] || '#8a7560';
-    return `<span class="verse-tag-chip" style="color:${c};border-color:${c}">${t}</span>`;
+    return `<a class="verse-tag-chip" href="/word/?tag=${encodeURIComponent(t)}"
+      style="color:${c};border-color:${c};text-decoration:none">${t}</a>`;
   }).join('');
 }
 
