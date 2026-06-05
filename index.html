@@ -121,7 +121,7 @@
     .verse-tags-row {
       display: flex; flex-wrap: wrap; gap: 0.28rem;
       justify-content: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
     .verse-tag-chip {
       font-family: var(--mono);
@@ -466,9 +466,11 @@
 
   <div class="verse-section">
 
-    <!-- Parchment background card — verse text lives inside -->
+    <!-- Tags sit above the parchment, outside it -->
+    <div class="verse-tags-row" id="cardTagsRow" style="display:none"></div>
+
+    <!-- Parchment background card — verse text only inside -->
     <div class="verse-card" id="verseCard">
-      <span class="verse-tags-row" id="cardTagsRow" style="display:none"></span>
       <span class="verse-text" id="verseText">gathering the word…</span>
     </div>
 
