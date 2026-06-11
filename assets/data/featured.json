@@ -1,163 +1,992 @@
 [
-  {"ref":"Genesis 1:1","text":"In the beginning God created the heaven and the earth."},
-  {"ref":"Genesis 1:11","text":"And God said, Let the earth bring forth grass, the herb yielding seed, and the fruit tree yielding fruit after his kind, whose seed is in itself, upon the earth: and it was so."},
-  {"ref":"Genesis 1:12","text":"And the earth brought forth grass, and herb yielding seed after his kind, and the tree yielding fruit, whose seed was in itself, after his kind: and God saw that it was good."},
-  {"ref":"Genesis 2:8","text":"And the LORD God planted a garden eastward in Eden; and there he put the man whom he had formed."},
-  {"ref":"Genesis 2:9","text":"And out of the ground made the LORD God to grow every tree that is pleasant to the sight, and good for food; the tree of life also in the midst of the garden."},
-  {"ref":"Psalm 1:2-3","text":"But his delight is in the law of the LORD; and in his law doth he meditate day and night. And he shall be like a tree planted by the rivers of water, that bringeth forth his fruit in his season; his leaf also shall not wither; and whatsoever he doeth shall prosper."},
-  {"ref":"Psalm 8:3-4","text":"When I consider thy heavens, the work of thy fingers, the moon and the stars, which thou hast ordained; what is man, that thou art mindful of him?"},
-  {"ref":"Psalm 16:11","text":"Thou wilt shew me the path of life: in thy presence is fulness of joy; at thy right hand there are pleasures for evermore."},
-  {"ref":"Psalm 17:8","text":"Keep me as the apple of the eye, hide me under the shadow of thy wings."},
-  {"ref":"Psalm 18:2","text":"The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust; my buckler, and the horn of my salvation, and my high tower."},
-  {"ref":"Psalm 19:1","text":"The heavens declare the glory of God; and the firmament sheweth his handywork."},
-  {"ref":"Psalm 19:14","text":"Let the words of my mouth, and the meditation of my heart, be acceptable in thy sight, O LORD, my strength, and my redeemer."},
-  {"ref":"Psalm 22:26","text":"The meek shall eat and be satisfied: they shall praise the LORD that seek him: your heart shall live for ever."},
-  {"ref":"Psalm 23:1-3","text":"The LORD is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul."},
-  {"ref":"Psalm 23:4","text":"Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me."},
-  {"ref":"Psalm 23:6","text":"Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the LORD for ever."},
-  {"ref":"Psalm 24:1","text":"The earth is the LORD's, and the fulness thereof; the world, and they that dwell therein."},
-  {"ref":"Psalm 25:4-5","text":"Shew me thy ways, O LORD; teach me thy paths. Lead me in thy truth, and teach me: for thou art the God of my salvation; on thee do I wait all the day."},
-  {"ref":"Psalm 27:1","text":"The LORD is my light and my salvation; whom shall I fear? the LORD is the strength of my life; of whom shall I be afraid?"},
-  {"ref":"Psalm 27:4","text":"One thing have I desired of the LORD, that will I seek after; that I may dwell in the house of the LORD all the days of my life, to behold the beauty of the LORD, and to inquire in his temple."},
-  {"ref":"Psalm 27:14","text":"Wait on the LORD: be of good courage, and he shall strengthen thine heart: wait, I say, on the LORD."},
-  {"ref":"Psalm 28:7","text":"The LORD is my strength and my shield; my heart trusted in him, and I am helped: therefore my heart greatly rejoiceth; and with my song will I praise him."},
-  {"ref":"Psalm 30:5","text":"For his anger endureth but a moment; in his favour is life: weeping may endure for a night, but joy cometh in the morning."},
-  {"ref":"Psalm 31:24","text":"Be of good courage, and he shall strengthen your heart, all ye that hope in the LORD."},
-  {"ref":"Psalm 32:8","text":"I will instruct thee and teach thee in the way which thou shalt go: I will guide thee with mine eye."},
-  {"ref":"Psalm 33:6","text":"By the word of the LORD were the heavens made; and all the host of them by the breath of his mouth."},
-  {"ref":"Psalm 34:8","text":"O taste and see that the LORD is good: blessed is the man that trusteth in him."},
-  {"ref":"Psalm 34:18","text":"The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit."},
-  {"ref":"Psalm 36:7","text":"How excellent is thy lovingkindness, O God! therefore the children of men put their trust under the shadow of thy wings."},
-  {"ref":"Psalm 36:9","text":"For with thee is the fountain of life: in thy light shall we see light."},
-  {"ref":"Psalm 37:4","text":"Delight thyself also in the LORD; and he shall give thee the desires of thine heart."},
-  {"ref":"Psalm 37:11","text":"But the meek shall inherit the earth; and shall delight themselves in the abundance of peace."},
-  {"ref":"Psalm 40:2-3","text":"He brought me up also out of an horrible pit, out of the miry clay, and set my feet upon a rock, and established my goings. And he hath put a new song in my mouth, even praise unto our God."},
-  {"ref":"Psalm 42:1-2","text":"As the hart panteth after the water brooks, so panteth my soul after thee, O God. My soul thirsteth for God, for the living God."},
-  {"ref":"Psalm 42:11","text":"Why art thou cast down, O my soul? and why art thou disquieted within me? hope thou in God: for I shall yet praise him, who is the health of my countenance, and my God."},
-  {"ref":"Psalm 46:1","text":"God is our refuge and strength, a very present help in trouble."},
-  {"ref":"Psalm 46:10","text":"Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth."},
-  {"ref":"Psalm 51:10","text":"Create in me a clean heart, O God; and renew a right spirit within me."},
-  {"ref":"Psalm 51:12","text":"Restore unto me the joy of thy salvation; and uphold me with thy free spirit."},
-  {"ref":"Psalm 55:22","text":"Cast thy burden upon the LORD, and he shall sustain thee: he shall never suffer the righteous to be moved."},
-  {"ref":"Psalm 57:1","text":"Be merciful unto me, O God, be merciful unto me: for my soul trusteth in thee: yea, in the shadow of thy wings will I make my refuge, until these calamities be overpast."},
-  {"ref":"Psalm 62:1","text":"Truly my soul waiteth upon God: from him cometh my salvation."},
-  {"ref":"Psalm 62:5","text":"My soul, wait thou only upon God; for my expectation is from him."},
-  {"ref":"Psalm 63:1","text":"O God, thou art my God; early will I seek thee: my soul thirsteth for thee, my flesh longeth for thee in a dry and thirsty land, where no water is."},
-  {"ref":"Psalm 65:9","text":"Thou visitest the earth, and waterest it: thou greatly enrichest it with the river of God, which is full of water: thou preparest them corn, when thou hast so provided for it."},
-  {"ref":"Psalm 65:11","text":"Thou crownest the year with thy goodness; and thy paths drop fatness."},
-  {"ref":"Psalm 65:13","text":"The pastures are clothed with flocks; the valleys also are covered over with corn; they shout for joy, they also sing."},
-  {"ref":"Psalm 66:5","text":"Come and see the works of God: he is terrible in his doing toward the children of men."},
-  {"ref":"Psalm 71:5","text":"For thou art my hope, O Lord GOD: thou art my trust from my youth."},
-  {"ref":"Psalm 72:6","text":"He shall come down like rain upon the mown grass: as showers that water the earth."},
-  {"ref":"Psalm 84:3","text":"Yea, the sparrow hath found an house, and the swallow a nest for herself, where she may lay her young, even thine altars, O LORD of hosts, my King, and my God."},
-  {"ref":"Psalm 84:11","text":"For the LORD God is a sun and shield: the LORD will give grace and glory: no good thing will he withhold from them that walk uprightly."},
-  {"ref":"Psalm 85:11","text":"Truth shall spring out of the earth; and righteousness shall look down from heaven."},
-  {"ref":"Psalm 90:12","text":"So teach us to number our days, that we may apply our hearts unto wisdom."},
-  {"ref":"Psalm 91:1","text":"He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty."},
-  {"ref":"Psalm 91:4","text":"He shall cover thee with his feathers, and under his wings shalt thou trust: his truth shall be thy shield and buckler."},
-  {"ref":"Psalm 92:12","text":"The righteous shall flourish like the palm tree: he shall grow like a cedar in Lebanon."},
-  {"ref":"Psalm 92:14","text":"They shall still bring forth fruit in old age; they shall be fat and flourishing."},
-  {"ref":"Psalm 96:11-12","text":"Let the heavens rejoice, and let the earth be glad; let the sea roar, and the fulness thereof. Let the field be joyful, and all that is therein: then shall all the trees of the wood rejoice."},
-  {"ref":"Psalm 100:3","text":"Know ye that the LORD he is God: it is he that hath made us, and not we ourselves; we are his people, and the sheep of his pasture."},
-  {"ref":"Psalm 103:2-3","text":"Bless the LORD, O my soul, and forget not all his benefits: who forgiveth all thine iniquities; who healeth all thy diseases."},
-  {"ref":"Psalm 103:13","text":"Like as a father pitieth his children, so the LORD pitieth them that fear him."},
-  {"ref":"Psalm 104:14","text":"He causeth the grass to grow for the cattle, and herb for the service of man: that he may bring forth food out of the earth."},
-  {"ref":"Psalm 104:16","text":"The trees of the LORD are full of sap; the cedars of Lebanon, which he hath planted."},
-  {"ref":"Psalm 104:24","text":"O LORD, how manifold are thy works! in wisdom hast thou made them all: the earth is full of thy riches."},
-  {"ref":"Psalm 107:35","text":"He turneth the wilderness into a standing water, and dry ground into watersprings."},
-  {"ref":"Psalm 107:37","text":"And sow the fields, and plant vineyards, which may yield fruits of increase."},
-  {"ref":"Psalm 111:2","text":"The works of the LORD are great, sought out of all them that have pleasure therein."},
-  {"ref":"Psalm 118:24","text":"This is the day which the LORD hath made; we will rejoice and be glad in it."},
-  {"ref":"Psalm 119:105","text":"Thy word is a lamp unto my feet, and a light unto my path."},
-  {"ref":"Psalm 121:1-2","text":"I will lift up mine eyes unto the hills, from whence cometh my help. My help cometh from the LORD, which made heaven and earth."},
-  {"ref":"Psalm 121:3","text":"He will not suffer thy foot to be moved: he that keepeth thee will not slumber."},
-  {"ref":"Psalm 126:5-6","text":"They that sow in tears shall reap in joy. He that goeth forth and weepeth, bearing precious seed, shall doubtless come again with rejoicing, bringing his sheaves with him."},
-  {"ref":"Psalm 128:2","text":"For thou shalt eat the labour of thine hands: happy shalt thou be, and it shall be well with thee."},
-  {"ref":"Psalm 133:1","text":"Behold, how good and how pleasant it is for brethren to dwell together in unity!"},
-  {"ref":"Psalm 136:25","text":"Who giveth food to all flesh: for his mercy endureth for ever."},
-  {"ref":"Psalm 139:7-8","text":"Whither shall I go from thy spirit? or whither shall I flee from thy presence? If I ascend up into heaven, thou art there: if I make my bed in hell, behold, thou art there."},
-  {"ref":"Psalm 139:14","text":"I will praise thee; for I am fearfully and wonderfully made: marvellous are thy works; and that my soul knoweth right well."},
-  {"ref":"Psalm 143:8","text":"Cause me to hear thy lovingkindness in the morning; for in thee do I trust: cause me to know the way wherein I should walk; for I lift up my soul unto thee."},
-  {"ref":"Psalm 145:9","text":"The LORD is good to all: and his tender mercies are over all his works."},
-  {"ref":"Psalm 145:15-16","text":"The eyes of all wait upon thee; and thou givest them their meat in due season. Thou openest thine hand, and satisfiest the desire of every living thing."},
-  {"ref":"Psalm 147:3","text":"He healeth the broken in heart, and bindeth up their wounds."},
-  {"ref":"Psalm 147:8","text":"Who covereth the heaven with clouds, who prepareth rain for the earth, who maketh grass to grow upon the mountains."},
-  {"ref":"Psalm 148:7-8","text":"Praise the LORD from the earth, ye dragons, and all deeps: fire, and hail; snow, and vapour; stormy wind fulfilling his word."},
-  {"ref":"Psalm 148:9-10","text":"Mountains, and all hills; fruitful trees, and all cedars: beasts, and all cattle; creeping things, and flying fowl."},
-  {"ref":"Psalm 150:6","text":"Let every thing that hath breath praise the LORD. Praise ye the LORD."},
-  {"ref":"Proverbs 3:5-6","text":"Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."},
-  {"ref":"Proverbs 11:25","text":"The liberal soul shall be made fat: and he that watereth shall be watered also himself."},
-  {"ref":"Proverbs 11:28","text":"He that trusteth in his riches shall fall; but the righteous shall flourish as a branch."},
-  {"ref":"Ecclesiastes 3:1-2","text":"To every thing there is a season, and a time to every purpose under the heaven: a time to be born, and a time to die; a time to plant, and a time to pluck up that which is planted."},
-  {"ref":"Ecclesiastes 3:11","text":"He hath made every thing beautiful in his time: also he hath set the world in their heart, so that no man can find out the work that God maketh from the beginning to the end."},
-  {"ref":"Song of Solomon 2:1","text":"I am the rose of Sharon, and the lily of the valleys."},
-  {"ref":"Song of Solomon 2:11-12","text":"For, lo, the winter is past, the rain is over and gone; the flowers appear on the earth; the time of the singing of birds is come, and the voice of the turtle is heard in our land."},
-  {"ref":"Song of Solomon 4:12","text":"A garden inclosed is my sister, my spouse; a spring shut up, a fountain sealed."},
-  {"ref":"Song of Solomon 6:11","text":"I went down into the garden of nuts to see the fruits of the valley, and to see whether the vine flourished, and the pomegranates budded."},
-  {"ref":"Isaiah 40:8","text":"The grass withereth, the flower fadeth: but the word of our God shall stand for ever."},
-  {"ref":"Isaiah 40:28-29","text":"Hast thou not known? hast thou not heard, that the everlasting God, the LORD, the Creator of the ends of the earth, fainteth not, neither is weary? there is no searching of his understanding. He giveth power to the faint; and to them that have no might he increaseth strength."},
-  {"ref":"Isaiah 40:31","text":"But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint."},
-  {"ref":"Isaiah 43:19","text":"Behold, I will do a new thing; now it shall spring forth; shall ye not know it? I will even make a way in the wilderness, and rivers in the desert."},
-  {"ref":"Isaiah 44:3-4","text":"For I will pour water upon him that is thirsty, and floods upon the dry ground: I will pour my spirit upon thy seed, and my blessing upon thine offspring: and they shall spring up as among the grass, as willows by the water courses."},
-  {"ref":"Isaiah 55:10-11","text":"For as the rain cometh down, and the snow from heaven, and returneth not thither, but watereth the earth, and maketh it bring forth and bud, that it may give seed to the sower, and bread to the eater: so shall my word be that goeth forth out of my mouth."},
-  {"ref":"Isaiah 61:11","text":"For as the earth bringeth forth her bud, and as the garden causeth the things that are sown in it to spring forth; so the Lord GOD will cause righteousness and praise to spring forth before all the nations."},
-  {"ref":"Jeremiah 17:7-8","text":"Blessed is the man that trusteth in the LORD, and whose hope the LORD is. For he shall be as a tree planted by the waters, and that spreadeth out her roots by the river, and shall not see when heat cometh, but her leaf shall be green."},
-  {"ref":"Jeremiah 29:11","text":"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end."},
-  {"ref":"Ezekiel 34:26","text":"And I will make them and the places round about my hill a blessing; and I will cause the shower to come down in his season; there shall be showers of blessing."},
-  {"ref":"Hosea 14:5","text":"I will be as the dew unto Israel: he shall grow as the lily, and cast forth his roots as Lebanon."},
-  {"ref":"Hosea 14:7","text":"They that dwell under his shadow shall return; they shall revive as the corn, and grow as the vine: the scent thereof shall be as the wine of Lebanon."},
-  {"ref":"Matthew 5:8","text":"Blessed are the pure in heart: for they shall see God."},
-  {"ref":"Matthew 6:28-29","text":"And why take ye thought for raiment? Consider the lilies of the field, how they grow; they toil not, neither do they spin: and yet I say unto you, That even Solomon in all his glory was not arrayed like one of these."},
-  {"ref":"Matthew 6:33","text":"But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you."},
-  {"ref":"Matthew 13:3","text":"And he spake many things unto them in parables, saying, Behold, a sower went forth to sow."},
-  {"ref":"Matthew 13:8","text":"But other fell into good ground, and brought forth fruit, some an hundredfold, some sixtyfold, some thirtyfold."},
-  {"ref":"Matthew 13:31-32","text":"The kingdom of heaven is like to a grain of mustard seed, which a man took, and sowed in his field: which indeed is the least of all seeds: but when it is grown, it is the greatest among herbs, and becometh a tree, so that the birds of the air come and lodge in the branches thereof."},
-  {"ref":"Matthew 13:33","text":"The kingdom of heaven is like unto leaven, which a woman took, and hid in three measures of meal, till the whole was leavened."},
-  {"ref":"Mark 4:26-27","text":"And he said, So is the kingdom of God, as if a man should cast seed into the ground; and should sleep, and rise night and day, and the seed should spring and grow up, he knoweth not how."},
-  {"ref":"Mark 4:28","text":"For the earth bringeth forth fruit of herself; first the blade, then the ear, after that the full corn in the ear."},
-  {"ref":"Mark 4:32","text":"But when it is sown, it groweth up, and becometh greater than all herbs, and shooteth out great branches; so that the fowls of the air may lodge under the shadow of it."},
-  {"ref":"Luke 8:15","text":"But that on the good ground are they, which in an honest and good heart, having heard the word, keep it, and bring forth fruit with patience."},
-  {"ref":"Luke 13:19","text":"It is like a grain of mustard seed, which a man took, and cast into his garden; and it grew, and waxed a great tree; and the fowls of the air lodged in the branches of it."},
-  {"ref":"John 1:4","text":"In him was life; and the life was the light of men."},
-  {"ref":"John 3:16","text":"For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."},
-  {"ref":"John 4:14","text":"But whosoever drinketh of the water that I shall give him shall never thirst; but the water that I shall give him shall be in him a well of water springing up into everlasting life."},
-  {"ref":"John 10:10","text":"The thief cometh not, but for to steal, and to kill, and to destroy: I am come that they might have life, and that they might have it more abundantly."},
-  {"ref":"John 12:24","text":"Verily, verily, I say unto you, Except a corn of wheat fall into the ground and die, it abideth alone: but if it die, it bringeth forth much fruit."},
-  {"ref":"John 13:34","text":"A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another."},
-  {"ref":"John 14:27","text":"Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid."},
-  {"ref":"John 15:1","text":"I am the true vine, and my Father is the husbandman."},
-  {"ref":"John 15:4","text":"Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me."},
-  {"ref":"John 15:5","text":"I am the vine, ye are the branches: He that abideth in me, and I in him, the same bringeth forth much fruit: for without me ye can do nothing."},
-  {"ref":"John 15:8","text":"Herein is my Father glorified, that ye bear much fruit; so shall ye be my disciples."},
-  {"ref":"John 15:12","text":"This is my commandment, That ye love one another, as I have loved you."},
-  {"ref":"Romans 5:5","text":"And hope maketh not ashamed; because the love of God is shed abroad in our hearts by the Holy Ghost which is given unto us."},
-  {"ref":"Romans 8:28","text":"And we know that all things work together for good to them that love God, to them who are the called according to his purpose."},
-  {"ref":"Romans 12:2","text":"And be not conformed to this world: but be ye transformed by the renewing of your mind, that ye may prove what is that good, and acceptable, and perfect, will of God."},
-  {"ref":"1 Corinthians 3:6-7","text":"I have planted, Apollos watered; but God gave the increase. So then neither is he that planteth any thing, neither he that watereth; but God that giveth the increase."},
-  {"ref":"1 Corinthians 13:4","text":"Charity suffereth long, and is kind; charity envieth not; charity vaunteth not itself, is not puffed up."},
-  {"ref":"1 Corinthians 13:13","text":"And now abideth faith, hope, charity, these three; but the greatest of these is charity."},
-  {"ref":"2 Corinthians 5:17","text":"Therefore if any man be in Christ, he is a new creature: old things are passed away; behold, all things are become new."},
-  {"ref":"2 Corinthians 9:10","text":"Now he that ministereth seed to the sower both minister bread for your food, and multiply your seed sown, and increase the fruits of your righteousness."},
-  {"ref":"Galatians 5:22-23","text":"But the fruit of the Spirit is love, joy, peace, longsuffering, gentleness, goodness, faith, meekness, temperance: against such there is no law."},
-  {"ref":"Galatians 6:7","text":"Be not deceived; God is not mocked: for whatsoever a man soweth, that shall he also reap."},
-  {"ref":"Galatians 6:9","text":"And let us not be weary in well doing: for in due season we shall reap, if we faint not."},
-  {"ref":"Ephesians 3:17","text":"That Christ may dwell in your hearts by faith; that ye, being rooted and grounded in love."},
-  {"ref":"Ephesians 4:32","text":"And be ye kind one to another, tenderhearted, forgiving one another, even as God for Christ's sake hath forgiven you."},
-  {"ref":"Philippians 4:6-7","text":"Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus."},
-  {"ref":"Philippians 4:8","text":"Finally, brethren, whatsoever things are true, whatsoever things are honest, whatsoever things are just, whatsoever things are pure, whatsoever things are lovely, whatsoever things are of good report; if there be any virtue, and if there be any praise, think on these things."},
-  {"ref":"Colossians 2:6-7","text":"As ye have therefore received Christ Jesus the Lord, so walk ye in him: rooted and built up in him, and stablished in the faith, as ye have been taught, abounding therein with thanksgiving."},
-  {"ref":"Colossians 3:15","text":"And let the peace of God rule in your hearts, to the which also ye are called in one body; and be ye thankful."},
-  {"ref":"1 Thessalonians 5:18","text":"In every thing give thanks: for this is the will of God in Christ Jesus concerning you."},
-  {"ref":"Hebrews 12:11","text":"Now no chastening for the present seemeth to be joyous, but grievous: nevertheless afterward it yieldeth the peaceable fruit of righteousness unto them which are exercised thereby."},
-  {"ref":"James 1:17","text":"Every good gift and every perfect gift is from above, and cometh down from the Father of lights, with whom is no variableness, neither shadow of turning."},
-  {"ref":"James 3:18","text":"And the fruit of righteousness is sown in peace of them that make peace."},
-  {"ref":"James 5:7","text":"Be patient therefore, brethren, unto the coming of the Lord. Behold, the husbandman waiteth for the precious fruit of the earth, and hath long patience for it, until he receive the early and latter rain."},
-  {"ref":"1 Peter 1:24-25","text":"For all flesh is as grass, and all the glory of man as the flower of grass. The grass withereth, and the flower thereof falleth away: but the word of the Lord endureth for ever."},
-  {"ref":"1 Peter 2:2","text":"As newborn babes, desire the sincere milk of the word, that ye may grow thereby."},
-  {"ref":"1 Peter 5:7","text":"Casting all your care upon him; for he careth for you."},
-  {"ref":"2 Peter 3:18","text":"But grow in grace, and in the knowledge of our Lord and Saviour Jesus Christ. To him be glory both now and for ever."},
-  {"ref":"1 John 4:7","text":"Beloved, let us love one another: for love is of God; and every one that loveth is born of God, and knoweth God."},
-  {"ref":"1 John 4:19","text":"We love him, because he first loved us."},
-  {"ref":"Revelation 22:2","text":"In the midst of the street of it, and on either side of the river, was there the tree of life, which bare twelve manner of fruits, and yielded her fruit every month: and the leaves of the tree were for the healing of the nations."},
-  {"ref":"Revelation 22:17","text":"And the Spirit and the bride say, Come. And let him that heareth say, Come. And let him that is athirst come. And whosoever will, let him take the water of life freely."}
+  {
+    "ref": "Genesis 1:1",
+    "text": "In the beginning God created the heaven and the earth.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Genesis 1:11",
+    "text": "And God said, Let the earth bring forth grass, the herb yielding seed, and the fruit tree yielding fruit after his kind, whose seed is in itself, upon the earth: and it was so.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Genesis 1:12",
+    "text": "And the earth brought forth grass, and herb yielding seed after his kind, and the tree yielding fruit, whose seed was in itself, after his kind: and God saw that it was good.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Genesis 2:8",
+    "text": "And the LORD God planted a garden eastward in Eden; and there he put the man whom he had formed.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Genesis 2:9",
+    "text": "And out of the ground made the LORD God to grow every tree that is pleasant to the sight, and good for food; the tree of life also in the midst of the garden.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 1:2-3",
+    "text": "But his delight is in the law of the LORD; and in his law doth he meditate day and night. And he shall be like a tree planted by the rivers of water, that bringeth forth his fruit in his season; his leaf also shall not wither; and whatsoever he doeth shall prosper.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 8:3-4",
+    "text": "When I consider thy heavens, the work of thy fingers, the moon and the stars, which thou hast ordained; what is man, that thou art mindful of him?",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 16:11",
+    "text": "Thou wilt shew me the path of life: in thy presence is fulness of joy; at thy right hand there are pleasures for evermore.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 17:8",
+    "text": "Keep me as the apple of the eye, hide me under the shadow of thy wings.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 18:2",
+    "text": "The LORD is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust; my buckler, and the horn of my salvation, and my high tower.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 19:1",
+    "text": "The heavens declare the glory of God; and the firmament sheweth his handywork.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 19:14",
+    "text": "Let the words of my mouth, and the meditation of my heart, be acceptable in thy sight, O LORD, my strength, and my redeemer.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 22:26",
+    "text": "The meek shall eat and be satisfied: they shall praise the LORD that seek him: your heart shall live for ever.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 23:1-3",
+    "text": "The LORD is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 23:4",
+    "text": "Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 23:6",
+    "text": "Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the LORD for ever.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 24:1",
+    "text": "The earth is the LORD's, and the fulness thereof; the world, and they that dwell therein.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 25:4-5",
+    "text": "Shew me thy ways, O LORD; teach me thy paths. Lead me in thy truth, and teach me: for thou art the God of my salvation; on thee do I wait all the day.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 27:1",
+    "text": "The LORD is my light and my salvation; whom shall I fear? the LORD is the strength of my life; of whom shall I be afraid?",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 27:4",
+    "text": "One thing have I desired of the LORD, that will I seek after; that I may dwell in the house of the LORD all the days of my life, to behold the beauty of the LORD, and to inquire in his temple.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 27:14",
+    "text": "Wait on the LORD: be of good courage, and he shall strengthen thine heart: wait, I say, on the LORD.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 28:7",
+    "text": "The LORD is my strength and my shield; my heart trusted in him, and I am helped: therefore my heart greatly rejoiceth; and with my song will I praise him.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 30:5",
+    "text": "For his anger endureth but a moment; in his favour is life: weeping may endure for a night, but joy cometh in the morning.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 31:24",
+    "text": "Be of good courage, and he shall strengthen your heart, all ye that hope in the LORD.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 32:8",
+    "text": "I will instruct thee and teach thee in the way which thou shalt go: I will guide thee with mine eye.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 33:6",
+    "text": "By the word of the LORD were the heavens made; and all the host of them by the breath of his mouth.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 34:8",
+    "text": "O taste and see that the LORD is good: blessed is the man that trusteth in him.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 34:18",
+    "text": "The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 36:7",
+    "text": "How excellent is thy lovingkindness, O God! therefore the children of men put their trust under the shadow of thy wings.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 36:9",
+    "text": "For with thee is the fountain of life: in thy light shall we see light.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 37:4",
+    "text": "Delight thyself also in the LORD; and he shall give thee the desires of thine heart.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 37:11",
+    "text": "But the meek shall inherit the earth; and shall delight themselves in the abundance of peace.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 40:2-3",
+    "text": "He brought me up also out of an horrible pit, out of the miry clay, and set my feet upon a rock, and established my goings. And he hath put a new song in my mouth, even praise unto our God.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 42:1-2",
+    "text": "As the hart panteth after the water brooks, so panteth my soul after thee, O God. My soul thirsteth for God, for the living God.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 42:11",
+    "text": "Why art thou cast down, O my soul? and why art thou disquieted within me? hope thou in God: for I shall yet praise him, who is the health of my countenance, and my God.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 46:1",
+    "text": "God is our refuge and strength, a very present help in trouble.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 46:10",
+    "text": "Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 51:10",
+    "text": "Create in me a clean heart, O God; and renew a right spirit within me.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 51:12",
+    "text": "Restore unto me the joy of thy salvation; and uphold me with thy free spirit.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 55:22",
+    "text": "Cast thy burden upon the LORD, and he shall sustain thee: he shall never suffer the righteous to be moved.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 57:1",
+    "text": "Be merciful unto me, O God, be merciful unto me: for my soul trusteth in thee: yea, in the shadow of thy wings will I make my refuge, until these calamities be overpast.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 62:1",
+    "text": "Truly my soul waiteth upon God: from him cometh my salvation.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 62:5",
+    "text": "My soul, wait thou only upon God; for my expectation is from him.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 63:1",
+    "text": "O God, thou art my God; early will I seek thee: my soul thirsteth for thee, my flesh longeth for thee in a dry and thirsty land, where no water is.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 65:9",
+    "text": "Thou visitest the earth, and waterest it: thou greatly enrichest it with the river of God, which is full of water: thou preparest them corn, when thou hast so provided for it.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 65:11",
+    "text": "Thou crownest the year with thy goodness; and thy paths drop fatness.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 65:13",
+    "text": "The pastures are clothed with flocks; the valleys also are covered over with corn; they shout for joy, they also sing.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 66:5",
+    "text": "Come and see the works of God: he is terrible in his doing toward the children of men.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 71:5",
+    "text": "For thou art my hope, O Lord GOD: thou art my trust from my youth.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 72:6",
+    "text": "He shall come down like rain upon the mown grass: as showers that water the earth.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 84:3",
+    "text": "Yea, the sparrow hath found an house, and the swallow a nest for herself, where she may lay her young, even thine altars, O LORD of hosts, my King, and my God.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 84:11",
+    "text": "For the LORD God is a sun and shield: the LORD will give grace and glory: no good thing will he withhold from them that walk uprightly.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 85:11",
+    "text": "Truth shall spring out of the earth; and righteousness shall look down from heaven.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 90:12",
+    "text": "So teach us to number our days, that we may apply our hearts unto wisdom.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 91:1",
+    "text": "He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 91:4",
+    "text": "He shall cover thee with his feathers, and under his wings shalt thou trust: his truth shall be thy shield and buckler.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 92:12",
+    "text": "The righteous shall flourish like the palm tree: he shall grow like a cedar in Lebanon.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 92:14",
+    "text": "They shall still bring forth fruit in old age; they shall be fat and flourishing.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 96:11-12",
+    "text": "Let the heavens rejoice, and let the earth be glad; let the sea roar, and the fulness thereof. Let the field be joyful, and all that is therein: then shall all the trees of the wood rejoice.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 100:3",
+    "text": "Know ye that the LORD he is God: it is he that hath made us, and not we ourselves; we are his people, and the sheep of his pasture.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 103:2-3",
+    "text": "Bless the LORD, O my soul, and forget not all his benefits: who forgiveth all thine iniquities; who healeth all thy diseases.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 103:13",
+    "text": "Like as a father pitieth his children, so the LORD pitieth them that fear him.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 104:14",
+    "text": "He causeth the grass to grow for the cattle, and herb for the service of man: that he may bring forth food out of the earth.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 104:16",
+    "text": "The trees of the LORD are full of sap; the cedars of Lebanon, which he hath planted.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 104:24",
+    "text": "O LORD, how manifold are thy works! in wisdom hast thou made them all: the earth is full of thy riches.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 107:35",
+    "text": "He turneth the wilderness into a standing water, and dry ground into watersprings.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 107:37",
+    "text": "And sow the fields, and plant vineyards, which may yield fruits of increase.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 111:2",
+    "text": "The works of the LORD are great, sought out of all them that have pleasure therein.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 118:24",
+    "text": "This is the day which the LORD hath made; we will rejoice and be glad in it.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 119:105",
+    "text": "Thy word is a lamp unto my feet, and a light unto my path.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 121:1-2",
+    "text": "I will lift up mine eyes unto the hills, from whence cometh my help. My help cometh from the LORD, which made heaven and earth.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 121:3",
+    "text": "He will not suffer thy foot to be moved: he that keepeth thee will not slumber.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 126:5-6",
+    "text": "They that sow in tears shall reap in joy. He that goeth forth and weepeth, bearing precious seed, shall doubtless come again with rejoicing, bringing his sheaves with him.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 128:2",
+    "text": "For thou shalt eat the labour of thine hands: happy shalt thou be, and it shall be well with thee.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 133:1",
+    "text": "Behold, how good and how pleasant it is for brethren to dwell together in unity!",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 136:25",
+    "text": "Who giveth food to all flesh: for his mercy endureth for ever.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 139:7-8",
+    "text": "Whither shall I go from thy spirit? or whither shall I flee from thy presence? If I ascend up into heaven, thou art there: if I make my bed in hell, behold, thou art there.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 139:14",
+    "text": "I will praise thee; for I am fearfully and wonderfully made: marvellous are thy works; and that my soul knoweth right well.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 143:8",
+    "text": "Cause me to hear thy lovingkindness in the morning; for in thee do I trust: cause me to know the way wherein I should walk; for I lift up my soul unto thee.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 145:9",
+    "text": "The LORD is good to all: and his tender mercies are over all his works.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Psalm 145:15-16",
+    "text": "The eyes of all wait upon thee; and thou givest them their meat in due season. Thou openest thine hand, and satisfiest the desire of every living thing.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Psalm 147:3",
+    "text": "He healeth the broken in heart, and bindeth up their wounds.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 147:8",
+    "text": "Who covereth the heaven with clouds, who prepareth rain for the earth, who maketh grass to grow upon the mountains.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 148:7-8",
+    "text": "Praise the LORD from the earth, ye dragons, and all deeps: fire, and hail; snow, and vapour; stormy wind fulfilling his word.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 148:9-10",
+    "text": "Mountains, and all hills; fruitful trees, and all cedars: beasts, and all cattle; creeping things, and flying fowl.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Psalm 150:6",
+    "text": "Let every thing that hath breath praise the LORD. Praise ye the LORD.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Proverbs 3:5-6",
+    "text": "Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Proverbs 11:25",
+    "text": "The liberal soul shall be made fat: and he that watereth shall be watered also himself.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Proverbs 11:28",
+    "text": "He that trusteth in his riches shall fall; but the righteous shall flourish as a branch.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Ecclesiastes 3:1-2",
+    "text": "To every thing there is a season, and a time to every purpose under the heaven: a time to be born, and a time to die; a time to plant, and a time to pluck up that which is planted.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Ecclesiastes 3:11",
+    "text": "He hath made every thing beautiful in his time: also he hath set the world in their heart, so that no man can find out the work that God maketh from the beginning to the end.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Song of Solomon 2:1",
+    "text": "I am the rose of Sharon, and the lily of the valleys.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Song of Solomon 2:11-12",
+    "text": "For, lo, the winter is past, the rain is over and gone; the flowers appear on the earth; the time of the singing of birds is come, and the voice of the turtle is heard in our land.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Song of Solomon 4:12",
+    "text": "A garden inclosed is my sister, my spouse; a spring shut up, a fountain sealed.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Song of Solomon 6:11",
+    "text": "I went down into the garden of nuts to see the fruits of the valley, and to see whether the vine flourished, and the pomegranates budded.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Isaiah 40:8",
+    "text": "The grass withereth, the flower fadeth: but the word of our God shall stand for ever.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Isaiah 40:28-29",
+    "text": "Hast thou not known? hast thou not heard, that the everlasting God, the LORD, the Creator of the ends of the earth, fainteth not, neither is weary? there is no searching of his understanding. He giveth power to the faint; and to them that have no might he increaseth strength.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Isaiah 40:31",
+    "text": "But they that wait upon the LORD shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Isaiah 43:19",
+    "text": "Behold, I will do a new thing; now it shall spring forth; shall ye not know it? I will even make a way in the wilderness, and rivers in the desert.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Isaiah 44:3-4",
+    "text": "For I will pour water upon him that is thirsty, and floods upon the dry ground: I will pour my spirit upon thy seed, and my blessing upon thine offspring: and they shall spring up as among the grass, as willows by the water courses.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Isaiah 55:10-11",
+    "text": "For as the rain cometh down, and the snow from heaven, and returneth not thither, but watereth the earth, and maketh it bring forth and bud, that it may give seed to the sower, and bread to the eater: so shall my word be that goeth forth out of my mouth.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Isaiah 61:11",
+    "text": "For as the earth bringeth forth her bud, and as the garden causeth the things that are sown in it to spring forth; so the Lord GOD will cause righteousness and praise to spring forth before all the nations.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Jeremiah 17:7-8",
+    "text": "Blessed is the man that trusteth in the LORD, and whose hope the LORD is. For he shall be as a tree planted by the waters, and that spreadeth out her roots by the river, and shall not see when heat cometh, but her leaf shall be green.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Jeremiah 29:11",
+    "text": "For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Ezekiel 34:26",
+    "text": "And I will make them and the places round about my hill a blessing; and I will cause the shower to come down in his season; there shall be showers of blessing.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Hosea 14:5",
+    "text": "I will be as the dew unto Israel: he shall grow as the lily, and cast forth his roots as Lebanon.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Hosea 14:7",
+    "text": "They that dwell under his shadow shall return; they shall revive as the corn, and grow as the vine: the scent thereof shall be as the wine of Lebanon.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Matthew 5:8",
+    "text": "Blessed are the pure in heart: for they shall see God.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Matthew 6:28-29",
+    "text": "And why take ye thought for raiment? Consider the lilies of the field, how they grow; they toil not, neither do they spin: and yet I say unto you, That even Solomon in all his glory was not arrayed like one of these.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Matthew 6:33",
+    "text": "But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Matthew 13:3",
+    "text": "And he spake many things unto them in parables, saying, Behold, a sower went forth to sow.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Matthew 13:8",
+    "text": "But other fell into good ground, and brought forth fruit, some an hundredfold, some sixtyfold, some thirtyfold.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Matthew 13:31-32",
+    "text": "The kingdom of heaven is like to a grain of mustard seed, which a man took, and sowed in his field: which indeed is the least of all seeds: but when it is grown, it is the greatest among herbs, and becometh a tree, so that the birds of the air come and lodge in the branches thereof.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Matthew 13:33",
+    "text": "The kingdom of heaven is like unto leaven, which a woman took, and hid in three measures of meal, till the whole was leavened.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Mark 4:26-27",
+    "text": "And he said, So is the kingdom of God, as if a man should cast seed into the ground; and should sleep, and rise night and day, and the seed should spring and grow up, he knoweth not how.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Mark 4:28",
+    "text": "For the earth bringeth forth fruit of herself; first the blade, then the ear, after that the full corn in the ear.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Mark 4:32",
+    "text": "But when it is sown, it groweth up, and becometh greater than all herbs, and shooteth out great branches; so that the fowls of the air may lodge under the shadow of it.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Luke 8:15",
+    "text": "But that on the good ground are they, which in an honest and good heart, having heard the word, keep it, and bring forth fruit with patience.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Luke 13:19",
+    "text": "It is like a grain of mustard seed, which a man took, and cast into his garden; and it grew, and waxed a great tree; and the fowls of the air lodged in the branches of it.",
+    "theme": "creation"
+  },
+  {
+    "ref": "John 1:4",
+    "text": "In him was life; and the life was the light of men.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "John 3:16",
+    "text": "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "John 4:14",
+    "text": "But whosoever drinketh of the water that I shall give him shall never thirst; but the water that I shall give him shall be in him a well of water springing up into everlasting life.",
+    "theme": "elements"
+  },
+  {
+    "ref": "John 10:10",
+    "text": "The thief cometh not, but for to steal, and to kill, and to destroy: I am come that they might have life, and that they might have it more abundantly.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "John 12:24",
+    "text": "Verily, verily, I say unto you, Except a corn of wheat fall into the ground and die, it abideth alone: but if it die, it bringeth forth much fruit.",
+    "theme": "creation"
+  },
+  {
+    "ref": "John 13:34",
+    "text": "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "John 14:27",
+    "text": "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "John 15:1",
+    "text": "I am the true vine, and my Father is the husbandman.",
+    "theme": "creation"
+  },
+  {
+    "ref": "John 15:4",
+    "text": "Abide in me, and I in you. As the branch cannot bear fruit of itself, except it abide in the vine; no more can ye, except ye abide in me.",
+    "theme": "creation"
+  },
+  {
+    "ref": "John 15:5",
+    "text": "I am the vine, ye are the branches: He that abideth in me, and I in him, the same bringeth forth much fruit: for without me ye can do nothing.",
+    "theme": "creation"
+  },
+  {
+    "ref": "John 15:8",
+    "text": "Herein is my Father glorified, that ye bear much fruit; so shall ye be my disciples.",
+    "theme": "creation"
+  },
+  {
+    "ref": "John 15:12",
+    "text": "This is my commandment, That ye love one another, as I have loved you.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Romans 5:5",
+    "text": "And hope maketh not ashamed; because the love of God is shed abroad in our hearts by the Holy Ghost which is given unto us.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Romans 8:28",
+    "text": "And we know that all things work together for good to them that love God, to them who are the called according to his purpose.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Romans 12:2",
+    "text": "And be not conformed to this world: but be ye transformed by the renewing of your mind, that ye may prove what is that good, and acceptable, and perfect, will of God.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "1 Corinthians 3:6-7",
+    "text": "I have planted, Apollos watered; but God gave the increase. So then neither is he that planteth any thing, neither he that watereth; but God that giveth the increase.",
+    "theme": "creation"
+  },
+  {
+    "ref": "1 Corinthians 13:4",
+    "text": "Charity suffereth long, and is kind; charity envieth not; charity vaunteth not itself, is not puffed up.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "1 Corinthians 13:13",
+    "text": "And now abideth faith, hope, charity, these three; but the greatest of these is charity.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "2 Corinthians 5:17",
+    "text": "Therefore if any man be in Christ, he is a new creature: old things are passed away; behold, all things are become new.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "2 Corinthians 9:10",
+    "text": "Now he that ministereth seed to the sower both minister bread for your food, and multiply your seed sown, and increase the fruits of your righteousness.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Galatians 5:22-23",
+    "text": "But the fruit of the Spirit is love, joy, peace, longsuffering, gentleness, goodness, faith, meekness, temperance: against such there is no law.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Galatians 6:7",
+    "text": "Be not deceived; God is not mocked: for whatsoever a man soweth, that shall he also reap.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Galatians 6:9",
+    "text": "And let us not be weary in well doing: for in due season we shall reap, if we faint not.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Ephesians 3:17",
+    "text": "That Christ may dwell in your hearts by faith; that ye, being rooted and grounded in love.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Ephesians 4:32",
+    "text": "And be ye kind one to another, tenderhearted, forgiving one another, even as God for Christ's sake hath forgiven you.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Philippians 4:6-7",
+    "text": "Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Philippians 4:8",
+    "text": "Finally, brethren, whatsoever things are true, whatsoever things are honest, whatsoever things are just, whatsoever things are pure, whatsoever things are lovely, whatsoever things are of good report; if there be any virtue, and if there be any praise, think on these things.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Colossians 2:6-7",
+    "text": "As ye have therefore received Christ Jesus the Lord, so walk ye in him: rooted and built up in him, and stablished in the faith, as ye have been taught, abounding therein with thanksgiving.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Colossians 3:15",
+    "text": "And let the peace of God rule in your hearts, to the which also ye are called in one body; and be ye thankful.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "1 Thessalonians 5:18",
+    "text": "In every thing give thanks: for this is the will of God in Christ Jesus concerning you.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Hebrews 12:11",
+    "text": "Now no chastening for the present seemeth to be joyous, but grievous: nevertheless afterward it yieldeth the peaceable fruit of righteousness unto them which are exercised thereby.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "James 1:17",
+    "text": "Every good gift and every perfect gift is from above, and cometh down from the Father of lights, with whom is no variableness, neither shadow of turning.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "James 3:18",
+    "text": "And the fruit of righteousness is sown in peace of them that make peace.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "James 5:7",
+    "text": "Be patient therefore, brethren, unto the coming of the Lord. Behold, the husbandman waiteth for the precious fruit of the earth, and hath long patience for it, until he receive the early and latter rain.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "1 Peter 1:24-25",
+    "text": "For all flesh is as grass, and all the glory of man as the flower of grass. The grass withereth, and the flower thereof falleth away: but the word of the Lord endureth for ever.",
+    "theme": "creation"
+  },
+  {
+    "ref": "1 Peter 2:2",
+    "text": "As newborn babes, desire the sincere milk of the word, that ye may grow thereby.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "1 Peter 5:7",
+    "text": "Casting all your care upon him; for he careth for you.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "2 Peter 3:18",
+    "text": "But grow in grace, and in the knowledge of our Lord and Saviour Jesus Christ. To him be glory both now and for ever.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "1 John 4:7",
+    "text": "Beloved, let us love one another: for love is of God; and every one that loveth is born of God, and knoweth God.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "1 John 4:19",
+    "text": "We love him, because he first loved us.",
+    "theme": "cycles"
+  },
+  {
+    "ref": "Revelation 22:2",
+    "text": "In the midst of the street of it, and on either side of the river, was there the tree of life, which bare twelve manner of fruits, and yielded her fruit every month: and the leaves of the tree were for the healing of the nations.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Revelation 22:17",
+    "text": "And the Spirit and the bride say, Come. And let him that heareth say, Come. And let him that is athirst come. And whosoever will, let him take the water of life freely.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 29:3",
+    "text": "The voice of the LORD is upon the waters: the God of glory thundereth: the LORD is upon many waters.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 50:3",
+    "text": "Our God shall come, and shall not keep silence: a fire shall devour before him, and it shall be very tempestuous round about him.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 104:3-4",
+    "text": "Who layeth the beams of his chambers in the waters: who maketh the clouds his chariot: who walketh upon the wings of the wind: who maketh his angels spirits; his ministers a flaming fire.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Isaiah 43:2",
+    "text": "When thou passest through the waters, I will be with thee; and through the rivers, they shall not overflow thee: when thou walkest through the fire, thou shalt not be burned; neither shall the flame kindle upon thee.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Isaiah 48:10",
+    "text": "Behold, I have refined thee, but not with silver; I have chosen thee in the furnace of affliction.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Job 38:4",
+    "text": "Where wast thou when I laid the foundations of the earth? declare, if thou hast understanding.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Proverbs 30:4",
+    "text": "Who hath ascended up into heaven, or descended? who hath gathered the wind in his fists? who hath bound the waters in a garment? who hath established all the ends of the earth? what is his name, and what is his son's name, if thou canst tell?",
+    "theme": "elements"
+  },
+  {
+    "ref": "Matthew 8:26",
+    "text": "And he saith unto them, Why are ye fearful, O ye of little faith? Then he arose, and rebuked the winds and the sea; and there was a great calm.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Acts 2:2-3",
+    "text": "And suddenly there came a sound from heaven as of a rushing mighty wind, and it filled all the house where they were sitting. And there appeared unto them cloven tongues like as of fire, and it sat upon each of them.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Hebrews 1:7",
+    "text": "And of the angels he saith, Who maketh his angels spirits, and his ministers a flame of fire.",
+    "theme": "elements"
+  },
+  {
+    "ref": "John 3:8",
+    "text": "The wind bloweth where it listeth, and thou hearest the sound thereof, but canst not tell whence it cometh, and whither it goeth: so is every one that is born of the Spirit.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Revelation 22:1",
+    "text": "And he shewed me a pure river of water of life, clear as crystal, proceeding out of the throne of God and of the Lamb.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Nahum 1:3",
+    "text": "The LORD is slow to anger, and great in power, and will not at all acquit the wicked: the LORD hath his way in the whirlwind and in the storm, and the clouds are the dust of his feet.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Psalm 104:30",
+    "text": "Thou sendest forth thy spirit, they are created: and thou renewest the face of the earth.",
+    "theme": "elements"
+  },
+  {
+    "ref": "Genesis 8:22",
+    "text": "While the earth remaineth, seedtime and harvest, and cold and heat, and summer and winter, and day and night shall not cease.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Joel 2:23",
+    "text": "Be glad then, ye children of Zion, and rejoice in the LORD your God: for he hath given you the former rain moderately, and he will cause to come down for you the rain, the former rain, and the latter rain in the first month.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Acts 14:17",
+    "text": "Nevertheless he left not himself without witness, in that he did good, and gave us rain from heaven, and fruitful seasons, filling our hearts with food and gladness.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Ecclesiastes 11:4",
+    "text": "He that observeth the wind shall not sow; and he that regardeth the clouds shall not reap.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Deuteronomy 11:14",
+    "text": "That I will give you the rain of your land in his due season, the first rain and the latter rain, that thou mayest gather in thy corn, and thy wine, and thine oil.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Mark 4:29",
+    "text": "But when the fruit is brought forth, immediately he putteth in the sickle, because the harvest is come.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Leviticus 26:4",
+    "text": "Then I will give you rain in due season, and the land shall yield her increase, and the trees of the field shall yield their fruit.",
+    "theme": "seasons"
+  },
+  {
+    "ref": "Proverbs 4:23",
+    "text": "Keep thy heart with all diligence; for out of it are the issues of life.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Matthew 22:37",
+    "text": "Jesus said unto him, Thou shalt love the Lord thy God with all thy heart, and with all thy soul, and with all thy mind.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Ezekiel 36:26",
+    "text": "A new heart also will I give you, and a new spirit will I put within you: and I will take away the stony heart out of your flesh, and I will give you an heart of flesh.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Matthew 11:28-29",
+    "text": "Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "John 14:1",
+    "text": "Let not your heart be troubled: ye believe in God, believe also in me.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Lamentations 3:22-23",
+    "text": "It is of the LORD's mercies that we are not consumed, because his compassions fail not. They are new every morning: great is thy faithfulness.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Psalm 73:26",
+    "text": "My flesh and my heart faileth: but God is the strength of my heart, and my portion for ever.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "2 Timothy 1:7",
+    "text": "For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "1 Peter 3:4",
+    "text": "But let it be the hidden man of the heart, in that which is not corruptible, even the ornament of a meek and quiet spirit, which is in the sight of God of great price.",
+    "theme": "heartspace"
+  },
+  {
+    "ref": "Matthew 6:26",
+    "text": "Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?",
+    "theme": "creation"
+  },
+  {
+    "ref": "Isaiah 40:11",
+    "text": "He shall feed his flock like a shepherd: he shall gather the lambs with his arm, and carry them in his bosom, and shall gently lead those that are with young.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Job 12:7-8",
+    "text": "But ask now the beasts, and they shall teach thee; and the fowls of the air, and they shall tell thee: or speak to the earth, and it shall teach thee; and the fishes of the sea shall declare unto thee.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Isaiah 11:6",
+    "text": "The wolf also shall dwell with the lamb, and the leopard shall lie down with the kid; and the calf and the young lion and the fatling together; and a little child shall lead them.",
+    "theme": "creation"
+  },
+  {
+    "ref": "John 10:11",
+    "text": "I am the good shepherd: the good shepherd giveth his life for the sheep.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Romans 1:20",
+    "text": "For the invisible things of him from the creation of the world are clearly seen, being understood by the things that are made, even his eternal power and Godhead; so that they are without excuse.",
+    "theme": "creation"
+  },
+  {
+    "ref": "Luke 12:6-7",
+    "text": "Are not five sparrows sold for two farthings, and not one of them is forgotten before God? But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.",
+    "theme": "creation"
+  }
 ]

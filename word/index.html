@@ -152,11 +152,36 @@
     .mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
 
     /* ── tag bar ─────────────────────────────────── */
-    .tag-bar {
+    .tag-bar { margin-bottom: 2rem; }
+
+    .tag-groups-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.38rem;
-      margin-bottom: 2rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .tag-group-btn {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.09em;
+      padding: 0.24rem 0.8rem;
+      border-radius: 20px;
+      border: 1.5px solid var(--accent);
+      background: white;
+      color: var(--accent);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tag-group-btn.open,
+    .tag-group-btn:hover { background: var(--accent); color: white; }
+
+    .tag-children-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.38rem;
+      min-height: 1.5rem;
+      padding: 0.15rem 0 0.2rem;
     }
 
     .tag-chip {
@@ -330,9 +355,21 @@
     }
 
     .modal-tag-grid {
-      display: flex; flex-wrap: wrap; gap: 0.38rem;
-      margin-bottom: 1.5rem;
+      display: flex; flex-wrap: wrap; gap: 0.35rem;
+      margin-bottom: 1.2rem;
+      align-items: flex-start;
     }
+    .modal-tag-group-label {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.65rem;
+      margin-bottom: 0.1rem;
+      flex-basis: 100%; /* forces new row */
+    }
+    .modal-tag-group-label:first-child { margin-top: 0; }
     .modal-tag {
       font-family: var(--mono);
       font-size: 0.6rem;
@@ -484,6 +521,15 @@ const TAGS = [
   'garden','birds','harvest','fruit','weeds','seeds'
 ];
 
+// Tag hierarchy — maps to Spiritual Gardening Guide chapters
+const TAG_GROUPS = [
+  { key:'seasons',    label:'The Seasons',       tags:['sunlight','harvest','seeds','fruit','clouds'] },
+  { key:'cycles',     label:'Cycles of Growth',  tags:['life','love','ideas','talk','forgiveness'] },
+  { key:'elements',   label:'The Elements',      tags:['earth','water','fire','wind'] },
+  { key:'heartspace', label:'The Heart Space',   tags:['heart','soul','mind','body','garden','weeds'] },
+  { key:'creation',   label:'Living Things',     tags:['trees','plants','herbs','animals','birds'] },
+];
+
 const TAG_COLORS = {
   trees:'#4a7850', life:'#8a9858', love:'#c8909a', heart:'#9b6050',
   mind:'#8090b0', body:'#c47a55', soul:'#5aadcf', ideas:'#a8a818',
@@ -531,6 +577,7 @@ let annotations = {};
 let customTags  = {};  // {name: color} — shared with home page
 let mode        = 'search';
 let tagFilter   = null;
+let openGroup   = null;  // which chapter group is expanded in the tag bar
 let activeVerse = null;
 let debounce    = null;
 
@@ -579,6 +626,9 @@ async function init() {
       // Arrived from a tag chip → open My Garden filtered to that tag
       mode = 'garden';
       tagFilter = qTag;
+      // Auto-open the parent chapter group so the active tag is visible
+      const parentGroup = TAG_GROUPS.find(g => g.tags.includes(qTag));
+      if (parentGroup) openGroup = parentGroup.key;
       document.querySelectorAll('.mode-tab').forEach(t =>
         t.classList.toggle('active', t.dataset.mode === 'garden')
       );
@@ -723,20 +773,55 @@ function showWelcome() {
 // ─────────────────────────────────────────────────────────────
 
 function buildTagBar() {
-  const bar     = document.getElementById('tagBar');
-  const allTags = [
-    ...TAGS.map(t => ({ name: t, color: TAG_COLORS[t] })),
-    ...Object.entries(customTags).map(([t, c]) => ({ name: t, color: c }))
-  ];
-  bar.innerHTML = allTags.map(({ name, color }) => {
-    const active = tagFilter === name;
-    return `<button class="tag-chip" data-tag="${name}"
-      style="color:${active?'white':color};border-color:${color};background:${active?color:'white'}"
-    >${name}</button>`;
-  }).join('');
-  bar.querySelectorAll('.tag-chip').forEach(chip => {
-    chip.addEventListener('click', () => onTagClick(chip.dataset.tag));
+  const bar = document.getElementById('tagBar');
+  bar.innerHTML = `
+    <div class="tag-groups-row" id="tagGroupsRow"></div>
+    <div class="tag-children-row" id="tagChildrenRow"></div>
+  `;
+  const groupsRow   = document.getElementById('tagGroupsRow');
+  const childrenRow = document.getElementById('tagChildrenRow');
+
+  // Chapter group buttons
+  TAG_GROUPS.forEach(group => {
+    const isOpen = openGroup === group.key;
+    const btn = document.createElement('button');
+    btn.className = `tag-group-btn${isOpen ? ' open' : ''}`;
+    btn.dataset.group = group.key;
+    btn.textContent = group.label;
+    btn.addEventListener('click', () => {
+      openGroup = openGroup === group.key ? null : group.key;
+      buildTagBar();
+    });
+    groupsRow.appendChild(btn);
   });
+
+  // Custom tags as individual chips beside the group buttons
+  Object.entries(customTags).forEach(([name, color]) => {
+    const isActive = tagFilter === name;
+    const btn = document.createElement('button');
+    btn.className = 'tag-chip';
+    btn.style.cssText = `color:${isActive?'white':color};border-color:${color};background:${isActive?color:'white'}`;
+    btn.textContent = name;
+    btn.addEventListener('click', () => onTagClick(name));
+    groupsRow.appendChild(btn);
+  });
+
+  // Child tag chips — shown when a group is open
+  if (openGroup) {
+    const group = TAG_GROUPS.find(g => g.key === openGroup);
+    if (group) {
+      group.tags.forEach(tag => {
+        const color = TAG_COLORS[tag] || '#8a7560';
+        const isActive = tagFilter === tag;
+        const chip = document.createElement('button');
+        chip.className = 'tag-chip';
+        chip.style.cssText = `color:${isActive?'white':color};border-color:${color};background:${isActive?color:'white'}`;
+        chip.textContent = tag;
+        chip.addEventListener('click', () => onTagClick(tag));
+        childrenRow.appendChild(chip);
+      });
+    }
+  }
 }
 
 function onTagClick(tag) {
@@ -763,17 +848,32 @@ function onTagClick(tag) {
 // ─────────────────────────────────────────────────────────────
 
 function buildModalTags(selectedTags = []) {
-  const grid    = document.getElementById('modalTagGrid');
-  const allTags = [
-    ...TAGS.map(t => ({ name: t, color: TAG_COLORS[t] })),
-    ...Object.entries(customTags).map(([t, c]) => ({ name: t, color: c }))
-  ];
-  grid.innerHTML = allTags.map(({ name, color }) => {
-    const sel = selectedTags.includes(name);
-    return `<button class="modal-tag" data-tag="${name}"
-      style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
-      ${sel ? 'class="modal-tag selected"' : ''}>${name}</button>`;
-  }).join('');
+  const grid = document.getElementById('modalTagGrid');
+  let html = '';
+
+  TAG_GROUPS.forEach(group => {
+    html += `<span class="modal-tag-group-label">${group.label}</span>`;
+    group.tags.forEach(name => {
+      const color = TAG_COLORS[name];
+      const sel   = selectedTags.includes(name);
+      html += `<button class="modal-tag${sel?' selected':''}" data-tag="${name}"
+        style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
+      >${name}</button>`;
+    });
+  });
+
+  const customEntries = Object.entries(customTags);
+  if (customEntries.length) {
+    html += `<span class="modal-tag-group-label">custom</span>`;
+    customEntries.forEach(([name, color]) => {
+      const sel = selectedTags.includes(name);
+      html += `<button class="modal-tag${sel?' selected':''}" data-tag="${name}"
+        style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
+      >${name}</button>`;
+    });
+  }
+
+  grid.innerHTML = html;
   grid.querySelectorAll('.modal-tag').forEach(btn => {
     btn.addEventListener('click', () => {
       const c   = btn.style.borderColor;
@@ -851,14 +951,14 @@ document.getElementById('searchInput').addEventListener('input', e => {
   document.getElementById('clearBtn').style.display = q ? 'block' : 'none';
   clearTimeout(debounce);
   if (!verses.length) return;
-  tagFilter = null; buildTagBar();
+  tagFilter = null; openGroup = null; buildTagBar();
   debounce = setTimeout(() => doSearch(q), 300);
 });
 
 document.getElementById('clearBtn').addEventListener('click', () => {
   document.getElementById('searchInput').value = '';
   document.getElementById('clearBtn').style.display = 'none';
-  tagFilter = null; buildTagBar(); showWelcome();
+  tagFilter = null; openGroup = null; buildTagBar(); showWelcome();
 });
 
 document.querySelectorAll('.mode-tab').forEach(tab => {
@@ -866,7 +966,7 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
     mode = tab.dataset.mode;
     document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    tagFilter = null; buildTagBar();
+    tagFilter = null; openGroup = null; buildTagBar();
     if (mode === 'garden') {
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').style.display = 'none';

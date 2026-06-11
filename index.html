@@ -118,6 +118,17 @@
       filter: drop-shadow(4px 7px 18px rgba(60,35,10,0.3));
     }
 
+    /* ── today's theme label ─────────────────────── */
+    .today-theme {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.55rem;
+      text-align: center;
+    }
+
     .verse-tags-row {
       display: flex; flex-wrap: wrap; gap: 0.28rem;
       justify-content: center;
@@ -313,11 +324,23 @@
       margin-bottom: 0.55rem;
     }
 
-    /* Tag grid */
+    /* Tag grid — grouped by chapter */
     .modal-tag-grid {
       display: flex; flex-wrap: wrap; gap: 0.35rem;
       margin-bottom: 0.6rem;
+      align-items: flex-start;
     }
+    .modal-tag-group-label {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.65rem;
+      margin-bottom: 0.1rem;
+      flex-basis: 100%;
+    }
+    .modal-tag-group-label:first-child { margin-top: 0; }
 
     .modal-tag {
       font-family: var(--mono);
@@ -466,6 +489,9 @@
 
   <div class="verse-section">
 
+    <!-- Today's theme label -->
+    <p class="today-theme" id="todayTheme"></p>
+
     <!-- Tags sit above the parchment, outside it -->
     <div class="verse-tags-row" id="cardTagsRow" style="display:none"></div>
 
@@ -555,6 +581,15 @@ const PRESET_TAGS = [
   'garden','birds','harvest','fruit','weeds','seeds'
 ];
 
+// Tag hierarchy — aligned with Spiritual Gardening Guide chapters
+const TAG_GROUPS = [
+  { key:'seasons',    label:'The Seasons',       tags:['sunlight','harvest','seeds','fruit','clouds'] },
+  { key:'cycles',     label:'Cycles of Growth',  tags:['life','love','ideas','talk','forgiveness'] },
+  { key:'elements',   label:'The Elements',      tags:['earth','water','fire','wind'] },
+  { key:'heartspace', label:'The Heart Space',   tags:['heart','soul','mind','body','garden','weeds'] },
+  { key:'creation',   label:'Living Things',     tags:['trees','plants','herbs','animals','birds'] },
+];
+
 const PRESET_COLORS = {
   trees:'#4a7850', life:'#8a9858', love:'#c8909a', heart:'#9b6050',
   mind:'#8090b0', body:'#c47a55', soul:'#5aadcf', ideas:'#a8a818',
@@ -587,10 +622,20 @@ let pickedColor  = SWATCH_COLORS[4];
 // INIT
 // ─────────────────────────────────────────────────────────────
 
+// Today's theme — cycles through all 5 framework chapters by calendar day
+function getTodayGroup() {
+  const daysSinceEpoch = Math.floor(Date.now() / 86400000);
+  return TAG_GROUPS[daysSinceEpoch % TAG_GROUPS.length];
+}
+
 async function init() {
   annotations = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
   customTags  = JSON.parse(localStorage.getItem(CTAG_KEY)  || '{}');
   buildColorSwatches();
+
+  // Set today's theme label
+  const todayGroup = getTodayGroup();
+  document.getElementById('todayTheme').textContent = todayGroup.label;
 
   // Only load the tiny featured list — verse appears immediately
   try {
@@ -632,7 +677,12 @@ function showRandomVerse(ev) {
   if (ev) ev.stopPropagation();
   if (!featured.length) return;
 
-  const f = featured[Math.floor(Math.random() * featured.length)];
+  // Pick from today's theme pool; fall back to full list if pool is tiny
+  const todayGroup = getTodayGroup();
+  const pool = featured.filter(f => f.theme === todayGroup.key);
+  const src  = pool.length >= 3 ? pool : featured;
+
+  const f = src[Math.floor(Math.random() * src.length)];
   setCurrentVerse(f);
 }
 
@@ -755,18 +805,31 @@ function closeModal() {
 
 function buildModalTags(selectedTags = []) {
   const grid = document.getElementById('modalTagGrid');
-  const allTags = [
-    ...PRESET_TAGS.map(t => ({ name: t, color: PRESET_COLORS[t], custom: false })),
-    ...Object.entries(customTags).map(([t, c]) => ({ name: t, color: c, custom: true }))
-  ];
+  let html = '';
 
-  grid.innerHTML = allTags.map(({ name, color, custom }) => {
-    const sel = selectedTags.includes(name);
-    return `<button class="modal-tag${custom ? ' custom-tag' : ''}" data-tag="${name}"
-      style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
-    >${name}</button>`;
-  }).join('');
+  TAG_GROUPS.forEach(group => {
+    html += `<span class="modal-tag-group-label">${group.label}</span>`;
+    group.tags.forEach(name => {
+      const color = PRESET_COLORS[name];
+      const sel   = selectedTags.includes(name);
+      html += `<button class="modal-tag${sel?' selected':''}" data-tag="${name}"
+        style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
+      >${name}</button>`;
+    });
+  });
 
+  const customEntries = Object.entries(customTags);
+  if (customEntries.length) {
+    html += `<span class="modal-tag-group-label">custom</span>`;
+    customEntries.forEach(([name, color]) => {
+      const sel = selectedTags.includes(name);
+      html += `<button class="modal-tag custom-tag${sel?' selected':''}" data-tag="${name}"
+        style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
+      >${name}</button>`;
+    });
+  }
+
+  grid.innerHTML = html;
   grid.querySelectorAll('.modal-tag').forEach(btn => {
     btn.addEventListener('click', () => {
       const c   = btn.style.borderColor;
@@ -775,12 +838,6 @@ function buildModalTags(selectedTags = []) {
       btn.style.background = sel ? c : 'white';
       btn.style.color      = sel ? 'white' : c;
     });
-  });
-
-  // Restore selected state
-  selectedTags.forEach(tag => {
-    const btn = grid.querySelector(`[data-tag="${tag}"]`);
-    if (btn) btn.classList.add('selected');
   });
 }
 
@@ -839,20 +896,10 @@ document.getElementById('newTagSave').addEventListener('click', () => {
   customTags[name] = pickedColor;
   localStorage.setItem(CTAG_KEY, JSON.stringify(customTags));
 
-  // Add to current modal grid immediately, pre-selected
-  const grid = document.getElementById('modalTagGrid');
-  const btn  = document.createElement('button');
-  btn.className = 'modal-tag custom-tag selected';
-  btn.dataset.tag = name;
-  btn.style.cssText = `color:white;border-color:${pickedColor};background:${pickedColor}`;
-  btn.textContent = name;
-  btn.addEventListener('click', () => {
-    btn.classList.toggle('selected');
-    const sel = btn.classList.contains('selected');
-    btn.style.background = sel ? pickedColor : 'white';
-    btn.style.color      = sel ? 'white' : pickedColor;
-  });
-  grid.appendChild(btn);
+  // Rebuild the grouped modal grid with the new tag pre-selected
+  const currentSelected = [...document.querySelectorAll('.modal-tag.selected')].map(b => b.dataset.tag);
+  currentSelected.push(name);
+  buildModalTags(currentSelected);
 
   document.getElementById('newTagInput').value = '';
   document.getElementById('newTagForm').classList.remove('open');
