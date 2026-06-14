@@ -430,6 +430,98 @@
     }
     .btn-remove:hover { color: #c84820; border-color: #c84820; }
 
+    /* ── browse panel ───────────────────────────────── */
+    .browse-panel {
+      display: none;
+      margin-bottom: 1.4rem;
+    }
+    .browse-panel.visible { display: block; }
+
+    .browse-pickers {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .browse-select {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      padding: 0.6rem 0.9rem;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      outline: none;
+      cursor: pointer;
+      flex: 1;
+      min-width: 160px;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a7870'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+      padding-right: 2.2rem;
+    }
+    .browse-select:focus { border-color: var(--accent); }
+    .browse-select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .browse-nav {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .browse-nav-btn {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.1rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .browse-nav-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--accent); }
+    .browse-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .browse-nav-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+    }
+
+    .ch-verse-num {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      vertical-align: super;
+      margin-right: 0.25em;
+      line-height: 0;
+    }
+
+    .see-chapter-link {
+      font-family: var(--mono);
+      font-size: 0.54rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 0.15s;
+    }
+    .see-chapter-link:hover { color: var(--accent); }
+
     @media (max-width: 580px) {
       .wordmark { font-size: 2.8rem; }
       main { padding: 1.8rem 1rem 6rem; }
@@ -459,15 +551,33 @@
   <div class="mode-tabs">
     <button class="mode-tab active" data-mode="search">search</button>
     <button class="mode-tab" data-mode="garden">my garden</button>
+    <button class="mode-tab" data-mode="browse">browse</button>
   </div>
 
   <div class="tag-bar" id="tagBar"></div>
+
+  <div class="browse-panel" id="browsePanel">
+    <div class="browse-pickers">
+      <select class="browse-select" id="bookSelect">
+        <option value="">— open a book —</option>
+      </select>
+      <select class="browse-select" id="chapterSelect" disabled>
+        <option value="">— chapter —</option>
+      </select>
+    </div>
+  </div>
+
   <div class="result-status" id="resultStatus"></div>
   <div class="verse-grid" id="verseGrid">
     <div class="state-block">
       <span class="glyph">✦</span>
       <p>gathering the word…</p>
     </div>
+  </div>
+  <div class="browse-nav" id="browseNav">
+    <button class="browse-nav-btn" id="prevChapterBtn" disabled>← prev</button>
+    <span class="browse-nav-label" id="browseNavLabel"></span>
+    <button class="browse-nav-btn" id="nextChapterBtn" disabled>next →</button>
   </div>
 
 </main>
@@ -476,7 +586,10 @@
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
   <div class="modal">
     <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
-    <p class="modal-ref" id="modalRef"></p>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.5rem">
+      <p class="modal-ref" id="modalRef" style="margin-bottom:0"></p>
+      <button class="see-chapter-link" id="modalChapterLink">read chapter ↗</button>
+    </div>
     <p class="modal-verse" id="modalVerse"></p>
 
     <label class="field-label">gardening themes</label>
@@ -572,14 +685,17 @@ const CONCEPTS = {
 // STATE
 // ─────────────────────────────────────────────────────────────
 
-let verses      = [];
-let annotations = {};
-let customTags  = {};  // {name: color} — shared with home page
-let mode        = 'search';
-let tagFilter   = null;
-let openGroup   = null;  // which chapter group is expanded in the tag bar
-let activeVerse = null;
-let debounce    = null;
+let verses       = [];
+let annotations  = {};
+let customTags   = {};  // {name: color} — shared with home page
+let mode         = 'search';
+let tagFilter    = null;
+let openGroup    = null;  // which chapter group is expanded in the tag bar
+let activeVerse  = null;
+let debounce     = null;
+let browseBook   = null;
+let browseChapter = null;
+const bookChapters = {};  // bookName → total chapter count
 
 // ─────────────────────────────────────────────────────────────
 // INIT
@@ -616,6 +732,19 @@ async function init() {
     document.getElementById('searchHint').textContent =
       `${verses.length.toLocaleString()} verses · KJV · search a word or click a theme to begin`;
 
+    // Build chapter counts for browse
+    verses.forEach(v => {
+      if (!bookChapters[v.book] || v.chapter > bookChapters[v.book])
+        bookChapters[v.book] = v.chapter;
+    });
+    // Populate book picker
+    const bookSel = document.getElementById('bookSelect');
+    BOOK_NAMES.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name; opt.textContent = name;
+      bookSel.appendChild(opt);
+    });
+
     // Handle URL params from homepage
     const params   = new URLSearchParams(window.location.search);
     const qBook    = params.get('book');
@@ -626,7 +755,6 @@ async function init() {
       // Arrived from a tag chip → open My Garden filtered to that tag
       mode = 'garden';
       tagFilter = qTag;
-      // Auto-open the parent chapter group so the active tag is visible
       const parentGroup = TAG_GROUPS.find(g => g.tags.includes(qTag));
       if (parentGroup) openGroup = parentGroup.key;
       document.querySelectorAll('.mode-tab').forEach(t =>
@@ -635,12 +763,11 @@ async function init() {
       buildTagBar();
       renderGarden();
     } else if (qBook && qChapter) {
-      const results = verses.filter(v =>
-        v.book.toLowerCase() === qBook.toLowerCase() && v.chapter === +qChapter
+      // Arrived from homepage book/chapter picker → open browse mode
+      viewChapter(
+        BOOK_NAMES.find(n => n.toLowerCase() === qBook.toLowerCase()) || qBook,
+        parseInt(qChapter)
       );
-      document.getElementById('searchInput').value = `${qBook} ${qChapter}`;
-      document.getElementById('resultStatus').textContent = `${qBook} · Chapter ${qChapter}`;
-      renderResults(results);
     } else if (qBook) {
       const results = verses.filter(v => v.book.toLowerCase() === qBook.toLowerCase());
       document.getElementById('searchInput').value = qBook;
@@ -724,7 +851,12 @@ function cardHTML(v, hl = '') {
     <article class="verse-card${hasAnn?' annotated':''}" data-id="${v.id}">
       <div class="verse-ref">
         <span>${v.book} ${v.chapter}:${v.verse}</span>
-        ${hasAnn ? '<span class="ann-star">✦</span>' : ''}
+        <span style="display:flex;gap:0.55rem;align-items:center">
+          <button class="see-chapter-link"
+            onclick="event.stopPropagation();viewChapter('${v.book}',${v.chapter},'${v.id}')"
+            title="read full chapter">ch ${v.chapter} ↗</button>
+          ${hasAnn ? '<span class="ann-star">✦</span>' : ''}
+        </span>
       </div>
       <p class="verse-text">${text}</p>
       ${tagsHTML}${noteHTML}
@@ -766,6 +898,105 @@ function showWelcome() {
         ? `you have ${count} annotated verse${count!==1?'s':''} · click <em>my garden</em> to see them`
         : 'search a word or click a theme above to begin'}</p>
     </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// BROWSE
+// ─────────────────────────────────────────────────────────────
+
+function viewChapter(bookName, chNum, highlightId = null) {
+  browseBook    = bookName;
+  browseChapter = chNum;
+  enterBrowseMode();
+  renderBrowseChapter(highlightId);
+}
+
+function enterBrowseMode() {
+  mode = 'browse';
+  document.querySelectorAll('.mode-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.mode === 'browse')
+  );
+  document.getElementById('tagBar').style.display         = 'none';
+  document.querySelector('.search-wrap').style.display    = 'none';
+  document.getElementById('searchHint').style.display     = 'none';
+  document.getElementById('browsePanel').classList.add('visible');
+
+  if (browseBook) {
+    document.getElementById('bookSelect').value = browseBook;
+    populateChapterSelect(browseBook);
+    if (browseChapter) document.getElementById('chapterSelect').value = browseChapter;
+  }
+}
+
+function leaveBrowseMode() {
+  document.getElementById('tagBar').style.display         = '';
+  document.querySelector('.search-wrap').style.display    = '';
+  document.getElementById('searchHint').style.display     = '';
+  document.getElementById('browsePanel').classList.remove('visible');
+  document.getElementById('browseNav').style.display      = 'none';
+}
+
+function populateChapterSelect(bookName) {
+  const sel   = document.getElementById('chapterSelect');
+  const maxCh = bookChapters[bookName] || 0;
+  sel.innerHTML = '<option value="">— chapter —</option>';
+  for (let i = 1; i <= maxCh; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `Chapter ${i}`;
+    sel.appendChild(opt);
+  }
+  sel.disabled = false;
+}
+
+function renderBrowseChapter(highlightId = null) {
+  if (!browseBook || !browseChapter) return;
+  const chVerses = verses.filter(v => v.book === browseBook && v.chapter === browseChapter);
+  const status   = document.getElementById('resultStatus');
+  const grid     = document.getElementById('verseGrid');
+  const nav      = document.getElementById('browseNav');
+
+  status.textContent = `${browseBook}  ·  chapter ${browseChapter}  ·  ${chVerses.length} verses`;
+
+  grid.innerHTML = chVerses.map(v => {
+    const ann    = annotations[v.id];
+    const hasAnn = ann && (ann.note || ann.tags?.length);
+    const isHL   = v.id === highlightId;
+    const tagsHTML = ann?.tags?.length
+      ? `<div class="verse-tags">${ann.tags.map(t =>
+          `<span class="verse-tag" style="color:${TAG_COLORS[t]};border-color:${TAG_COLORS[t]}">${t}</span>`
+        ).join('')}</div>` : '';
+    const noteHTML = ann?.note
+      ? `<div class="verse-note-preview">${escHtml(ann.note.slice(0,130))}${ann.note.length>130?'…':''}</div>` : '';
+    return `
+      <article class="verse-card${hasAnn?' annotated':''}${isHL?' ch-highlight':''}" data-id="${v.id}"
+        ${isHL ? 'style="background:rgba(200,160,32,0.1);border-left-color:var(--accent)"' : ''}>
+        <div class="verse-ref">
+          <span>${v.book} ${v.chapter}:${v.verse}</span>
+          ${hasAnn ? '<span class="ann-star">✦</span>' : ''}
+        </div>
+        <p class="verse-text"><sup class="ch-verse-num">${v.verse}</sup>${escHtml(v.text)}</p>
+        ${tagsHTML}${noteHTML}
+      </article>`;
+  }).join('');
+
+  grid.querySelectorAll('.verse-card').forEach(card =>
+    card.addEventListener('click', () => openModal(card.dataset.id))
+  );
+
+  const maxCh = bookChapters[browseBook] || 1;
+  nav.style.display = 'flex';
+  document.getElementById('browseNavLabel').textContent =
+    `${browseBook}  ${browseChapter} / ${maxCh}`;
+  document.getElementById('prevChapterBtn').disabled = browseChapter <= 1;
+  document.getElementById('nextChapterBtn').disabled = browseChapter >= maxCh;
+
+  if (highlightId) {
+    requestAnimationFrame(() => {
+      const el = grid.querySelector(`[data-id="${highlightId}"]`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -895,6 +1126,11 @@ function openModal(verseId) {
   document.getElementById('modalVerse').textContent = v.text;
   document.getElementById('modalNote').value        = ann.note ?? '';
 
+  document.getElementById('modalChapterLink').onclick = () => {
+    closeModal();
+    viewChapter(v.book, v.chapter, verseId);
+  };
+
   buildModalTags(ann.tags ?? []);
 
   document.getElementById('overlay').classList.add('open');
@@ -926,6 +1162,10 @@ function removeAnnotation() {
 function persist() { localStorage.setItem(STORE_KEY, JSON.stringify(annotations)); }
 
 function refresh() {
+  if (mode === 'browse') {
+    if (browseBook && browseChapter) renderBrowseChapter();
+    return;
+  }
   buildTagBar();
   if (mode === 'garden') { renderGarden(); return; }
   if (tagFilter) { const r = verses.filter(v => annotations[v.id]?.tags?.includes(tagFilter)); renderResults(r); return; }
@@ -963,15 +1203,33 @@ document.getElementById('clearBtn').addEventListener('click', () => {
 
 document.querySelectorAll('.mode-tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    mode = tab.dataset.mode;
-    document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    tagFilter = null; openGroup = null; buildTagBar();
-    if (mode === 'garden') {
+    const newMode = tab.dataset.mode;
+    if (newMode === mode) return;
+
+    if (mode === 'browse') leaveBrowseMode();
+
+    if (newMode === 'browse') {
+      enterBrowseMode();
+      if (browseBook && browseChapter) {
+        renderBrowseChapter();
+      } else {
+        document.getElementById('resultStatus').textContent = '';
+        document.getElementById('verseGrid').innerHTML = `
+          <div class="state-block">
+            <span class="glyph">✦</span>
+            <p>${browseBook ? 'choose a chapter to begin reading' : 'open a book above to begin'}</p>
+          </div>`;
+      }
+    } else {
+      mode = newMode;
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      tagFilter = null; openGroup = null; buildTagBar();
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').style.display = 'none';
-      renderGarden();
-    } else { showWelcome(); }
+      if (mode === 'garden') renderGarden();
+      else showWelcome();
+    }
   });
 });
 
@@ -982,6 +1240,48 @@ document.getElementById('overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('overlay')) closeModal();
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.getElementById('bookSelect').addEventListener('change', e => {
+  browseBook    = e.target.value || null;
+  browseChapter = null;
+  document.getElementById('browseNav').style.display      = 'none';
+  document.getElementById('resultStatus').textContent     = '';
+  document.getElementById('chapterSelect').value          = '';
+  if (browseBook) {
+    populateChapterSelect(browseBook);
+  } else {
+    document.getElementById('chapterSelect').innerHTML    = '<option value="">— chapter —</option>';
+    document.getElementById('chapterSelect').disabled     = true;
+  }
+  document.getElementById('verseGrid').innerHTML = `
+    <div class="state-block">
+      <span class="glyph">✦</span>
+      <p>${browseBook ? 'choose a chapter to begin reading' : 'open a book above to begin'}</p>
+    </div>`;
+});
+
+document.getElementById('chapterSelect').addEventListener('change', e => {
+  browseChapter = parseInt(e.target.value) || null;
+  if (browseChapter) renderBrowseChapter();
+});
+
+document.getElementById('prevChapterBtn').addEventListener('click', () => {
+  if (browseChapter > 1) {
+    browseChapter--;
+    document.getElementById('chapterSelect').value = browseChapter;
+    renderBrowseChapter();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
+
+document.getElementById('nextChapterBtn').addEventListener('click', () => {
+  if (browseBook && browseChapter < bookChapters[browseBook]) {
+    browseChapter++;
+    document.getElementById('chapterSelect').value = browseChapter;
+    renderBrowseChapter();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
 
 // ─────────────────────────────────────────────────────────────
 init();
