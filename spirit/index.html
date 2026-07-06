@@ -165,7 +165,8 @@
       z-index: 5;
     }
     .fruit-dot {
-      width: 19px; height: 19px;
+      /* --size grows ~1px per watering, set from the reflection log */
+      width: var(--size, 19px); height: var(--size, 19px);
       border-radius: 50%;
       background: radial-gradient(circle at 34% 30%, rgba(255,255,255,0.75), var(--node-color) 55%);
       border: 1px solid rgba(0,0,0,0.18);
@@ -223,9 +224,16 @@
       cursor: pointer;
       transition: background 0.15s, transform 0.15s;
     }
-    .weed-chip:nth-child(odd)  { transform: rotate(-1.6deg); }
-    .weed-chip:nth-child(even) { transform: rotate(1.4deg); }
-    .weed-chip:hover { background: #fff; transform: rotate(0deg) scale(1.06); }
+    /* --shrink/--fade tighten a little with every pull, set from the log */
+    .weed-chip {
+      transform: rotate(var(--rot, 0deg)) scale(var(--shrink, 1));
+      opacity: var(--fade, 1);
+    }
+    .weed-chip:hover {
+      background: #fff;
+      transform: rotate(0deg) scale(calc(var(--shrink, 1) * 1.08));
+      opacity: 1;
+    }
     .weed-chip.focus {
       border-color: #c84820;
       color: #c84820;
@@ -443,6 +451,13 @@
       letter-spacing: 0.1em;
       color: var(--muted);
       text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .modal-growth {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--accent);
       margin-bottom: 1rem;
     }
     .modal-prompt {
@@ -636,6 +651,7 @@
     <p class="modal-type" id="modalType"></p>
     <p class="modal-name" id="modalName"></p>
     <p class="modal-verse-ref" id="modalVerseRef"></p>
+    <p class="modal-growth" id="modalGrowth"></p>
     <p class="modal-prompt" id="modalPrompt"></p>
 
     <div id="customWeedRow" style="display:none">
@@ -653,53 +669,21 @@
   </div>
 </div>
 
+<script src="/assets/js/spirit-store.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────
-// DATA — same storage keys as before, notes carry over
+// DATA — fruits, weeds & the reflection log live in SpiritStore
 // ─────────────────────────────────────────────────────────────
 
-const NOTES_KEY  = 'heartsgarden-spirit-notes-v1';
-const RITUAL_KEY = 'heartsgarden-spirit-ritual-v1';
-
-// x/y = position of each fruit in the canopy, % of the tree scene
-const FRUITS = [
-  { key:'love',          label:'love',          color:'#c8909a', x:50, y:12, prompt:'Where did love grow where it was hardest to plant?' },
-  { key:'joy',           label:'joy',           color:'#c8a020', x:31, y:19, prompt:'What brought joy that did not depend on circumstance?' },
-  { key:'peace',         label:'peace',         color:'#5aadcf', x:69, y:19, prompt:'Where did I choose peace instead of striving?' },
-  { key:'longsuffering', label:'longsuffering', color:'#c47a55', x:20, y:34, prompt:'What am I being asked to wait on, patiently?' },
-  { key:'gentleness',    label:'gentleness',    color:'#8a9858', x:80, y:34, prompt:'Where could I have answered softer than I did?' },
-  { key:'goodness',      label:'goodness',      color:'#4a7850', x:41, y:27, prompt:'What good did I do simply because it was good?' },
-  { key:'faith',         label:'faith',         color:'#8090b0', x:59, y:27, prompt:'Where did I trust without seeing the outcome?' },
-  { key:'meekness',      label:'meekness',      color:'#d9937a', x:33, y:42, prompt:'Where did I hold strength gently instead of forcing it?' },
-  { key:'temperance',    label:'temperance',    color:'#c8c020', x:67, y:42, prompt:'What did I say no to, so I could say yes to what matters?' },
-];
-
-const WEEDS = [
-  { key:'adultery',       label:'adultery',       prompt:'Where have I broken trust — with another, or with what is sacred?' },
-  { key:'fornication',    label:'fornication',    prompt:'What boundary around my body or desires needs tending?' },
-  { key:'uncleanness',    label:'uncleanness',    prompt:'What am I letting linger that does not belong in the soil?' },
-  { key:'lasciviousness', label:'lasciviousness', prompt:'Where am I chasing appetite instead of purpose?' },
-  { key:'idolatry',       label:'idolatry',       prompt:'What have I let take God’s place at the center?' },
-  { key:'witchcraft',     label:'witchcraft',     prompt:'Where am I trying to control what I should surrender?' },
-  { key:'hatred',         label:'hatred',         prompt:'Who is it hard for me to bless right now?' },
-  { key:'variance',       label:'variance',       prompt:'Where am I stirring division instead of peace?' },
-  { key:'emulations',     label:'emulations',     prompt:'Where does comparison have a grip on me?' },
-  { key:'wrath',          label:'wrath',          prompt:'What keeps lighting my anger — and why?' },
-  { key:'strife',         label:'strife',         prompt:'What conflict am I feeding instead of starving?' },
-  { key:'seditions',      label:'seditions',      prompt:'Where am I undermining instead of building?' },
-  { key:'heresies',       label:'heresies',       prompt:'What have I let distort the truth I know?' },
-  { key:'envyings',       label:'envyings',       prompt:'What does someone else have that I resent them for?' },
-  { key:'murders',        label:'murders',        prompt:'What am I killing with my words or my silence?' },
-  { key:'drunkenness',    label:'drunkenness',    prompt:'What am I using to numb instead of feel?' },
-  { key:'revellings',     label:'revellings',     prompt:'Where is indulgence crowding out devotion?' },
-  { key:'such-like',      label:'…and such like', prompt:'Paul ends his list with "and such like" — anything that chokes love, joy, or peace counts. Name your own below.', custom:true },
-];
+const { FRUITS, WEEDS } = SpiritStore;
+const RITUAL_KEY = SpiritStore.RITUAL_KEY;
 
 // ─────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────
 
-let notes  = {};
+let log    = [];
+let tally  = {};   // per-key {waters, pulls, last} derived from the log
 let ritual = { fruit:null, fruitSetAt:null, weed:null, weedSetAt:null, weedCustomLabel:'' };
 let activeType = null, activeKey = null;
 
@@ -708,12 +692,13 @@ let activeType = null, activeKey = null;
 // ─────────────────────────────────────────────────────────────
 
 function init() {
-  notes  = JSON.parse(localStorage.getItem(NOTES_KEY)  || '{}');
   ritual = Object.assign(ritual, JSON.parse(localStorage.getItem(RITUAL_KEY) || '{}'));
   renderAll();
 }
 
 function renderAll() {
+  log   = SpiritStore.readLog();
+  tally = SpiritStore.counts(log);
   buildFruits();
   buildWeeds();
   renderRitualPanel();
@@ -727,12 +712,13 @@ function renderAll() {
 function buildFruits() {
   const layer = document.getElementById('fruitLayer');
   layer.innerHTML = FRUITS.map(f => {
-    const hasNote = !!(notes[f.key] && notes[f.key].note);
+    const waters  = (tally[f.key] || {}).waters || 0;
+    const size    = 19 + Math.min(waters, 10);   // grows 1px per watering, up to +10
     const isFocus = ritual.fruit === f.key;
     return `<button class="fruit-node${isFocus ? ' focus' : ''}" data-key="${f.key}"
-      style="left:${f.x}%;top:${f.y}%;--node-color:${f.color}" title="${f.label}">
+      style="left:${f.x}%;top:${f.y}%;--node-color:${f.color};--size:${size}px" title="${f.label}">
       <span class="fruit-dot"></span>
-      <span class="fruit-label">${f.label}${hasNote ? ' ✦' : ''}</span>
+      <span class="fruit-label">${f.label}${waters ? ' ✦' : ''}</span>
     </button>`;
   }).join('');
   layer.querySelectorAll('.fruit-node').forEach(node =>
@@ -742,14 +728,18 @@ function buildFruits() {
 
 function buildWeeds() {
   const patch = document.getElementById('weedPatch');
-  patch.innerHTML = WEEDS.map(w => {
-    const hasNote = !!(notes[w.key] && notes[w.key].note);
+  patch.innerHTML = WEEDS.map((w, i) => {
+    const pulls   = (tally[w.key] || {}).pulls || 0;
+    const shrink  = Math.max(1 - Math.min(pulls, 10) * 0.025, 0.75); // loosens a little per pull
+    const fade    = Math.max(1 - Math.min(pulls, 10) * 0.03, 0.7);
+    const rot     = i % 2 ? 1.4 : -1.6;
     const isFocus = ritual.weed === w.key;
     const label = (w.key === 'such-like' && isFocus && ritual.weedCustomLabel)
       ? ritual.weedCustomLabel
       : w.label;
-    return `<button class="weed-chip${isFocus ? ' focus' : ''}" data-key="${w.key}" title="${w.label}">
-      ${escHtml(label)}${hasNote ? '<span class="node-mark">✦</span>' : ''}
+    return `<button class="weed-chip${isFocus ? ' focus' : ''}" data-key="${w.key}"
+      style="--rot:${rot}deg;--shrink:${shrink};--fade:${fade}" title="${w.label}">
+      ${escHtml(label)}${pulls ? '<span class="node-mark">✦</span>' : ''}
     </button>`;
   }).join('');
   patch.querySelectorAll('.weed-chip').forEach(chip =>
@@ -791,30 +781,28 @@ function renderRitualPanel() {
 
 function renderJournal() {
   const journal = document.getElementById('journal');
-  const entries = Object.entries(notes)
-    .filter(([, n]) => n.note)
-    .sort((a, b) => (b[1].savedAt || '').localeCompare(a[1].savedAt || ''));
+  const entries = log.filter(e => e.note).slice().reverse();
 
   if (!entries.length) {
     journal.innerHTML = `<p class="journal-empty">your margins are empty — tap a fruit or a weed to write</p>`;
     return;
   }
 
-  journal.innerHTML = entries.map(([key, n]) => {
-    const fruit = FRUITS.find(f => f.key === key);
-    const weed  = WEEDS.find(w => w.key === key);
-    const item  = fruit || weed;
+  journal.innerHTML = entries.map(e => {
+    const item = (e.kind === 'fruit' ? FRUITS : WEEDS).find(i => i.key === e.key);
     if (!item) return '';
-    const name = (key === 'such-like' && n.customLabel) ? n.customLabel : item.label;
-    const date = n.savedAt
-      ? new Date(n.savedAt).toLocaleDateString('en-US', { month:'short', day:'numeric' })
+    const name = (e.key === 'such-like' && e.tag) ? e.tag : item.label;
+    const act  = e.act === 'water' ? 'watered' : 'pulled';
+    const date = e.at
+      ? new Date(e.at).toLocaleDateString('en-US', { month:'short', day:'numeric' })
       : '';
-    return `<button class="journal-entry" data-type="${fruit ? 'fruit' : 'weed'}" data-key="${key}">
+    const tagNote = (e.tag && e.key !== 'such-like') ? ` · ${escHtml(e.tag)}` : '';
+    return `<button class="journal-entry" data-type="${e.kind}" data-key="${e.key}">
       <span class="journal-entry-head">
-        <span class="journal-entry-name${weed ? ' is-weed' : ''}">${escHtml(name)}</span>
-        <span class="journal-entry-date">${date}</span>
+        <span class="journal-entry-name${e.kind === 'weed' ? ' is-weed' : ''}">${escHtml(name)}</span>
+        <span class="journal-entry-date">${act}${tagNote} · ${date}</span>
       </span>
-      <span class="journal-entry-snippet">${escHtml(n.note)}</span>
+      <span class="journal-entry-snippet">${escHtml(e.note)}</span>
     </button>`;
   }).join('');
 
@@ -839,18 +827,36 @@ function openSpiritModal(type, key) {
     type === 'fruit' ? 'Galatians 5:22–23 · KJV' : 'Galatians 5:19–21 · KJV';
   document.getElementById('modalPrompt').textContent = item.prompt;
 
+  // growth line — how tended this spot is
+  const t = tally[key] || { waters:0, pulls:0 };
+  const growth = document.getElementById('modalGrowth');
+  if (type === 'fruit') {
+    growth.textContent = t.waters
+      ? `watered ${t.waters} time${t.waters !== 1 ? 's' : ''} — it is growing`
+      : 'not yet watered';
+  } else {
+    growth.textContent = t.pulls
+      ? `pulled ${t.pulls} time${t.pulls !== 1 ? 's' : ''} — its grip is loosening`
+      : 'still rooted';
+  }
+
   const customRow   = document.getElementById('customWeedRow');
   const customInput = document.getElementById('customWeedInput');
   if (key === 'such-like') {
     customRow.style.display = 'block';
     customInput.value = (ritual.weed === 'such-like' && ritual.weedCustomLabel)
       ? ritual.weedCustomLabel
-      : (notes[key] && notes[key].customLabel) || '';
+      : '';
   } else {
     customRow.style.display = 'none';
   }
 
-  document.getElementById('modalNote').value = (notes[key] && notes[key].note) || '';
+  // each visit is a fresh act of tending — past words live in the margins
+  const noteEl = document.getElementById('modalNote');
+  noteEl.value = '';
+  noteEl.placeholder = 'write what’s true right now…';
+  document.getElementById('btnSaveNote').textContent =
+    type === 'fruit' ? 'water this fruit' : 'pull this weed';
 
   const isFocus = type === 'fruit' ? ritual.fruit === key : ritual.weed === key;
   const btn = document.getElementById('btnFocus');
@@ -869,17 +875,24 @@ function closeModal() {
 
 function saveNote() {
   if (!activeKey) return;
-  const note = document.getElementById('modalNote').value.trim();
-  const customLabel = activeKey === 'such-like'
+  const noteEl = document.getElementById('modalNote');
+  const note = noteEl.value.trim();
+  const tag = activeKey === 'such-like'
     ? document.getElementById('customWeedInput').value.trim()
-    : undefined;
+    : '';
 
-  if (!note && !customLabel) {
-    delete notes[activeKey];
-  } else {
-    notes[activeKey] = { note, customLabel, savedAt: new Date().toISOString() };
+  if (!note) {
+    noteEl.placeholder = 'growth needs a few words — write a little…';
+    noteEl.focus();
+    return;
   }
-  localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+
+  SpiritStore.addEntry({
+    key:  activeKey,
+    kind: activeType,
+    act:  activeType === 'fruit' ? 'water' : 'pull',
+    note, tag
+  });
   closeModal();
   renderAll();
 }

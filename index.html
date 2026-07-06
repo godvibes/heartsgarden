@@ -65,20 +65,155 @@
       margin: 0 auto 2.5rem;
     }
 
-    /* ── enter button ─────────────────────────────── */
-    .enter-link {
-      display: inline-block;
+    .tagline a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      transition: color 0.2s;
+    }
+    .tagline a:hover { color: var(--ink); }
+
+    /* ── quest card ───────────────────────────────── */
+    .quest-card {
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto;
+      background: var(--parch);
+      border: 1px solid var(--border);
+      padding: 1.5rem 1.7rem 1.6rem;
+      text-align: center;
+      box-shadow: 0 3px 16px rgba(60,35,10,0.08);
+    }
+    .quest-label {
       font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
+      font-size: 0.56rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      text-decoration: none;
-      color: var(--cream);
+      color: var(--muted);
+      margin-bottom: 0.7rem;
+    }
+    .quest-name {
+      font-family: var(--hand);
+      font-size: 2.1rem;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .quest-name.is-weed { color: #7a4030; }
+    .quest-kind {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+    .quest-q {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.65;
+      margin-bottom: 1.1rem;
+    }
+    .quest-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+    .quest-btn {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.2rem;
       background: var(--ink);
-      padding: 0.9rem 2.4rem;
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
       transition: background 0.2s;
     }
-    .enter-link:hover { background: var(--accent); }
+    .quest-btn:hover { background: var(--accent); }
+    .quest-btn.secondary {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .quest-btn.secondary:hover { color: #7a4030; border-color: #7a4030; background: none; }
+    .quest-skip {
+      background: none; border: none; cursor: pointer;
+      color: var(--border); font-size: 0.95rem; line-height: 1;
+      transition: color 0.2s;
+    }
+    .quest-skip:hover { color: var(--accent); }
+
+    .quest-form { display: none; text-align: left; margin-top: 0.4rem; }
+    .quest-form.open { display: block; }
+    .quest-form-hint {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+      line-height: 1.55;
+    }
+    .quest-note {
+      width: 100%;
+      min-height: 84px;
+      padding: 0.7rem 0.9rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+      margin-bottom: 0.6rem;
+      transition: border-color 0.2s;
+    }
+    .quest-note:focus { border-color: var(--accent); }
+    .quest-note::placeholder { color: #b5b0a8; }
+    .quest-tag {
+      width: 100%;
+      padding: 0.55rem 0.9rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.88rem;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      outline: none;
+      margin-bottom: 0.6rem;
+      transition: border-color 0.2s;
+    }
+    .quest-tag:focus { border-color: var(--accent); }
+    .quest-form-actions { display: flex; gap: 0.5rem; }
+
+    .quest-done { display: none; }
+    .quest-done.open { display: block; }
+    .quest-done-msg {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+    }
+    .quest-done-links {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+    }
+    .quest-done-links a, .quest-done-links button {
+      color: var(--muted);
+      background: none; border: none; cursor: pointer;
+      font: inherit; letter-spacing: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .quest-done-links a:hover, .quest-done-links button:hover { color: var(--ink); }
 
     /* ── verse section ────────────────────────────── */
     .verse-section {
@@ -483,10 +618,44 @@
 <body>
 
   <p class="mark">Hearts Garden</p>
-  <p class="tagline">a spiritual gardening guide · rooted in the living word</p>
+  <p class="tagline">a spiritual gardening guide · rooted in the <a href="/word/">living word</a></p>
   <div class="rule"></div>
-  <a class="enter-link" href="/word/">enter the living word →</a>
-  <p style="margin-top:1rem">
+
+  <!-- a quest for your spirit — daily question, watered or weeded -->
+  <div class="quest-card" id="questCard">
+    <p class="quest-label">a quest for your spirit</p>
+    <p class="quest-name" id="questName"></p>
+    <p class="quest-kind" id="questKind"></p>
+    <p class="quest-q" id="questQ"></p>
+
+    <div class="quest-actions" id="questActions">
+      <button class="quest-btn" id="btnQuestWater">water · nourish it</button>
+      <button class="quest-btn secondary" id="btnQuestWeed">weed · repent</button>
+      <button class="quest-skip" id="questSkip" title="another question">↻</button>
+    </div>
+
+    <div class="quest-form" id="questForm">
+      <p class="quest-form-hint" id="questFormHint"></p>
+      <textarea class="quest-note" id="questNote"></textarea>
+      <input class="quest-tag" id="questTag" type="text" maxlength="40" style="display:none"
+        placeholder="name the spot — what kind of weed is this?" />
+      <div class="quest-form-actions">
+        <button class="quest-btn" id="questSave">save</button>
+        <button class="quest-btn secondary" id="questCancel">back</button>
+      </div>
+    </div>
+
+    <div class="quest-done" id="questDone">
+      <p class="quest-done-msg" id="questDoneMsg"></p>
+      <p class="quest-done-links">
+        <a href="/spirit/">see your tree →</a>
+        &nbsp;·&nbsp;
+        <button id="questAgain">another question ↻</button>
+      </p>
+    </div>
+  </div>
+
+  <p style="margin-top:1.2rem">
     <a href="/spirit/" style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--muted);text-decoration:underline;text-underline-offset:3px">tend the spirit garden →</a>
   </p>
 
@@ -556,6 +725,7 @@
     </div>
   </div>
 
+<script src="/assets/js/spirit-store.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────
 // CONSTANTS
@@ -912,6 +1082,115 @@ document.getElementById('newTagInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('newTagSave').click();
   if (e.key === 'Escape') document.getElementById('newTagForm').classList.remove('open');
 });
+
+// ─────────────────────────────────────────────────────────────
+// QUEST CARD — a daily question, watered or weeded
+// ─────────────────────────────────────────────────────────────
+
+const QUESTS = [
+  ...SpiritStore.FRUITS.map(f => ({ key:f.key, kind:'fruit', label:f.label, prompt:f.prompt })),
+  ...SpiritStore.WEEDS.filter(w => w.key !== 'such-like')
+    .map(w => ({ key:w.key, kind:'weed', label:w.label, prompt:w.prompt }))
+];
+
+let questOffset = 0;
+let questMode   = null;  // 'water' | 'weed'
+
+function currentQuest() {
+  const day = Math.floor(Date.now() / 86400000);
+  return QUESTS[(day + questOffset) % QUESTS.length];
+}
+
+function renderQuest() {
+  const q = currentQuest();
+  document.getElementById('questName').textContent = q.label;
+  document.getElementById('questName').classList.toggle('is-weed', q.kind === 'weed');
+  document.getElementById('questKind').textContent =
+    q.kind === 'fruit' ? 'fruit of the spirit · galatians 5:22' : 'weed of the world · galatians 5:19';
+  document.getElementById('questQ').textContent = q.prompt;
+
+  // weed quests only offer the pull
+  document.getElementById('btnQuestWater').style.display = q.kind === 'fruit' ? '' : 'none';
+  document.getElementById('btnQuestWeed').textContent =
+    q.kind === 'fruit' ? 'weed · repent' : 'pull this weed';
+
+  document.getElementById('questActions').style.display = 'flex';
+  document.getElementById('questForm').classList.remove('open');
+  document.getElementById('questDone').classList.remove('open');
+  document.getElementById('questNote').value = '';
+  document.getElementById('questTag').value = '';
+  questMode = null;
+}
+
+function openQuestForm(mode) {
+  const q = currentQuest();
+  questMode = mode;
+
+  const hint = document.getElementById('questFormHint');
+  const note = document.getElementById('questNote');
+  const tag  = document.getElementById('questTag');
+
+  if (mode === 'water') {
+    hint.textContent = `journal the blood, sweat, or tears you're pouring into ${q.label} — this waters it.`;
+    note.placeholder = 'how are you nourishing this fruit?';
+    tag.style.display = 'none';
+  } else {
+    hint.textContent = q.kind === 'fruit'
+      ? `the question revealed a weed? name it, repent, and ask God for grace — this pulls it.`
+      : `let it go — pray, repent, and ask God for grace and mercy. every pull loosens its grip.`;
+    note.placeholder = 'what needs pulling — and what are you praying?';
+    tag.style.display = '';
+    tag.placeholder = q.kind === 'fruit'
+      ? 'name the spot — what kind of weed is this?'
+      : 'tag the spot — where does this weed grow? (optional)';
+  }
+
+  document.getElementById('questActions').style.display = 'none';
+  document.getElementById('questForm').classList.add('open');
+  setTimeout(() => note.focus(), 60);
+}
+
+function saveQuest() {
+  const q = currentQuest();
+  const noteEl = document.getElementById('questNote');
+  const note = noteEl.value.trim();
+  const tagText = document.getElementById('questTag').value.trim();
+
+  if (!note) {
+    noteEl.placeholder = 'growth needs a few words — write a little…';
+    noteEl.focus();
+    return;
+  }
+
+  let entry, doneMsg;
+  if (questMode === 'water') {
+    entry = { key:q.key, kind:'fruit', act:'water', note, tag:tagText };
+    doneMsg = `✦ watered — ${q.label} grows a little`;
+  } else if (q.kind === 'weed') {
+    entry = { key:q.key, kind:'weed', act:'pull', note, tag:tagText };
+    doneMsg = `✦ pulled — ${q.label} loosens its grip`;
+  } else {
+    // weeding from a fruit question — match the named weed, or file under "such like"
+    const matched = SpiritStore.matchWeed(tagText) || 'such-like';
+    entry = { key:matched, kind:'weed', act:'pull', note, tag:tagText };
+    const label = matched === 'such-like' ? (tagText || 'that weed') : matched;
+    doneMsg = `✦ pulled — ${label} loosens its grip`;
+  }
+
+  SpiritStore.addEntry(entry);
+  document.getElementById('questForm').classList.remove('open');
+  document.getElementById('questDoneMsg').textContent = doneMsg;
+  document.getElementById('questDone').classList.add('open');
+}
+
+document.getElementById('btnQuestWater').addEventListener('click', () => openQuestForm('water'));
+document.getElementById('btnQuestWeed').addEventListener('click', () => openQuestForm('weed'));
+document.getElementById('questSave').addEventListener('click', saveQuest);
+document.getElementById('questCancel').addEventListener('click', renderQuest);
+document.getElementById('questSkip').addEventListener('click', () => { questOffset++; renderQuest(); });
+document.getElementById('questAgain').addEventListener('click', () => { questOffset++; renderQuest(); });
+
+renderQuest();
 
 // ─────────────────────────────────────────────────────────────
 // EVENTS
