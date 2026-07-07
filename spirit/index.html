@@ -346,6 +346,58 @@
       margin-top: 0.4rem;
     }
 
+    /* from your garden — tagged verses that speak of this week's focus */
+    .garden-verses { margin-bottom: 1.4rem; }
+    .garden-target-label {
+      font-family: var(--hand);
+      font-size: 1.1rem;
+      line-height: 1;
+      color: var(--ink);
+      margin: 0.6rem 0 0.25rem;
+    }
+    .garden-target-label.is-weed { color: #7a4030; }
+    .garden-verse {
+      display: block;
+      font-family: var(--serif);
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.28rem 0.15rem;
+      border-bottom: 1px dotted rgba(138,117,96,0.3);
+      line-height: 1.5;
+      transition: color 0.15s, background 0.15s;
+    }
+    .garden-verse:hover { color: var(--ink); background: rgba(255,255,255,0.5); }
+    .garden-verse .gv-ref {
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-right: 0.45rem;
+    }
+    .garden-empty-line {
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 0.25rem 0.15rem 0.4rem;
+    }
+    .garden-empty-line a { color: var(--accent); text-underline-offset: 2px; }
+    .garden-open-link {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-align: center;
+      margin-top: 0.7rem;
+    }
+    .garden-open-link:hover { color: var(--ink); }
+
     /* journal — reflections written into the margins */
     .journal { margin-top: 0.2rem; }
     .journal-empty {
@@ -635,6 +687,9 @@
       <p class="ritual-line" id="ritualLine"></p>
     </div>
 
+    <p class="practice-label">from your garden</p>
+    <div class="garden-verses" id="gardenVerses"></div>
+
     <p class="practice-label">your margins</p>
     <div class="journal" id="journal"></div>
 
@@ -682,9 +737,10 @@ const RITUAL_KEY = SpiritStore.RITUAL_KEY;
 // STATE
 // ─────────────────────────────────────────────────────────────
 
-let log    = [];
-let tally  = {};   // per-key {waters, pulls, last} derived from the log
-let ritual = { fruit:null, fruitSetAt:null, weed:null, weedSetAt:null, weedCustomLabel:'' };
+let log      = [];
+let tally    = {};   // per-key {waters, pulls, last} derived from the log
+let ritual   = { fruit:null, fruitSetAt:null, weed:null, weedSetAt:null, weedCustomLabel:'' };
+let verseText = null; // {id: text} lookup, lazy-loaded from KJV for correlation
 let activeType = null, activeKey = null;
 
 // ─────────────────────────────────────────────────────────────
@@ -694,6 +750,7 @@ let activeType = null, activeKey = null;
 function init() {
   ritual = Object.assign(ritual, JSON.parse(localStorage.getItem(RITUAL_KEY) || '{}'));
   renderAll();
+  loadVerseText();   // fills in "from your garden" once scripture is ready
 }
 
 function renderAll() {
@@ -702,7 +759,22 @@ function renderAll() {
   buildFruits();
   buildWeeds();
   renderRitualPanel();
+  renderGardenVerses();
   renderJournal();
+}
+
+// Lazily load KJV text just to correlate the verses she's tagged
+async function loadVerseText() {
+  if (verseText) return;
+  try {
+    const res  = await fetch('/assets/data/kjv.json');
+    const data = await res.json();
+    verseText = {};
+    data.forEach((book, b) => book.chapters.forEach((ch, c) =>
+      ch.forEach((t, v) => { verseText[`${b}_${c}_${v}`] = t; })
+    ));
+    renderGardenVerses();   // re-render now that word matching is possible
+  } catch (e) { verseText = {}; }
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -777,6 +849,55 @@ function renderRitualPanel() {
     : '';
 
   line.innerHTML = `${text}${since ? `<span class="ritual-since">since ${since}</span>` : ''}`;
+}
+
+// ── from your garden — verses you tagged that speak of this week's focus
+function renderGardenVerses() {
+  const wrap = document.getElementById('gardenVerses');
+
+  // this week's focus fruit + weed (skip the custom "such-like" placeholder)
+  const targets = [];
+  if (ritual.fruit) targets.push({ item: FRUITS.find(f => f.key === ritual.fruit), kind:'fruit' });
+  if (ritual.weed && ritual.weed !== 'such-like')
+    targets.push({ item: WEEDS.find(w => w.key === ritual.weed), kind:'weed' });
+
+  if (!targets.length) {
+    wrap.innerHTML = `<p class="garden-empty-line">set a fruit and a weed above, then the verses you’ve gathered in <a href="/word/">the living word</a> will gather here.</p>`;
+    return;
+  }
+
+  const annotations = SpiritStore.readWordAnnotations();
+  let html = '';
+
+  targets.forEach(({ item, kind }) => {
+    // find her tagged verses that name this fruit/weed — by tag or by scripture's own words
+    const matches = Object.keys(annotations).map(id => {
+      const ann = annotations[id];
+      const text = verseText ? verseText[id] : '';
+      if (!SpiritStore.verseSpeaksOf(item, ann, text)) return null;
+      const ref = SpiritStore.verseRef(id);
+      if (!ref) return null;
+      return { id, ref, text, savedAt: ann.savedAt || '' };
+    }).filter(Boolean)
+      .sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''))
+      .slice(0, 4);
+
+    html += `<p class="garden-target-label${kind === 'weed' ? ' is-weed' : ''}">${escHtml(item.label)}</p>`;
+
+    if (!matches.length) {
+      html += `<p class="garden-empty-line">none yet — <a href="/word/?q=${encodeURIComponent(item.key)}">search “${escHtml(item.label)}”</a> and tag what speaks to you.</p>`;
+    } else {
+      html += matches.map(m => {
+        const snippet = m.text ? escHtml(m.text.length > 96 ? m.text.slice(0, 96) + '…' : m.text) : '';
+        return `<a class="garden-verse" href="/word/?book=${encodeURIComponent(m.ref.book)}&chapter=${m.ref.chapter}&verse=${m.ref.verse}">
+          <span class="gv-ref">${m.ref.label}</span>${snippet}
+        </a>`;
+      }).join('');
+    }
+  });
+
+  html += `<a class="garden-open-link" href="/word/?view=garden">open my garden →</a>`;
+  wrap.innerHTML = html;
 }
 
 function renderJournal() {

@@ -745,33 +745,44 @@ async function init() {
       bookSel.appendChild(opt);
     });
 
-    // Handle URL params from homepage
+    // Handle URL params from home / spirit pages
     const params   = new URLSearchParams(window.location.search);
     const qBook    = params.get('book');
     const qChapter = params.get('chapter');
+    const qVerse   = params.get('verse');
     const qTag     = params.get('tag');
+    const qView    = params.get('view');
+    const qQuery   = params.get('q');
 
-    if (qTag) {
-      // Arrived from a tag chip → open My Garden filtered to that tag
+    if (qView === 'garden' || qTag) {
+      // Arrived from a tag chip or "open my garden" → My Garden (optionally filtered)
       mode = 'garden';
-      tagFilter = qTag;
-      const parentGroup = TAG_GROUPS.find(g => g.tags.includes(qTag));
-      if (parentGroup) openGroup = parentGroup.key;
+      tagFilter = qTag || null;
+      if (qTag) {
+        const parentGroup = TAG_GROUPS.find(g => g.tags.includes(qTag));
+        if (parentGroup) openGroup = parentGroup.key;
+      }
       document.querySelectorAll('.mode-tab').forEach(t =>
         t.classList.toggle('active', t.dataset.mode === 'garden')
       );
       buildTagBar();
       renderGarden();
     } else if (qBook && qChapter) {
-      // Arrived from homepage book/chapter picker → open browse mode
-      viewChapter(
-        BOOK_NAMES.find(n => n.toLowerCase() === qBook.toLowerCase()) || qBook,
-        parseInt(qChapter)
-      );
+      // Arrived from a chapter/verse link → open browse, highlight the verse if given
+      const bookName = BOOK_NAMES.find(n => n.toLowerCase() === qBook.toLowerCase()) || qBook;
+      const bookIdx  = BOOK_NAMES.indexOf(bookName);
+      const highlightId = (qVerse && bookIdx !== -1)
+        ? `${bookIdx}_${parseInt(qChapter) - 1}_${parseInt(qVerse) - 1}`
+        : null;
+      viewChapter(bookName, parseInt(qChapter), highlightId);
     } else if (qBook) {
       const results = verses.filter(v => v.book.toLowerCase() === qBook.toLowerCase());
       document.getElementById('searchInput').value = qBook;
       renderResults(results);
+    } else if (qQuery) {
+      document.getElementById('searchInput').value = qQuery;
+      document.getElementById('clearBtn').style.display = 'block';
+      doSearch(qQuery);
     } else {
       showWelcome();
     }
