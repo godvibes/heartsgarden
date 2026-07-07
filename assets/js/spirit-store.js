@@ -166,17 +166,78 @@
     return entry;
   }
 
-  // { love: {waters:3, pulls:0, last:'…'}, wrath: {waters:0, pulls:2, last:'…'} }
+  // { love: {waters:3, watches:1, pulls:0, last:'…'}, wrath: {…} }
   function counts(log) {
     log = log || readLog();
     const c = {};
     log.forEach(e => {
-      if (!c[e.key]) c[e.key] = { waters: 0, pulls: 0, last: null };
-      if (e.act === 'water') c[e.key].waters++;
-      else c[e.key].pulls++;
+      if (!c[e.key]) c[e.key] = { waters: 0, watches: 0, pulls: 0, last: null };
+      if      (e.act === 'water') c[e.key].waters++;
+      else if (e.act === 'watch') c[e.key].watches++;
+      else                        c[e.key].pulls++;
       if (!c[e.key].last || (e.at || '') > c[e.key].last) c[e.key].last = e.at;
     });
     return c;
+  }
+
+  // ── the gardenscape — monarch metamorphosis driven by tending ──
+  // Every act feeds one growth score; a full cycle raises a butterfly.
+  const CYCLE = 24;   // growth points to complete one metamorphosis (~8 days of daily tending)
+  const STAGES = [
+    { min: 0,  key:'stem',    name:'a bare stem',          hint:'begin tending — your garden waits' },
+    { min: 3,  key:'leaves',  name:'milkweed unfurls',     hint:'green returns' },
+    { min: 7,  key:'bloom',   name:'milkweed in bloom',    hint:'the blooms open' },
+    { min: 12, key:'cat',     name:'a caterpillar feeds',  hint:'life arrives to be nourished' },
+    { min: 17, key:'chrys',   name:'a chrysalis forms',    hint:'hidden transformation' },
+    { min: 22, key:'flutter', name:'a monarch emerges',    hint:'ready to take wing' },
+  ];
+
+  function stageFor(p) {
+    let s = STAGES[0];
+    for (const stage of STAGES) if (p >= stage.min) s = stage;
+    return s;
+  }
+
+  // consecutive calendar days (local) with at least one act, ending today or yesterday
+  function streakOf(daySet) {
+    if (!daySet.size) return 0;
+    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+    const d = new Date();
+    if (!daySet.has(fmt(d))) d.setDate(d.getDate() - 1); // grace: streak alive until tomorrow
+    let s = 0;
+    while (daySet.has(fmt(d))) { s++; d.setDate(d.getDate() - 1); }
+    return s;
+  }
+
+  // The whole picture of a person's tending — the /grow page renders from this
+  function garden(log) {
+    log = log || readLog();
+    let waters = 0, watches = 0, pulls = 0;
+    const days = new Set();
+    log.forEach(e => {
+      if      (e.act === 'water') waters++;
+      else if (e.act === 'watch') watches++;
+      else                        pulls++;
+      if (e.at) days.add(e.at.slice(0, 10)); // ISO date (UTC) — stable bucket key
+    });
+
+    // watering pours the most; watching and weeding each tend a little
+    const growth  = waters * 2 + watches * 1 + pulls * 1;
+    const cycles  = Math.floor(growth / CYCLE);   // butterflies released
+    const p       = growth % CYCLE;               // progress within the current metamorphosis
+    const stage   = stageFor(p);
+    const idx     = STAGES.indexOf(stage);
+    const next    = STAGES[idx + 1] || null;
+    const toNext  = next ? next.min - p : CYCLE - p; // points until next stage / release
+
+    const today   = new Date().toISOString().slice(0, 10);
+    return {
+      waters, watches, pulls, growth, cycles, p, stage, next, toNext,
+      streak: streakOf(days),
+      tendedToday: days.has(today),
+      dayCount: days.size,
+      CYCLE
+    };
   }
 
   // Free-text tag → known weed key, if it names one ("wrath", "my wrath at work")
@@ -222,8 +283,8 @@
   }
 
   window.SpiritStore = {
-    FRUITS, WEEDS, BOOK_NAMES, GARDEN_TAGS,
-    isFruit, readLog, addEntry, counts, matchWeed,
+    FRUITS, WEEDS, BOOK_NAMES, GARDEN_TAGS, STAGES, CYCLE,
+    isFruit, readLog, addEntry, counts, matchWeed, garden,
     readWordAnnotations, verseRef, wordsRegex, verseSpeaksOf,
     RITUAL_KEY, WORD_KEY, CTAG_KEY
   };

@@ -624,7 +624,7 @@
 
 <div class="top-nav">
   <a class="back-link" href="/">← hearts garden</a>
-  <span class="nav-note">heartsgarden.cc/spirit</span>
+  <a class="back-link" href="/grow/" style="text-decoration:underline;text-underline-offset:3px">grow →</a>
 </div>
 
 <div class="book-wrap">
@@ -913,7 +913,7 @@ function renderJournal() {
     const item = (e.kind === 'fruit' ? FRUITS : WEEDS).find(i => i.key === e.key);
     if (!item) return '';
     const name = (e.key === 'such-like' && e.tag) ? e.tag : item.label;
-    const act  = e.act === 'water' ? 'watered' : 'pulled';
+    const act  = e.act === 'water' ? 'watered' : e.act === 'watch' ? 'watched' : 'pulled';
     const date = e.at
       ? new Date(e.at).toLocaleDateString('en-US', { month:'short', day:'numeric' })
       : '';

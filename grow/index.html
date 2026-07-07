@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grow · Hearts Garden</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <style>
+    @font-face {
+      font-family: 'GoodHand';
+      src: url('../assets/fonts/GoodHandFont-Regular.ttf') format('truetype');
+    }
+
+    :root {
+      --cream:  #faf6ef;
+      --parch:  #f4ede0;
+      --parch2: #ede4d2;
+      --ink:    #1a1a18;
+      --muted:  #7a7870;
+      --border: #dedad4;
+      --accent: #8a7560;
+      --sky:    #f3f4ea;
+      --soil:   #e6dcc4;
+      --leaf:   #6a8840;
+      --leaf-d: #4a6a34;
+      --bloom:  #b58aa0;
+      --water:  #4898b8;
+      --serif:  'Times New Roman', Times, serif;
+      --hand:   'GoodHand', cursive;
+      --mono:   'Courier New', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding: 2rem 1rem 5rem;
+    }
+
+    .top-nav {
+      max-width: 640px;
+      margin: 0 auto 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .back-link, .nav-note {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--ink); }
+    .nav-note { color: var(--border); }
+
+    .wrap { max-width: 640px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 1.2rem; }
+    .wordmark {
+      font-family: var(--hand);
+      font-size: clamp(2.8rem, 8vw, 4rem);
+      line-height: 1;
+    }
+    .subtitle {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-top: 0.3rem;
+    }
+
+    /* ── stats ribbon ───────────────────────────────── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 1.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.3rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: var(--hand);
+      font-size: 1.9rem;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.53rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── the gardenscape ────────────────────────────── */
+    .scene {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(to bottom, var(--sky) 0%, #f6f1e6 58%, var(--soil) 100%);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 -18px 30px rgba(122,90,50,0.08);
+      margin-bottom: 0.5rem;
+    }
+    .ground {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 24%;
+      background: linear-gradient(to bottom, rgba(160,130,80,0.12), rgba(140,110,64,0.28));
+      border-top: 1px solid rgba(122,90,50,0.2);
+    }
+
+    /* hero of the current metamorphosis stage */
+    .hero {
+      position: absolute;
+      left: 50%;
+      bottom: 12%;
+      transform: translateX(-50%);
+      width: 46%;
+      max-width: 260px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      animation: rise 0.9s cubic-bezier(0.2,0.7,0.3,1) both;
+    }
+    .hero img, .hero svg { width: 100%; height: auto; display: block; }
+    .hero img { filter: drop-shadow(2px 6px 10px rgba(60,40,15,0.18)); }
+    @keyframes rise {
+      from { opacity: 0; transform: translate(-50%, 14px) scale(0.94); }
+      to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    }
+
+    /* scattered blooms along the soil — one per watering */
+    .bloom-dot {
+      position: absolute;
+      bottom: 6%;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff 0%, var(--bloom) 70%);
+      box-shadow: 0 1px 3px rgba(60,40,15,0.2);
+      animation: pop 0.5s ease both;
+    }
+    @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+
+    /* released monarchs flutter across the sky */
+    .flit {
+      position: absolute;
+      width: 26px; height: auto;
+      opacity: 0.92;
+      animation: flit 9s ease-in-out infinite;
+    }
+    @keyframes flit {
+      0%   { transform: translate(0,0) rotate(-6deg); }
+      25%  { transform: translate(10px,-8px) rotate(6deg); }
+      50%  { transform: translate(0,4px) rotate(-4deg); }
+      75%  { transform: translate(-10px,-6px) rotate(5deg); }
+      100% { transform: translate(0,0) rotate(-6deg); }
+    }
+
+    .stage-caption {
+      text-align: center;
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+    .stage-caption strong { color: var(--ink); font-style: normal; }
+
+    /* progress toward the next butterfly */
+    .progress {
+      max-width: 320px;
+      margin: 0 auto 1.8rem;
+    }
+    .progress-track {
+      height: 6px;
+      background: var(--parch2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--leaf), var(--bloom));
+      border-radius: 4px;
+      transition: width 0.7s cubic-bezier(0.2,0.7,0.3,1);
+    }
+    .progress-note {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    /* ── quest card ─────────────────────────────────── */
+    .quest {
+      background: var(--parch);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.6rem 1.7rem 1.7rem;
+      box-shadow: 0 4px 20px rgba(60,35,10,0.08);
+    }
+    .quest-label {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 0.7rem;
+    }
+    .quest-fruit {
+      font-family: var(--hand);
+      font-size: 2rem;
+      line-height: 1;
+      text-align: center;
+      color: var(--ink);
+    }
+    .quest-ref {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin: 0.25rem 0 1rem;
+    }
+    .quest-q {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.12rem;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 1.4rem;
+    }
+
+    /* three choices */
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+    }
+    .choice {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.9rem 0.5rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+    }
+    .choice:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(60,35,10,0.1);
+    }
+    .choice-glyph { font-size: 1.4rem; line-height: 1; }
+    .choice[data-act="water"]:hover { border-color: var(--water); }
+    .choice[data-act="watch"]:hover { border-color: var(--accent); }
+    .choice[data-act="weed"]:hover  { border-color: #7a4030; }
+    .choice-name {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .choice-desc {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .quest-skip {
+      display: block;
+      margin: 1rem auto 0;
+      background: none; border: none; cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--border);
+      transition: color 0.2s;
+    }
+    .quest-skip:hover { color: var(--accent); }
+
+    /* the writing step */
+    .respond { display: none; }
+    .respond.open { display: block; }
+    .respond-hint {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 0.7rem;
+      text-align: center;
+    }
+    .respond-note {
+      width: 100%;
+      min-height: 92px;
+      padding: 0.75rem 0.95rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.94rem;
+      line-height: 1.6;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+      margin-bottom: 0.6rem;
+      transition: border-color 0.2s;
+    }
+    .respond-note:focus { border-color: var(--accent); }
+    .respond-tag {
+      width: 100%;
+      padding: 0.6rem 0.95rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.88rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--ink);
+      outline: none;
+      margin-bottom: 0.6rem;
+      display: none;
+      transition: border-color 0.2s;
+    }
+    .respond-tag:focus { border-color: var(--accent); }
+    .respond-actions { display: flex; gap: 0.5rem; justify-content: center; }
+    .btn {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-primary { background: var(--ink); color: var(--cream); }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); }
+    .btn-ghost:hover { color: var(--ink); border-color: var(--accent); }
+
+    /* the done state */
+    .done { display: none; text-align: center; }
+    .done.open { display: block; }
+    .done-msg {
+      font-family: var(--hand);
+      font-size: 1.6rem;
+      line-height: 1.2;
+      color: var(--leaf-d);
+      margin-bottom: 0.4rem;
+    }
+    .done-sub {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+    .done-links {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+    }
+    .done-links a, .done-links button {
+      color: var(--muted);
+      background: none; border: none; cursor: pointer;
+      font: inherit; letter-spacing: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .done-links a:hover, .done-links button:hover { color: var(--ink); }
+
+    /* growth toast */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 2rem;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      padding: 0.7rem 1.2rem;
+      border-radius: 30px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 50;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .foot-links {
+      text-align: center;
+      margin-top: 2rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+    }
+    .foot-links a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+    .foot-links a:hover { color: var(--ink); }
+
+    @media (max-width: 480px) {
+      .quest-q { font-size: 1rem; }
+      .choice { padding: 0.75rem 0.35rem; }
+      .choice-desc { font-size: 0.66rem; }
+      .stats { gap: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-nav">
+  <a class="back-link" href="/">← hearts garden</a>
+  <span class="nav-note">heartsgarden.cc/grow</span>
+</div>
+
+<div class="wrap">
+
+  <header>
+    <div class="wordmark">Grow</div>
+    <p class="subtitle">tend one question a day &middot; watch your spirit take wing</p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="scene" id="scene">
+    <div class="ground"></div>
+  </div>
+
+  <p class="stage-caption" id="stageCaption"></p>
+  <div class="progress">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <p class="progress-note" id="progressNote"></p>
+  </div>
+
+  <div class="quest" id="quest">
+    <!-- choose step -->
+    <div id="chooseStep">
+      <p class="quest-label">today's tending</p>
+      <p class="quest-fruit" id="questFruit"></p>
+      <p class="quest-ref" id="questRef"></p>
+      <p class="quest-q" id="questQ"></p>
+      <div class="choices">
+        <button class="choice" data-act="water">
+          <span class="choice-glyph">💧</span>
+          <span class="choice-name">water</span>
+          <span class="choice-desc">I'm pouring energy into this</span>
+        </button>
+        <button class="choice" data-act="watch">
+          <span class="choice-glyph">👁</span>
+          <span class="choice-name">watch</span>
+          <span class="choice-desc">I'm holding it, watching what arises</span>
+        </button>
+        <button class="choice" data-act="weed">
+          <span class="choice-glyph">🌿</span>
+          <span class="choice-name">weed</span>
+          <span class="choice-desc">something's choking it — uproot</span>
+        </button>
+      </div>
+      <button class="quest-skip" id="questSkip">a different question ↻</button>
+    </div>
+
+    <!-- respond step -->
+    <div class="respond" id="respondStep">
+      <p class="quest-label" id="respondLabel"></p>
+      <p class="respond-hint" id="respondHint"></p>
+      <textarea class="respond-note" id="respondNote"></textarea>
+      <input class="respond-tag" id="respondTag" type="text" maxlength="40" />
+      <div class="respond-actions">
+        <button class="btn btn-primary" id="respondSave">tend</button>
+        <button class="btn btn-ghost" id="respondBack">back</button>
+      </div>
+    </div>
+
+    <!-- done step -->
+    <div class="done" id="doneStep">
+      <p class="done-msg" id="doneMsg"></p>
+      <p class="done-sub" id="doneSub"></p>
+      <div class="done-links">
+        <button id="doneAgain">tend another ↻</button>
+        &nbsp;·&nbsp;
+        <a href="/spirit/">your tree →</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot-links">
+    <a href="/spirit/">the spirit garden</a> &nbsp;·&nbsp; <a href="/word/">the living word</a>
+  </p>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/assets/js/spirit-store.js"></script>
+<script>
+// ─────────────────────────────────────────────────────────────
+// /grow — a daily tending ritual that grows a monarch gardenscape
+// ─────────────────────────────────────────────────────────────
+
+const { FRUITS } = SpiritStore;
+
+// Only fruit questions here — the user chooses their relationship to it
+const QUESTS = FRUITS.map(f => ({ key:f.key, label:f.label, prompt:f.prompt }));
+
+let questOffset = 0;
+let chosenAct   = null;   // 'water' | 'watch' | 'weed'
+
+// ── hero art per metamorphosis stage ────────────────────────
+// Watercolor PNGs are the heroes once uploaded; SVG placeholders bloom meanwhile.
+const HERO_IMG = {
+  bloom:   '/assets/images/spirit/milkweed.png',
+  cat:     '/assets/images/spirit/caterpillar.png',
+  flutter: '/assets/images/spirit/butterfly.png',
+};
+
+function monarchSVG(w = 26) {
+  return `<svg viewBox="0 0 60 52" width="${w}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g stroke="#1e3a24" stroke-width="1.4" fill="#c8752e">
+      <path d="M30 26 C14 6 2 8 4 22 C0 30 8 36 18 34 C24 33 28 30 30 26Z"/>
+      <path d="M30 26 C46 6 58 8 56 22 C60 30 52 36 42 34 C36 33 32 30 30 26Z"/>
+      <path d="M30 26 C20 34 12 40 16 46 C22 50 28 40 30 34Z"/>
+      <path d="M30 26 C40 34 48 40 44 46 C38 50 32 40 30 34Z"/>
+    </g>
+    <g fill="#fff"><circle cx="9" cy="20" r="1.5"/><circle cx="14" cy="15" r="1.5"/><circle cx="51" cy="20" r="1.5"/><circle cx="46" cy="15" r="1.5"/></g>
+    <rect x="29" y="20" width="2" height="18" rx="1" fill="#1e2a1a"/>
+  </svg>`;
+}
+
+const HERO_SVG = {
+  stem: `<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M60 150 Q58 100 60 60 Q61 40 60 24" stroke="#6a8840" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </svg>`,
+  leaves: `<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M60 150 Q58 96 60 50 Q61 34 60 20" stroke="#6a8840" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M60 96 Q30 84 18 96 Q34 108 60 100Z" fill="#7a9850" stroke="#4a6a34" stroke-width="1.5"/>
+    <path d="M60 78 Q90 66 102 78 Q86 90 60 82Z" fill="#7a9850" stroke="#4a6a34" stroke-width="1.5"/>
+    <path d="M60 56 Q34 46 24 58 Q40 68 60 60Z" fill="#8aa860" stroke="#4a6a34" stroke-width="1.5"/>
+  </svg>`,
+  bloom: `<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M60 150 Q58 96 60 50 Q61 34 60 20" stroke="#6a8840" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M60 100 Q30 88 18 100 Q34 112 60 104Z" fill="#7a9850" stroke="#4a6a34" stroke-width="1.5"/>
+    <path d="M60 84 Q90 72 102 84 Q86 96 60 88Z" fill="#7a9850" stroke="#4a6a34" stroke-width="1.5"/>
+    <g fill="#c69fb2" stroke="#a06f88" stroke-width="0.6">
+      <circle cx="52" cy="40" r="6"/><circle cx="64" cy="36" r="6"/><circle cx="58" cy="48" r="6"/>
+      <circle cx="70" cy="46" r="6"/><circle cx="48" cy="50" r="6"/><circle cx="62" cy="26" r="6"/>
+      <circle cx="74" cy="34" r="5"/><circle cx="44" cy="40" r="5"/>
+    </g>
+    <g fill="#fff"><circle cx="52" cy="40" r="2"/><circle cx="64" cy="36" r="2"/><circle cx="58" cy="48" r="2"/><circle cx="70" cy="46" r="2"/><circle cx="48" cy="50" r="2"/><circle cx="62" cy="26" r="2"/></g>
+  </svg>`,
+  cat: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M20 96 Q80 70 150 40" stroke="#6a8840" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M60 92 Q40 80 26 90 Q42 100 62 96Z" fill="#7a9850" stroke="#4a6a34" stroke-width="1.5"/>
+    <g transform="rotate(-22 90 66)">
+      <rect x="52" y="54" width="76" height="26" rx="13" fill="#f2f0ec" stroke="#1e2a1a" stroke-width="1.4"/>
+      <g fill="#1e2a1a"><rect x="60" y="54" width="4" height="26"/><rect x="72" y="54" width="4" height="26"/><rect x="84" y="54" width="4" height="26"/><rect x="96" y="54" width="4" height="26"/><rect x="108" y="54" width="4" height="26"/><rect x="118" y="54" width="4" height="26"/></g>
+      <g fill="#e8a72e"><rect x="66" y="55" width="5" height="24"/><rect x="90" y="55" width="5" height="24"/><rect x="112" y="55" width="5" height="24"/></g>
+      <path d="M126 60 q8 -8 4 -16 M126 66 q8 8 4 16" stroke="#1e2a1a" stroke-width="1.4" fill="none"/>
+    </g>
+  </svg>`,
+  chrys: `<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M60 8 Q58 26 60 40" stroke="#4a6a34" stroke-width="3" fill="none"/>
+    <path d="M40 44 Q60 26 80 44 Q86 92 60 110 Q34 92 40 44Z" fill="#7fa06a" stroke="#4a6a34" stroke-width="1.8"/>
+    <g fill="#d8b23e"><circle cx="48" cy="60" r="2"/><circle cx="60" cy="56" r="2"/><circle cx="72" cy="60" r="2"/><circle cx="54" cy="66" r="2"/><circle cx="66" cy="66" r="2"/></g>
+    <path d="M44 72 Q60 78 76 72" stroke="#d8b23e" stroke-width="1.6" fill="none"/>
+  </svg>`,
+  flutter: `<svg viewBox="0 0 140 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M64 44 Q62 30 64 14" stroke="#7fa06a" stroke-width="3" fill="none"/>
+    <path d="M56 24 Q64 12 78 22 Q84 44 64 54 Q50 44 56 24Z" fill="#8aa06a" stroke="#4a6a34" stroke-width="1.4" opacity="0.85"/>
+    <g transform="translate(4 46)">${monarchSVG(120).replace('<svg', '<svg x="0"').replace(/width="120"/, 'width="120"')}</g>
+  </svg>`,
+};
+
+// ─────────────────────────────────────────────────────────────
+function renderScene() {
+  const g = SpiritStore.garden();
+  const scene = document.getElementById('scene');
+
+  // clear everything but the ground
+  [...scene.querySelectorAll('.hero, .bloom-dot, .flit')].forEach(el => el.remove());
+
+  // hero for the current stage
+  const hero = document.createElement('div');
+  hero.className = 'hero';
+  const imgSrc = HERO_IMG[g.stage.key];
+  if (imgSrc) {
+    hero.innerHTML =
+      `<img src="${imgSrc}" alt="${g.stage.name}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+       <span style="display:none;width:100%">${HERO_SVG[g.stage.key]}</span>`;
+  } else {
+    hero.innerHTML = HERO_SVG[g.stage.key];
+  }
+  scene.appendChild(hero);
+
+  // scattered blooms — one per watering, up to 8, spread along the soil
+  const blooms = Math.min(g.waters, 8);
+  for (let i = 0; i < blooms; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'bloom-dot';
+    const left = 8 + (84 / Math.max(blooms, 1)) * i + (i % 2 ? 3 : -2);
+    dot.style.left = left + '%';
+    dot.style.bottom = (5 + (i % 3) * 3) + '%';
+    dot.style.animationDelay = (i * 0.06) + 's';
+    scene.appendChild(dot);
+  }
+
+  // released monarchs flutter across the sky — one per completed cycle, up to 6
+  const flits = Math.min(g.cycles, 6);
+  for (let i = 0; i < flits; i++) {
+    const b = document.createElement('span');
+    b.className = 'flit';
+    b.innerHTML = monarchSVG(20 + (i % 3) * 5);
+    b.style.left = (12 + i * 14) + '%';
+    b.style.top  = (8 + (i % 3) * 12) + '%';
+    b.style.animationDelay = (i * 1.3) + 's';
+    b.style.animationDuration = (8 + (i % 3) * 2) + 's';
+    scene.appendChild(b);
+  }
+
+  // caption + progress
+  document.getElementById('stageCaption').innerHTML =
+    `<strong>${g.stage.name}</strong> · ${g.stage.hint}`;
+  const pct = Math.round((g.p / g.CYCLE) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressNote').textContent = g.cycles > 0
+    ? `${g.toNext} to the next stage · ${g.cycles} monarch${g.cycles !== 1 ? 's' : ''} released`
+    : `${g.toNext} to the next stage`;
+
+  renderStats(g);
+  return g;
+}
+
+function renderStats(g) {
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-num">${g.streak}</div><div class="stat-label">day streak</div></div>
+    <div class="stat"><div class="stat-num">${g.cycles}</div><div class="stat-label">monarchs</div></div>
+    <div class="stat"><div class="stat-num">${g.waters + g.watches + g.pulls}</div><div class="stat-label">tendings</div></div>
+  `;
+}
+
+// ── the quest ────────────────────────────────────────────────
+function currentQuest() {
+  const day = Math.floor(Date.now() / 86400000);
+  return QUESTS[(day + questOffset) % QUESTS.length];
+}
+
+function renderQuest() {
+  const q = currentQuest();
+  document.getElementById('questFruit').textContent = q.label;
+  document.getElementById('questRef').textContent = 'fruit of the spirit · galatians 5:22';
+  document.getElementById('questQ').textContent = q.prompt;
+
+  document.getElementById('chooseStep').style.display = 'block';
+  document.getElementById('respondStep').classList.remove('open');
+  document.getElementById('doneStep').classList.remove('open');
+  document.getElementById('respondNote').value = '';
+  document.getElementById('respondTag').value = '';
+  chosenAct = null;
+}
+
+function openRespond(act) {
+  chosenAct = act;
+  const q = currentQuest();
+  const label = document.getElementById('respondLabel');
+  const hint  = document.getElementById('respondHint');
+  const note  = document.getElementById('respondNote');
+  const tag   = document.getElementById('respondTag');
+  const save  = document.getElementById('respondSave');
+
+  tag.style.display = 'none';
+
+  if (act === 'water') {
+    label.textContent = `watering ${q.label}`;
+    hint.textContent = `journal the blood, sweat, or tears you're pouring into ${q.label}. this waters it.`;
+    note.placeholder = 'how are you nourishing this fruit?';
+    save.textContent = 'water it';
+  } else if (act === 'watch') {
+    label.textContent = `watching ${q.label}`;
+    hint.textContent = `no need to fix anything — just notice what arises around ${q.label} today.`;
+    note.placeholder = 'what are you noticing? (a word is enough)';
+    save.textContent = 'watch it';
+  } else {
+    label.textContent = `weeding around ${q.label}`;
+    hint.textContent = `what's choking ${q.label}? name it, repent, and ask God for grace. this pulls the weed.`;
+    note.placeholder = 'what needs pulling — and what are you praying?';
+    tag.placeholder = 'name the weed — where does it grow?';
+    tag.style.display = 'block';
+    save.textContent = 'pull it';
+  }
+
+  document.getElementById('chooseStep').style.display = 'none';
+  document.getElementById('respondStep').classList.add('open');
+  setTimeout(() => note.focus(), 60);
+}
+
+function saveTending() {
+  const q = currentQuest();
+  const note = document.getElementById('respondNote').value.trim();
+  const tagText = document.getElementById('respondTag').value.trim();
+  const noteEl = document.getElementById('respondNote');
+
+  // watching can be wordless; watering & weeding grow best with a few words
+  if (chosenAct !== 'watch' && !note) {
+    noteEl.placeholder = 'growth needs a few words — write a little…';
+    noteEl.focus();
+    return;
+  }
+
+  const before = SpiritStore.garden();
+
+  let entry, msg;
+  if (chosenAct === 'water') {
+    entry = { key:q.key, kind:'fruit', act:'water', note, tag:'' };
+    msg = `you watered ${q.label}`;
+  } else if (chosenAct === 'watch') {
+    entry = { key:q.key, kind:'fruit', act:'watch', note, tag:'' };
+    msg = `you're watching ${q.label}`;
+  } else {
+    const matched = SpiritStore.matchWeed(tagText) || 'such-like';
+    entry = { key:matched, kind:'weed', act:'pull', note, tag:tagText };
+    const label = matched === 'such-like' ? (tagText || 'that weed') : matched;
+    msg = `you pulled ${label}`;
+  }
+
+  SpiritStore.addEntry(entry);
+  const after = renderScene();
+
+  // celebrate crossing a stage or releasing a monarch
+  if (after.cycles > before.cycles) {
+    showToast('✦ a monarch takes wing — a cycle complete');
+  } else if (after.stage.key !== before.stage.key) {
+    showToast('✦ your garden reached — ' + after.stage.name);
+  }
+
+  document.getElementById('respondStep').classList.remove('open');
+  document.getElementById('doneMsg').textContent = '✦ ' + msg;
+  document.getElementById('doneSub').textContent = after.tendedToday
+    ? `tended today · come back tomorrow to keep your ${after.streak}-day streak growing`
+    : 'your garden grew a little';
+  document.getElementById('doneStep').classList.add('open');
+}
+
+// ── toast ────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(text) {
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ── wiring ───────────────────────────────────────────────────
+document.querySelectorAll('.choice').forEach(c =>
+  c.addEventListener('click', () => openRespond(c.dataset.act))
+);
+document.getElementById('respondSave').addEventListener('click', saveTending);
+document.getElementById('respondBack').addEventListener('click', renderQuest);
+document.getElementById('questSkip').addEventListener('click', () => { questOffset++; renderQuest(); });
+document.getElementById('doneAgain').addEventListener('click', () => { questOffset++; renderQuest(); });
+
+// ─────────────────────────────────────────────────────────────
+renderScene();
+renderQuest();
+</script>
+</body>
+</html>
