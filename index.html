@@ -39,7 +39,48 @@
       justify-content: center;
       padding: 3rem 1.5rem 5rem;
       text-align: center;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* ── watercolor garden — butterfly, milkweed, caterpillar ── */
+    .deco {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      filter: drop-shadow(1px 4px 8px rgba(60,40,15,0.1));
+    }
+    .deco-butterfly {
+      width: clamp(70px, 9vw, 120px);
+      top: 4.5rem;
+      right: max(4vw, 1rem);
+      animation: hover-flit 8s ease-in-out infinite;
+    }
+    .deco-milkweed {
+      width: clamp(110px, 15vw, 190px);
+      bottom: 9rem;
+      left: max(2.5vw, 0.4rem);
+      opacity: 0.95;
+    }
+    .deco-caterpillar {
+      width: clamp(95px, 12vw, 160px);
+      bottom: 3.2rem;
+      right: max(3vw, 0.6rem);
+      transform: rotate(-4deg);
+    }
+    @keyframes hover-flit {
+      0%   { transform: translate(0,0) rotate(-3deg); }
+      30%  { transform: translate(-7px,-9px) rotate(4deg); }
+      60%  { transform: translate(5px,3px) rotate(-2deg); }
+      100% { transform: translate(0,0) rotate(-3deg); }
+    }
+    @media (max-width: 720px) {
+      .deco { opacity: 0.55; }
+      .deco-milkweed { bottom: auto; top: 30%; }
+    }
+
+    /* keep the page content above the garden */
+    body > *:not(.deco) { position: relative; z-index: 1; }
 
     /* ── wordmark ─────────────────────────────────── */
     .mark {
@@ -616,6 +657,11 @@
   </style>
 </head>
 <body>
+
+  <!-- watercolor garden — these appear once the PNGs land in assets/images/spirit/ -->
+  <img class="deco deco-butterfly" src="/assets/images/spirit/butterfly.png" alt="" aria-hidden="true" onerror="this.remove()" />
+  <img class="deco deco-milkweed" src="/assets/images/spirit/milkweed.png" alt="" aria-hidden="true" onerror="this.remove()" />
+  <img class="deco deco-caterpillar" src="/assets/images/spirit/caterpillar.png" alt="" aria-hidden="true" onerror="this.remove()" />
 
   <p class="mark">Hearts Garden</p>
   <p class="tagline">a spiritual gardening guide · rooted in the <a href="/word/">living word</a></p>
