@@ -184,7 +184,7 @@
   // Every act feeds one growth score; a full cycle raises a butterfly.
   const CYCLE = 24;   // growth points to complete one metamorphosis (~8 days of daily tending)
   const STAGES = [
-    { min: 0,  key:'stem',    name:'a bare stem',          hint:'begin tending — your garden waits' },
+    { min: 0,  key:'stem',    name:'a milkweed pod',       hint:'begin tending — seeds wait to fly' },
     { min: 3,  key:'leaves',  name:'milkweed unfurls',     hint:'green returns' },
     { min: 7,  key:'bloom',   name:'milkweed in bloom',    hint:'the blooms open' },
     { min: 12, key:'cat',     name:'a caterpillar feeds',  hint:'life arrives to be nourished' },
