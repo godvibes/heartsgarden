@@ -452,6 +452,22 @@
       overflow: hidden;
     }
 
+    .margins-toggle {
+      display: block;
+      margin: 0.9rem auto 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .margins-toggle:hover { color: var(--ink); }
+
     /* ── modal — a tipped-in note card ─────────────── */
     .overlay {
       position: fixed; inset: 0;
@@ -900,36 +916,60 @@ function renderGardenVerses() {
   wrap.innerHTML = html;
 }
 
+let marginsExpanded = false;
+const MARGINS_PREVIEW = 6;
+
+function journalEntryHTML(e) {
+  const item = (e.kind === 'fruit' ? FRUITS : WEEDS).find(i => i.key === e.key);
+  if (!item) return '';
+  const name = (e.key === 'such-like' && e.tag) ? e.tag : item.label;
+  const act  = e.act === 'water' ? 'watered' : e.act === 'watch' ? 'watched' : 'pulled';
+  const date = e.at
+    ? new Date(e.at).toLocaleDateString('en-US', { month:'short', day:'numeric' })
+    : '';
+  const tagNote = (e.tag && e.key !== 'such-like') ? ` · ${escHtml(e.tag)}` : '';
+  const snippet = e.note
+    ? escHtml(e.note)
+    : '<em style="opacity:0.65">held in silence</em>';
+  return `<button class="journal-entry" data-type="${e.kind}" data-key="${e.key}">
+    <span class="journal-entry-head">
+      <span class="journal-entry-name${e.kind === 'weed' ? ' is-weed' : ''}">${escHtml(name)}</span>
+      <span class="journal-entry-date">${act}${tagNote} · ${date}</span>
+    </span>
+    <span class="journal-entry-snippet">${snippet}</span>
+  </button>`;
+}
+
 function renderJournal() {
   const journal = document.getElementById('journal');
-  const entries = log.filter(e => e.note).slice().reverse();
+  const entries = log.slice().reverse();   // every act — even wordless watching
 
   if (!entries.length) {
     journal.innerHTML = `<p class="journal-empty">your margins are empty — tap a fruit or a weed to write</p>`;
     return;
   }
 
-  journal.innerHTML = entries.map(e => {
-    const item = (e.kind === 'fruit' ? FRUITS : WEEDS).find(i => i.key === e.key);
-    if (!item) return '';
-    const name = (e.key === 'such-like' && e.tag) ? e.tag : item.label;
-    const act  = e.act === 'water' ? 'watered' : e.act === 'watch' ? 'watched' : 'pulled';
-    const date = e.at
-      ? new Date(e.at).toLocaleDateString('en-US', { month:'short', day:'numeric' })
-      : '';
-    const tagNote = (e.tag && e.key !== 'such-like') ? ` · ${escHtml(e.tag)}` : '';
-    return `<button class="journal-entry" data-type="${e.kind}" data-key="${e.key}">
-      <span class="journal-entry-head">
-        <span class="journal-entry-name${e.kind === 'weed' ? ' is-weed' : ''}">${escHtml(name)}</span>
-        <span class="journal-entry-date">${act}${tagNote} · ${date}</span>
-      </span>
-      <span class="journal-entry-snippet">${escHtml(e.note)}</span>
-    </button>`;
-  }).join('');
+  const shown = marginsExpanded ? entries : entries.slice(0, MARGINS_PREVIEW);
+  const hidden = entries.length - shown.length;
+
+  let html = shown.map(journalEntryHTML).join('');
+  if (entries.length > MARGINS_PREVIEW) {
+    html += `<button class="margins-toggle" id="marginsToggle">${
+      marginsExpanded
+        ? 'show recent ↑'
+        : `see all ${entries.length} margins ↓`
+    }</button>`;
+  }
+  journal.innerHTML = html;
 
   journal.querySelectorAll('.journal-entry').forEach(e =>
     e.addEventListener('click', () => openSpiritModal(e.dataset.type, e.dataset.key))
   );
+  const toggle = document.getElementById('marginsToggle');
+  if (toggle) toggle.addEventListener('click', () => {
+    marginsExpanded = !marginsExpanded;
+    renderJournal();
+  });
 }
 
 // ─────────────────────────────────────────────────────────────

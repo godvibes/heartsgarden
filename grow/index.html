@@ -420,6 +420,69 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* ── your margins — the whole journal, folded away ── */
+    .margins-wrap { margin-top: 1.6rem; }
+    .margins-toggle {
+      display: block;
+      margin: 0 auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .margins-toggle:hover { color: var(--ink); }
+    .margins-list {
+      margin-top: 0.9rem;
+      background: var(--parch);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem 1.1rem 0.9rem;
+    }
+    .margin-entry {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      border-bottom: 1px dotted rgba(138,117,96,0.4);
+      padding: 0.55rem 0.1rem;
+      font-family: var(--serif);
+    }
+    .margin-entry:last-child { border-bottom: none; }
+    .margin-entry-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-bottom: 0.12rem;
+    }
+    .margin-entry-name {
+      font-family: var(--hand);
+      font-size: 1.1rem;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .margin-entry-name.is-weed { color: #7a4030; }
+    .margin-entry-date {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .margin-entry-note {
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
     .foot-links {
       text-align: center;
       margin-top: 2rem;
@@ -513,6 +576,11 @@
         <a href="/spirit/">your tree →</a>
       </div>
     </div>
+  </div>
+
+  <div class="margins-wrap">
+    <button class="margins-toggle" id="marginsToggle" style="display:none"></button>
+    <div class="margins-list" id="marginsList" hidden></div>
   </div>
 
   <p class="foot-links">
@@ -758,6 +826,7 @@ function saveTending() {
 
   SpiritStore.addEntry(entry);
   const after = renderScene();
+  renderMargins();
 
   // celebrate crossing a stage or releasing a monarch
   if (after.cycles > before.cycles) {
@@ -773,6 +842,58 @@ function saveTending() {
     : 'your garden grew a little';
   document.getElementById('doneStep').classList.add('open');
 }
+
+// ── your margins — every reflection, folded under the quest ──
+let marginsOpen = false;
+
+function renderMargins() {
+  const toggle = document.getElementById('marginsToggle');
+  const list   = document.getElementById('marginsList');
+  const entries = SpiritStore.readLog().slice().reverse();
+
+  if (!entries.length) {
+    toggle.style.display = 'none';
+    list.hidden = true;
+    return;
+  }
+
+  toggle.style.display = 'block';
+  toggle.textContent = marginsOpen
+    ? 'fold the margins away ↑'
+    : `see all ${entries.length} margin${entries.length !== 1 ? 's' : ''} ↓`;
+  list.hidden = !marginsOpen;
+
+  if (marginsOpen) {
+    const { FRUITS, WEEDS } = SpiritStore;
+    list.innerHTML = entries.map(e => {
+      const item = (e.kind === 'fruit' ? FRUITS : WEEDS).find(i => i.key === e.key);
+      if (!item) return '';
+      const name = (e.key === 'such-like' && e.tag) ? e.tag : item.label;
+      const act  = e.act === 'water' ? 'watered' : e.act === 'watch' ? 'watched' : 'pulled';
+      const date = e.at
+        ? new Date(e.at).toLocaleDateString('en-US', { month:'short', day:'numeric' })
+        : '';
+      const tagNote = (e.tag && e.key !== 'such-like') ? ` · ${esc(e.tag)}` : '';
+      const note = e.note ? esc(e.note) : '<em style="opacity:0.65">held in silence</em>';
+      return `<div class="margin-entry">
+        <span class="margin-entry-head">
+          <span class="margin-entry-name${e.kind === 'weed' ? ' is-weed' : ''}">${esc(name)}</span>
+          <span class="margin-entry-date">${act}${tagNote} · ${date}</span>
+        </span>
+        <span class="margin-entry-note">${note}</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.getElementById('marginsToggle').addEventListener('click', () => {
+  marginsOpen = !marginsOpen;
+  renderMargins();
+});
 
 // ── toast ────────────────────────────────────────────────────
 let toastTimer = null;
@@ -796,6 +917,7 @@ document.getElementById('doneAgain').addEventListener('click', () => { questOffs
 // ─────────────────────────────────────────────────────────────
 renderScene();
 renderQuest();
+renderMargins();
 </script>
 </body>
 </html>
