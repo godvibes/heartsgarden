@@ -365,6 +365,17 @@
     }
     .refresh-btn:hover { color: var(--accent); }
 
+    .chapter-link {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .chapter-link:hover { color: var(--accent); }
+
     /* ── book + chapter picker ────────────────────── */
     .picker-rule {
       width: 30px; height: 1px;
@@ -725,6 +736,9 @@
       <span class="ann-star" id="annStar" style="display:none">✦</span>
       <button class="refresh-btn" id="refreshBtn" title="another verse">↻</button>
     </div>
+    <p style="margin-top:0.45rem">
+      <a class="chapter-link" id="chapterLink" href="/word/" style="display:none">read the chapter ↗</a>
+    </p>
 
     <div class="picker-rule"></div>
     <p class="picker-label">open a book &amp; chapter</p>
@@ -746,7 +760,10 @@
   <div class="overlay" id="overlay" role="dialog" aria-modal="true">
     <div class="modal">
       <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
-      <p class="modal-ref" id="modalRef"></p>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:0.6rem">
+        <p class="modal-ref" id="modalRef" style="margin-bottom:0.5rem"></p>
+        <a class="chapter-link" id="modalChapterLink" href="/word/" style="display:none;white-space:nowrap">read chapter ↗</a>
+      </div>
       <p class="modal-verse" id="modalVerse"></p>
 
       <label class="field-label">gardening themes</label>
@@ -906,6 +923,14 @@ function showRandomVerse(ev) {
   setCurrentVerse(f);
 }
 
+// "42_2_15" → "/word/?book=John&chapter=3&verse=16" (browse mode, verse highlighted)
+function chapterURL(id) {
+  const parts = String(id).split('_').map(Number);
+  if (parts.length !== 3 || parts.some(isNaN) || !BOOK_NAMES[parts[0]]) return null;
+  const [b, c, v] = parts;
+  return `/word/?book=${encodeURIComponent(BOOK_NAMES[b])}&chapter=${c + 1}&verse=${v + 1}`;
+}
+
 // Convert "John 15:5" → "43_14_4" — same 0-based ID the word page uses
 // Handles multi-verse refs like "Psalm 23:1-3" by using the first verse
 function refToId(ref) {
@@ -930,6 +955,12 @@ function setCurrentVerse(f) {
   el.classList.remove('loading');
 
   document.getElementById('verseRef').textContent = `${f.ref}  ·  KJV`;
+
+  // link to the full chapter in the living word, verse highlighted
+  const chLink = document.getElementById('chapterLink');
+  const url = chapterURL(currentVerse.id);
+  if (url) { chLink.href = url; chLink.style.display = 'inline'; }
+  else chLink.style.display = 'none';
 
   refreshCardTags();
 
@@ -1011,6 +1042,11 @@ function openModal() {
   document.getElementById('modalRef').textContent   = `${currentVerse.ref}  ·  King James Version`;
   document.getElementById('modalVerse').textContent = currentVerse.text;
   document.getElementById('modalNote').value        = ann.note ?? '';
+
+  const mLink = document.getElementById('modalChapterLink');
+  const mUrl = chapterURL(currentVerse.id);
+  if (mUrl) { mLink.href = mUrl; mLink.style.display = 'inline'; }
+  else mLink.style.display = 'none';
 
   buildModalTags(ann.tags ?? []);
   document.getElementById('overlay').classList.add('open');
