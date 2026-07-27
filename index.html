@@ -936,7 +936,9 @@ function chapterURL(id) {
 function refToId(ref) {
   const m = ref.match(/^(.+?)\s+(\d+):(\d+)/);
   if (!m) return 'feat_' + ref.replace(/[\s:]/g, '_');
-  const [, bookName, ch, v] = m;
+  let [, bookName, ch, v] = m;
+  // featured.json writes "Psalm 23:1" (singular); BOOK_NAMES uses "Psalms"
+  if (bookName.toLowerCase() === 'psalm') bookName = 'Psalms';
   const bIdx = BOOK_NAMES.findIndex(n => n.toLowerCase() === bookName.toLowerCase());
   if (bIdx === -1) return 'feat_' + ref.replace(/[\s:]/g, '_');
   return `${bIdx}_${+ch - 1}_${+v - 1}`;

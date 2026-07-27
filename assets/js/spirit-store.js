@@ -198,14 +198,21 @@
     return s;
   }
 
+  // Local calendar day key — days must bucket in her timezone, not UTC,
+  // or an evening's tending lands on tomorrow's date and breaks the streak.
+  function dayKey(date) {
+    const d = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(d)) return null;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
   // consecutive calendar days (local) with at least one act, ending today or yesterday
   function streakOf(daySet) {
     if (!daySet.size) return 0;
-    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
     const d = new Date();
-    if (!daySet.has(fmt(d))) d.setDate(d.getDate() - 1); // grace: streak alive until tomorrow
+    if (!daySet.has(dayKey(d))) d.setDate(d.getDate() - 1); // grace: streak alive until tomorrow
     let s = 0;
-    while (daySet.has(fmt(d))) { s++; d.setDate(d.getDate() - 1); }
+    while (daySet.has(dayKey(d))) { s++; d.setDate(d.getDate() - 1); }
     return s;
   }
 
@@ -218,7 +225,8 @@
       if      (e.act === 'water') waters++;
       else if (e.act === 'watch') watches++;
       else                        pulls++;
-      if (e.at) days.add(e.at.slice(0, 10)); // ISO date (UTC) — stable bucket key
+      const k = e.at && dayKey(e.at);
+      if (k) days.add(k);   // local calendar day, matching streakOf
     });
 
     // watering pours the most; watching and weeding each tend a little
@@ -230,11 +238,10 @@
     const next    = STAGES[idx + 1] || null;
     const toNext  = next ? next.min - p : CYCLE - p; // points until next stage / release
 
-    const today   = new Date().toISOString().slice(0, 10);
     return {
       waters, watches, pulls, growth, cycles, p, stage, next, toNext,
       streak: streakOf(days),
-      tendedToday: days.has(today),
+      tendedToday: days.has(dayKey(new Date())),
       dayCount: days.size,
       CYCLE
     };
