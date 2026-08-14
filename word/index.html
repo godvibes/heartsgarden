@@ -382,6 +382,87 @@
       transition: background 0.15s, color 0.15s;
     }
 
+    /* add / edit custom tags */
+    .add-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .add-tag-btn {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      border: 1px dashed var(--border);
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .add-tag-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .add-tag-btn.active { border-style: solid; border-color: var(--accent); color: var(--accent); }
+
+    .new-tag-form {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .new-tag-form.open { display: flex; }
+    .new-tag-input {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--ink);
+      outline: none;
+      width: 130px;
+      transition: border-color 0.15s;
+    }
+    .new-tag-input:focus { border-color: var(--accent); }
+    .color-swatches { display: flex; gap: 0.3rem; }
+    .color-swatch {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.1s;
+    }
+    .color-swatch:hover { transform: scale(1.2); }
+    .color-swatch.picked { border-color: var(--ink); }
+    .new-tag-save {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.7rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .new-tag-save:hover { background: var(--accent); }
+    .new-tag-delete {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.7rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .new-tag-delete:hover { color: #c84820; border-color: #c84820; }
+
+    .modal-tag.editable { border-style: dashed; }
+    .modal-tag.editable::after { content: ' ✎'; font-size: 0.55em; }
+
     .modal-note {
       width: 100%;
       min-height: 110px;
@@ -594,6 +675,17 @@
 
     <label class="field-label">gardening themes</label>
     <div class="modal-tag-grid" id="modalTagGrid"></div>
+
+    <div class="add-tag-row">
+      <button class="add-tag-btn" id="addTagBtn">+ add tag</button>
+      <button class="add-tag-btn" id="editTagsBtn" style="display:none">edit tags</button>
+      <div class="new-tag-form" id="newTagForm">
+        <input class="new-tag-input" id="newTagInput" type="text" placeholder="tag name…" maxlength="20" />
+        <div class="color-swatches" id="colorSwatches"></div>
+        <button class="new-tag-save" id="newTagSave">add</button>
+        <button class="new-tag-delete" id="newTagDelete" style="display:none">delete</button>
+      </div>
+    </div>
 
     <label class="field-label" for="modalNote">your reflection</label>
     <textarea class="modal-note" id="modalNote"
@@ -1109,7 +1201,8 @@ function buildModalTags(selectedTags = []) {
     html += `<span class="modal-tag-group-label">custom</span>`;
     customEntries.forEach(([name, color]) => {
       const sel = selectedTags.includes(name);
-      html += `<button class="modal-tag${sel?' selected':''}" data-tag="${name}"
+      html += `<button class="modal-tag${sel?' selected':''}${tagEditMode?' editable':''}"
+        data-tag="${name}" data-custom="1"
         style="color:${sel?'white':color};border-color:${color};background:${sel?color:'white'}"
       >${name}</button>`;
     });
@@ -1118,6 +1211,8 @@ function buildModalTags(selectedTags = []) {
   grid.innerHTML = html;
   grid.querySelectorAll('.modal-tag').forEach(btn => {
     btn.addEventListener('click', () => {
+      // in edit mode, tapping a custom tag opens it in the tag form
+      if (tagEditMode && btn.dataset.custom) { openTagForm(btn.dataset.tag); return; }
       const c   = btn.style.borderColor;
       btn.classList.toggle('selected');
       const sel = btn.classList.contains('selected');
@@ -1125,7 +1220,134 @@ function buildModalTags(selectedTags = []) {
       btn.style.color      = sel ? 'white' : c;
     });
   });
+
+  // edit button only matters once custom tags exist
+  document.getElementById('editTagsBtn').style.display = customEntries.length ? '' : 'none';
 }
+
+// ─────────────────────────────────────────────────────────────
+// CUSTOM TAGS — add, rename, recolor, delete (shared with home page)
+// ─────────────────────────────────────────────────────────────
+
+const SWATCH_COLORS = [
+  '#5aadcf','#8090b0','#8a9858','#4a7850',
+  '#c8a020','#c47a55','#c8909a','#c84820',
+  '#9b6050','#7a4030','#8c8a88','#3a7040'
+];
+let pickedColor = SWATCH_COLORS[4];
+let editingTag  = null;   // original name of the tag being edited, or null when adding
+let tagEditMode = false;
+
+function buildColorSwatches() {
+  const wrap = document.getElementById('colorSwatches');
+  wrap.innerHTML = SWATCH_COLORS.map(c =>
+    `<span class="color-swatch${c === pickedColor ? ' picked' : ''}" data-color="${c}"
+      style="background:${c}" title="${c}"></span>`
+  ).join('');
+  wrap.querySelectorAll('.color-swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      wrap.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('picked'));
+      s.classList.add('picked');
+      pickedColor = s.dataset.color;
+    });
+  });
+}
+
+function currentModalSelection() {
+  return [...document.querySelectorAll('.modal-tag.selected')].map(b => b.dataset.tag);
+}
+
+function openTagForm(name = null) {
+  editingTag = name;
+  pickedColor = name ? (customTags[name] || SWATCH_COLORS[4]) : SWATCH_COLORS[4];
+  buildColorSwatches();
+  document.getElementById('newTagInput').value = name || '';
+  document.getElementById('newTagSave').textContent = name ? 'save' : 'add';
+  document.getElementById('newTagDelete').style.display = name ? '' : 'none';
+  document.getElementById('newTagForm').classList.add('open');
+  document.getElementById('newTagInput').focus();
+}
+
+function closeTagForm() {
+  editingTag = null;
+  document.getElementById('newTagForm').classList.remove('open');
+  document.getElementById('newTagInput').value = '';
+}
+
+// rename (newName set) or remove (newName null) a tag across every verse annotation
+function rewriteTagEverywhere(oldName, newName) {
+  Object.keys(annotations).forEach(id => {
+    const a = annotations[id];
+    if (!a.tags || !a.tags.includes(oldName)) return;
+    a.tags = a.tags.filter(t => t !== oldName);
+    if (newName && !a.tags.includes(newName)) a.tags.push(newName);
+    if (!a.tags.length && !a.note) delete annotations[id];
+  });
+  persist();
+}
+
+function saveTagForm() {
+  const name = document.getElementById('newTagInput').value.trim().toLowerCase();
+  if (!name) return;
+  // preset names are reserved; duplicates only allowed when renaming to itself
+  if (TAG_COLORS[name]) return;
+  if (customTags[name] && name !== editingTag) return;
+
+  const selection = currentModalSelection();
+
+  if (editingTag) {
+    const renamed = name !== editingTag;
+    delete customTags[editingTag];
+    customTags[name] = pickedColor;
+    if (renamed) {
+      rewriteTagEverywhere(editingTag, name);
+      if (tagFilter === editingTag) tagFilter = name;
+      const i = selection.indexOf(editingTag);
+      if (i !== -1) selection[i] = name;
+    }
+  } else {
+    customTags[name] = pickedColor;
+    selection.push(name);   // a fresh tag is probably meant for this verse
+  }
+
+  localStorage.setItem(CTAG_KEY, JSON.stringify(customTags));
+  closeTagForm();
+  buildModalTags(selection);
+  buildTagBar();
+}
+
+function deleteTagForm() {
+  if (!editingTag) return;
+  delete customTags[editingTag];
+  localStorage.setItem(CTAG_KEY, JSON.stringify(customTags));
+  rewriteTagEverywhere(editingTag, null);
+  if (tagFilter === editingTag) tagFilter = null;
+  const selection = currentModalSelection().filter(t => t !== editingTag);
+  closeTagForm();
+  buildModalTags(selection);
+  buildTagBar();
+}
+
+document.getElementById('addTagBtn').addEventListener('click', () => {
+  const form = document.getElementById('newTagForm');
+  if (form.classList.contains('open') && !editingTag) { closeTagForm(); return; }
+  openTagForm(null);
+});
+
+document.getElementById('editTagsBtn').addEventListener('click', () => {
+  tagEditMode = !tagEditMode;
+  document.getElementById('editTagsBtn').classList.toggle('active', tagEditMode);
+  document.getElementById('editTagsBtn').textContent = tagEditMode ? 'done editing' : 'edit tags';
+  if (!tagEditMode) closeTagForm();
+  buildModalTags(currentModalSelection());
+});
+
+document.getElementById('newTagSave').addEventListener('click', saveTagForm);
+document.getElementById('newTagDelete').addEventListener('click', deleteTagForm);
+document.getElementById('newTagInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveTagForm();
+  if (e.key === 'Escape') closeTagForm();
+});
 
 function openModal(verseId) {
   const v = verses.find(v => v.id === verseId);
@@ -1151,6 +1373,10 @@ function openModal(verseId) {
 function closeModal() {
   document.getElementById('overlay').classList.remove('open');
   activeVerse = null;
+  tagEditMode = false;
+  document.getElementById('editTagsBtn').classList.remove('active');
+  document.getElementById('editTagsBtn').textContent = 'edit tags';
+  closeTagForm();
 }
 
 function saveAnnotation() {
