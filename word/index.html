@@ -588,6 +588,31 @@
       line-height: 0;
     }
 
+    /* ── chapter reader — a page of scripture, one verse per line ── */
+    .verse-grid.reader {
+      display: block;
+      background: white;
+      border: 1px solid var(--border);
+      padding: 1.7rem 1.9rem 1.9rem;
+    }
+    .reader-verse {
+      font-family: var(--serif);
+      font-size: 1.02rem;
+      line-height: 1.78;
+      padding: 0.1rem 0.35rem;
+      margin: 0 -0.35rem;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.15s;
+    }
+    .reader-verse:hover { background: rgba(138,117,96,0.08); }
+    .reader-verse.annotated { background: var(--parch); }
+    .reader-verse.hl { background: rgba(200,160,32,0.18); }
+    .reader-verse .ann-star { font-size: 0.6rem; margin-left: 0.3em; }
+    @media (max-width: 580px) {
+      .verse-grid.reader { padding: 1.2rem 1.1rem 1.3rem; }
+    }
+
     .see-chapter-link {
       font-family: var(--mono);
       font-size: 0.54rem;
@@ -914,6 +939,7 @@ function doSearch(raw) {
 function renderResults(results, highlight = '') {
   const status = document.getElementById('resultStatus');
   const grid   = document.getElementById('verseGrid');
+  grid.classList.remove('reader');
 
   if (!results.length) {
     status.textContent = '';
@@ -969,6 +995,7 @@ function cardHTML(v, hl = '') {
 function renderGarden() {
   const status = document.getElementById('resultStatus');
   const grid   = document.getElementById('verseGrid');
+  grid.classList.remove('reader');
 
   const list = verses.filter(v => {
     const a = annotations[v.id];
@@ -993,6 +1020,7 @@ function renderGarden() {
 
 function showWelcome() {
   const count = Object.values(annotations).filter(a => a.note || a.tags?.length).length;
+  document.getElementById('verseGrid').classList.remove('reader');
   document.getElementById('resultStatus').textContent = '';
   document.getElementById('verseGrid').innerHTML = `
     <div class="state-block">
@@ -1061,30 +1089,18 @@ function renderBrowseChapter(highlightId = null) {
 
   status.textContent = `${browseBook}  ·  chapter ${browseChapter}  ·  ${chVerses.length} verses`;
 
+  grid.classList.add('reader');
   grid.innerHTML = chVerses.map(v => {
     const ann    = annotations[v.id];
     const hasAnn = ann && (ann.note || ann.tags?.length);
     const isHL   = v.id === highlightId;
-    const tagsHTML = ann?.tags?.length
-      ? `<div class="verse-tags">${ann.tags.map(t =>
-          `<span class="verse-tag" style="color:${TAG_COLORS[t]};border-color:${TAG_COLORS[t]}">${t}</span>`
-        ).join('')}</div>` : '';
-    const noteHTML = ann?.note
-      ? `<div class="verse-note-preview">${escHtml(ann.note.slice(0,130))}${ann.note.length>130?'…':''}</div>` : '';
     return `
-      <article class="verse-card${hasAnn?' annotated':''}${isHL?' ch-highlight':''}" data-id="${v.id}"
-        ${isHL ? 'style="background:rgba(200,160,32,0.1);border-left-color:var(--accent)"' : ''}>
-        <div class="verse-ref">
-          <span>${v.book} ${v.chapter}:${v.verse}</span>
-          ${hasAnn ? '<span class="ann-star">✦</span>' : ''}
-        </div>
-        <p class="verse-text"><sup class="ch-verse-num">${v.verse}</sup>${escHtml(v.text)}</p>
-        ${tagsHTML}${noteHTML}
-      </article>`;
+      <p class="reader-verse${hasAnn?' annotated':''}${isHL?' hl ch-highlight':''}" data-id="${v.id}"
+        title="tap to reflect"><sup class="ch-verse-num">${v.verse}</sup>${escHtml(v.text)}${hasAnn ? '<span class="ann-star">✦</span>' : ''}</p>`;
   }).join('');
 
-  grid.querySelectorAll('.verse-card').forEach(card =>
-    card.addEventListener('click', () => openModal(card.dataset.id))
+  grid.querySelectorAll('.reader-verse').forEach(line =>
+    line.addEventListener('click', () => openModal(line.dataset.id))
   );
 
   const maxCh = bookChapters[browseBook] || 1;
