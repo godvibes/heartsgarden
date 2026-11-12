@@ -1,0 +1,11 @@
+# Files that are part of the project but should not be served on heartsgarden.cc
+.git
+.gitignore
+.assetsignore
+.DS_Store
+wrangler.jsonc
+node_modules
+.wrangler
+media
+Spiritual Gardening Guide
+Spiritual Cultivation process.

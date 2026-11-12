@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // SpiritStore — the heart of Hearts Garden
-// Used by / (the garden). One source of truth for:
+// Used by the garden book on the home page. One source of truth for:
 //   · the nine fruits, each with its two weeds (deficient / excess)
 //   · the words of Jesus that sit beside each fruit (KJV)
 //   · what has been planted — words of praise, the only thing kept
@@ -15,8 +15,6 @@
   const LOG_KEY       = 'heartsgarden-spirit-log-v1';    // old reflection log (before the pruning)
   const OLD_NOTES_KEY = 'heartsgarden-spirit-notes-v1';  // older still
   const RITUAL_KEY    = 'heartsgarden-spirit-ritual-v1'; // old weekly focus
-  const WORD_KEY      = 'heartsgarden-word-v1';          // living word verse annotations
-  const CTAG_KEY      = 'heartsgarden-custom-tags-v1';   // custom gardening tags
 
   // ── the weeds — the works of the flesh, Galatians 5:19–21 ───
   // To change a weed's wording, edit its line here.
@@ -116,8 +114,7 @@
       deficient:'lasciviousness', excess:'witchcraft',
       prompt:'What did I say no to, so I could say yes to what matters?',
       jesus:[
-        // the site's KJV data numbers this verse 26:40, so the chapter link uses wv
-        { ref:'Matthew 26:41', b:'Matthew', c:26, v:41, wv:40, text:'Watch and pray, that ye enter not into temptation: the spirit indeed is willing, but the flesh is weak.' },
+        { ref:'Matthew 26:41', b:'Matthew', c:26, v:41, text:'Watch and pray, that ye enter not into temptation: the spirit indeed is willing, but the flesh is weak.' },
         { ref:'Luke 9:23', b:'Luke', c:9, v:23, text:'If any man will come after me, let him deny himself, and take up his cross daily, and follow me.' },
         { ref:'Matthew 4:4', b:'Matthew', c:4, v:4, text:'It is written, Man shall not live by bread alone, but by every word that proceedeth out of the mouth of God.' },
       ] },
@@ -205,7 +202,6 @@
     FRUITS, WEEDS,
     fruit, fruitOfWeed, jesusFor,
     plantings, plant, plantedCounts,
-    oldWeedCount, releaseOld,
-    WORD_KEY, CTAG_KEY
+    oldWeedCount, releaseOld
   };
 })();

@@ -723,6 +723,7 @@
   </div>
 </div>
 
+<script src="/assets/js/verse-fix.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────
 // DATA
@@ -839,7 +840,7 @@ async function init() {
             book:    bookName,
             chapter: chIdx + 1,
             verse:   vIdx + 1,
-            text
+            text:    cleanVerse(text)
           });
         });
       });
@@ -862,7 +863,7 @@ async function init() {
       bookSel.appendChild(opt);
     });
 
-    // Handle URL params from home / spirit pages
+    // Handle URL params from the home page and the garden
     const params   = new URLSearchParams(window.location.search);
     const qBook    = params.get('book');
     const qChapter = params.get('chapter');
@@ -1429,6 +1430,18 @@ function refresh() {
 // ─────────────────────────────────────────────────────────────
 // UTILS
 // ─────────────────────────────────────────────────────────────
+
+// The KJV source marks the translators' supplied words as {word} and tucks
+// margin notes into the verse as {word: Heb. …}. Readers see neither:
+// notes are dropped, supplied words are kept, the marks are removed.
+function cleanVerse(t) {
+  if (t.indexOf('{') === -1 && t.indexOf('«') === -1) return t;
+  let out = t.replace(/\s*\{[^{}]*:[^{}]*\}/g, '');
+  if ((out.match(/\{/g) || []).length !== (out.match(/\}/g) || []).length) {
+    out = t.replace(/\s*\{[^{}]*:[^{}]*\}[^{}]*\}/g, '').replace(/\s*\{[^{}]*:[^{}]*\}/g, '');
+  }
+  return out.replace(/[{}«»]/g, '').replace(/\s{2,}/g, ' ').trim();
+}
 
 function escHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

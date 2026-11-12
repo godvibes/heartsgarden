@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hearts Garden · The Living Word</title>
+  <title>Hearts Garden</title>
+  <meta name="description" content="A garden for the heart, rooted in the living word. Look honestly, tend it with Jesus, give it to God, and plant praise." />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -1075,7 +1076,7 @@
 
   <section class="hero">
 
-  <!-- watercolor garden — these appear once the PNGs land in assets/images/spirit/ -->
+  <!-- Esther's watercolors -->
   <img class="deco deco-butterfly" src="/assets/images/spirit/butterfly.png" alt="" aria-hidden="true" onerror="this.remove()" />
   <img class="deco deco-milkweed" src="/assets/images/spirit/milkweed.png" alt="" aria-hidden="true" onerror="this.remove()" />
   <img class="deco deco-caterpillar" src="/assets/images/spirit/caterpillar.png" alt="" aria-hidden="true" onerror="this.remove()" />
@@ -1135,65 +1136,46 @@
       <div class="running-head">the garden of the heart</div>
 
       <div class="tree-scene" id="treeScene">
-        <!-- drawn in pencil and wash to sit beside Esther's watercolors -->
         <svg class="tree-svg" viewBox="0 0 300 324" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
+            <!-- watercolor: a soft wobbling edge and gentle pooling of pigment -->
             <filter id="hgWash" x="-15%" y="-15%" width="130%" height="130%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="7" result="warp"/>
-              <feDisplacementMap in="SourceGraphic" in2="warp" scale="11" result="shape"/>
-              <feTurbulence type="fractalNoise" baseFrequency="0.085" numOctaves="2" seed="3" result="grain"/>
-              <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.6" result="mask"/>
+              <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="7" result="warp"/>
+              <feDisplacementMap in="SourceGraphic" in2="warp" scale="9" result="shape"/>
+              <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="3" result="grain"/>
+              <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.4" result="mask"/>
               <feComposite in="shape" in2="mask" operator="in"/>
             </filter>
+            <!-- pencil: a hand that never draws a perfectly straight line -->
             <filter id="hgPencil" x="-10%" y="-10%" width="120%" height="120%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="11" result="w"/>
-              <feDisplacementMap in="SourceGraphic" in2="w" scale="3.2"/>
+              <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="11" result="w"/>
+              <feDisplacementMap in="SourceGraphic" in2="w" scale="2.6"/>
             </filter>
           </defs>
 
-          <!-- ground wash -->
-          <path filter="url(#hgWash)" d="M-8 297 Q70 281 150 289 Q230 297 308 284 L308 330 L-8 330 Z" fill="#cdb48e" opacity="0.75"/>
-          <path filter="url(#hgWash)" d="M20 300 Q90 290 150 294 Q220 299 285 292 L285 312 Q150 318 20 312 Z" fill="#9aa860" opacity="0.4"/>
+          <!-- the ground: a soft mound of earth and a wash of grass -->
+          <path filter="url(#hgWash)" d="M6 301 Q80 284 150 288 Q222 284 294 300 Q224 318 150 318 Q78 318 6 301 Z" fill="#cdb48e" opacity="0.8"/>
+          <path filter="url(#hgWash)" d="M30 299 Q92 288 150 291 Q210 288 272 298 Q210 307 150 306 Q92 307 30 299 Z" fill="#9db068" opacity="0.5"/>
 
-          <!-- branches reaching to each fruit -->
-          <g filter="url(#hgPencil)" fill="none" stroke="#7a4d33" stroke-linecap="round" opacity="0.85">
-            <path d="M151 152 Q152 96 150 46" stroke-width="3"/>
-            <path d="M136 182 Q104 132 93 68" stroke-width="2.6"/>
-            <path d="M165 182 Q198 132 207 68" stroke-width="2.6"/>
-            <path d="M147 164 Q131 122 123 93" stroke-width="2.2"/>
-            <path d="M155 164 Q171 124 177 93" stroke-width="2.2"/>
-            <path d="M119 174 Q78 152 60 116" stroke-width="2.4"/>
-            <path d="M185 168 Q224 152 240 116" stroke-width="2.4"/>
-            <path d="M131 180 Q109 172 99 158" stroke-width="2"/>
-            <path d="M171 180 Q192 172 201 158" stroke-width="2"/>
+          <!-- foliage washes, clump by clump (drawn by drawPlate) -->
+          <g id="hgWashes" filter="url(#hgWash)" style="mix-blend-mode:multiply"></g>
+
+          <!-- limbs and trunk: wash first, pencil over it -->
+          <g id="hgLimbWash" filter="url(#hgWash)" fill="#96643f" opacity="0.92"></g>
+          <path filter="url(#hgWash)" fill="#6f4429" opacity="0.4"
+            d="M152 296 C156 268 156 240 157 214 L161 204 C160 240 164 280 176 297 Z"/>
+          <g id="hgLimbLines" filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"></g>
+          <g filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-linecap="round" opacity="0.7">
+            <path stroke-width="0.7" d="M146 284 Q148 266 147 246 M153 276 Q155 256 154 232 M149 228 Q150 216 149 208 M143 262 Q144 252 143 242 M157 262 Q158 250 157 240"/>
+            <path stroke-width="1" d="M127 297 Q112 301 95 298 M175 297 Q190 303 208 299 M150 298 Q146 305 138 307 M160 298 Q164 304 172 306"/>
           </g>
 
-          <!-- foliage — layered washes -->
-          <g filter="url(#hgWash)" style="mix-blend-mode:multiply">
-            <ellipse cx="150" cy="100" rx="108" ry="80" fill="#b7c98a" opacity="0.8"/>
-            <ellipse cx="92"  cy="122" rx="62" ry="50" fill="#93a85e" opacity="0.7"/>
-            <ellipse cx="208" cy="122" rx="62" ry="50" fill="#93a85e" opacity="0.7"/>
-            <ellipse cx="150" cy="58"  rx="68" ry="46" fill="#7d9a52" opacity="0.7"/>
-            <ellipse cx="118" cy="94"  rx="44" ry="34" fill="#5f8a55" opacity="0.55"/>
-            <ellipse cx="184" cy="98"  rx="44" ry="34" fill="#5f8a55" opacity="0.55"/>
-            <ellipse cx="66"  cy="104" rx="34" ry="28" fill="#a9bd6e" opacity="0.6"/>
-            <ellipse cx="236" cy="106" rx="32" ry="28" fill="#a9bd6e" opacity="0.6"/>
-          </g>
-          <g id="hgLeafMarks" filter="url(#hgPencil)"></g>
-          <path id="hgCanopyLine" filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-width="1" stroke-linejoin="round" opacity="0.7"/>
-          <g id="hgScallops" filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-width="0.8" stroke-linecap="round" opacity="0.45"></g>
+          <!-- leaves in pencil, and the scalloped edge of each clump -->
+          <g id="hgLeafWash" filter="url(#hgWash)"></g>
+          <g id="hgClumpLines" filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-width="0.85" stroke-linejoin="round" stroke-linecap="round" opacity="0.6"></g>
+          <g id="hgLeafLines" filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"></g>
 
-          <!-- trunk — wash, then pencil -->
-          <path filter="url(#hgWash)" fill="#96643f" opacity="0.9"
-            d="M126 296 C138 281 141 250 141 216 C141 196 128 181 108 169 L112 162 C130 170 143 179 148 191 C149 171 149 156 150 139 L156 139 C156 159 156 173 158 189 C164 177 176 169 194 161 L197 167 C178 177 163 193 162 216 C162 250 166 281 178 296 Z"/>
-          <path filter="url(#hgWash)" fill="#6f4429" opacity="0.45"
-            d="M152 292 C156 262 156 232 158 206 C160 196 166 186 176 178 C168 190 163 202 162 216 C162 250 166 281 178 296 Z"/>
-          <g filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-linecap="round" opacity="0.8">
-            <path stroke-width="1.1" d="M126 296 C138 281 141 250 141 216 C141 196 128 181 108 169 M112 162 C130 170 143 179 148 191 C149 171 149 156 150 139 M156 139 C156 159 156 173 158 189 C164 177 176 169 194 161 M197 167 C178 177 163 193 162 216 C162 250 166 281 178 296"/>
-            <path stroke-width="0.8" d="M147 280 Q149 262 148 244 M154 270 Q156 250 155 228 M150 222 Q151 210 150 200 M144 260 Q145 250 144 240"/>
-            <path stroke-width="1.1" d="M126 296 Q110 300 92 297 M178 296 Q194 302 214 298 M150 297 Q146 304 138 306"/>
-          </g>
-          <g id="hgGrass" filter="url(#hgPencil)" fill="none" stroke="#5f7a4a" stroke-width="1" stroke-linecap="round" opacity="0.75"></g>
+          <g id="hgGrass" filter="url(#hgPencil)" fill="none" stroke="#5f7a4a" stroke-width="0.9" stroke-linecap="round" opacity="0.8"></g>
         </svg>
 
         <img class="plate-art plate-milkweed" src="/assets/images/spirit/milkweed.png" alt="" aria-hidden="true" onerror="this.remove()" />
@@ -1281,6 +1263,7 @@
     </div>
   </div>
 
+<script src="/assets/js/verse-fix.js"></script>
 <script src="/assets/js/spirit-store.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────
@@ -1703,7 +1686,8 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── the painted plate — pencil lines drawn once, the same every visit ──
+// ── the painted plate — drawn once, the same every visit ─────
+// Pencil lines with a watercolor wash, to sit beside Esther's paintings.
 function drawPlate() {
   let seed = 20261112;
   const rnd = () => {           // small seeded generator, so the drawing never shifts
@@ -1712,47 +1696,123 @@ function drawPlate() {
     t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
+  const n1 = x => x.toFixed(1);
 
-  // scalloped pencil outline around the canopy
-  const cx = 150, cy = 102, N = 17;
-  const rx = a => 114 + 10 * Math.max(0, Math.sin(a)) ;   // a little wider toward the bottom
-  const ry = 86;
-  const pt = (a, k) => [cx + Math.cos(a) * rx(a) * k, cy + Math.sin(a) * ry * k];
-  let d = '';
-  for (let i = 0; i <= N; i++) {
-    const a  = (i / N) * Math.PI * 2 - Math.PI / 2;
-    const am = ((i - 0.5) / N) * Math.PI * 2 - Math.PI / 2;
-    const [x, y] = pt(a, 0.97 + rnd() * 0.05);
-    if (i === 0) { d += `M${x.toFixed(1)} ${y.toFixed(1)}`; continue; }
-    const [qx, qy] = pt(am, 1.1 + rnd() * 0.06);
-    d += ` Q${qx.toFixed(1)} ${qy.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`;
-  }
-  $('hgCanopyLine').setAttribute('d', d);
+  // ── foliage: clumps of leaves, back to front ──
+  // [centre x, centre y, half-width, half-height, wash colour, wash strength]
+  const CLUMPS = [
+    [150, 100, 70, 52, '#b9cc8c', 0.85],
+    [ 62, 122, 44, 36, '#a6bb6c', 0.75],
+    [238, 122, 44, 36, '#a6bb6c', 0.75],
+    [ 94,  80, 50, 38, '#93aa5e', 0.7 ],
+    [206,  80, 50, 38, '#93aa5e', 0.7 ],
+    [150,  52, 58, 38, '#7f9d55', 0.7 ],
+    [110, 132, 46, 32, '#86a45a', 0.6 ],
+    [190, 132, 46, 32, '#86a45a', 0.6 ],
+    [128,  98, 34, 28, '#5f8a55', 0.45],
+    [176, 100, 34, 28, '#5f8a55', 0.45],
+  ];
 
-  // leaf dabs and little scallops inside the canopy
-  let dabs = '', scallops = '';
-  const greens = ['#4f7a45', '#6f9050', '#c9dc98', '#3f6a40', '#a2b866'];
-  for (let i = 0; i < 70; i++) {
-    const a = rnd() * Math.PI * 2, k = Math.sqrt(rnd()) * 0.9;
-    const [x, y] = pt(a, k);
-    const rot = Math.round(rnd() * 180);
-    dabs += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(2.5 + rnd() * 3).toFixed(1)}" ry="${(1.2 + rnd() * 1.4).toFixed(1)}"
-      transform="rotate(${rot} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${greens[i % greens.length]}" opacity="${(0.28 + rnd() * 0.3).toFixed(2)}"/>`;
-    if (i % 3 === 0) {
-      const w = 7 + rnd() * 8;
-      scallops += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} q${(w / 2).toFixed(1)} ${(-4 - rnd() * 4).toFixed(1)} ${w.toFixed(1)} 0"/>`;
+  let washes = '', lines = '';
+  CLUMPS.forEach(([cx, cy, rx, ry, color, alpha], ci) => {
+    // the wash sits a little off its pencil line, the way paint does
+    washes += `<ellipse cx="${n1(cx + 3)}" cy="${n1(cy + 2)}" rx="${n1(rx * 0.96)}" ry="${n1(ry * 0.96)}" fill="${color}" opacity="${alpha}"/>`;
+    if (ci >= 8) return;                       // the inner shadows have no outline
+    // a scalloped pencil edge, left open where the clump tucks behind the others
+    const N = Math.round((rx + ry) / 9);
+    const toCentre = Math.atan2(104 - cy, 150 - cx);
+    const near = Math.hypot(150 - cx, 104 - cy) < 12;
+    let d = '', pen = false;
+    for (let i = 0; i <= N; i++) {
+      const a  = (i / N) * Math.PI * 2;
+      const am = ((i - 0.5) / N) * Math.PI * 2;
+      const hidden = !near && Math.cos(a - toCentre) > 0.35;   // the side facing the middle of the tree
+      const k = 0.98 + rnd() * 0.05;
+      const x = cx + Math.cos(a) * rx * k, y = cy + Math.sin(a) * ry * k;
+      if (hidden) { pen = false; continue; }
+      if (!pen) { d += `M${n1(x)} ${n1(y)}`; pen = true; continue; }
+      const kq = 1.13 + rnd() * 0.07;
+      d += ` Q${n1(cx + Math.cos(am) * rx * kq)} ${n1(cy + Math.sin(am) * ry * kq)} ${n1(x)} ${n1(y)}`;
     }
-  }
-  $('hgLeafMarks').innerHTML = dabs;
-  $('hgScallops').innerHTML = scallops;
+    lines += `<path d="${d}"/>`;
+    // a few loose scallops inside, suggesting leaves
+    for (let j = 0; j < 4; j++) {
+      const a = rnd() * Math.PI * 2, k = 0.25 + rnd() * 0.5, w = 6 + rnd() * 7;
+      const x = cx + Math.cos(a) * rx * k, y = cy + Math.sin(a) * ry * k;
+      lines += `<path d="M${n1(x)} ${n1(y)} q${n1(w / 2)} ${n1(-3 - rnd() * 3)} ${n1(w)} 0" opacity="0.7"/>`;
+    }
+  });
+  $('hgWashes').innerHTML = washes;
+  $('hgClumpLines').innerHTML = lines;
 
-  // grass along the ground
+  // ── trunk and limbs: each a tapering shape, washed then outlined ──
+  // [start x, y, bend x, y, end x, y, width at start, width at tip]
+  const LIMBS = [
+    [150, 297, 149, 250, 150, 204, 34, 17],   // trunk
+    [150, 210, 155, 126, 150,  47,  9, 1.6],  // to love
+    [145, 212, 110, 152,  93,  69,  8, 1.6],  // to joy
+    [155, 212, 192, 152, 207,  69,  8, 1.6],  // to peace
+    [147, 176, 127, 138, 123,  94, 4.2, 1.3], // to goodness
+    [153, 176, 174, 138, 177,  94, 4.2, 1.3], // to faith
+    [132, 186,  84, 164,  60, 117, 5.2, 1.4], // to longsuffering
+    [168, 186, 216, 164, 240, 117, 5.2, 1.4], // to gentleness
+    [110, 172, 100, 170,  99, 158, 2.6, 1.2], // to meekness
+    [190, 172, 200, 170, 201, 158, 2.6, 1.2], // to temperance
+  ];
+  let limbWash = '', limbLines = '';
+  LIMBS.forEach(([x0, y0, qx, qy, x1, y1, w0, w1], li) => {
+    const left = [], right = [], S = 14;
+    for (let i = 0; i <= S; i++) {
+      const t = i / S, u = 1 - t;
+      const x = u * u * x0 + 2 * u * t * qx + t * t * x1;
+      const y = u * u * y0 + 2 * u * t * qy + t * t * y1;
+      const dx = 2 * u * (qx - x0) + 2 * t * (x1 - qx);
+      const dy = 2 * u * (qy - y0) + 2 * t * (y1 - qy);
+      const len = Math.hypot(dx, dy) || 1;
+      let w = (w0 + (w1 - w0) * Math.pow(t, 0.8)) / 2;
+      if (li === 0) w += 7 * Math.pow(1 - t, 4);            // the trunk flares into its roots
+      left.push([x - dy / len * w, y + dx / len * w]);
+      right.push([x + dy / len * w, y - dx / len * w]);
+    }
+    const run = pts => pts.map(p => `${n1(p[0])} ${n1(p[1])}`).join(' L');
+    limbWash  += `<path d="M${run(left)} L${run(right.slice().reverse())} Z"/>`;
+    limbLines += `<path d="M${run(left)}"/><path d="M${run(right)}"/>`;
+  });
+  $('hgLimbWash').innerHTML = limbWash;
+  $('hgLimbLines').innerHTML = limbLines;
+
+  // ── leaves: pencil outline with a midrib, a dab of green behind ──
+  const greens = ['#8fb062', '#b5cc80', '#6f9654', '#a2bd6c'];
+  let leafWash = '', leafLines = '';
+  const leaf = (x, y, rot, s, gi) => {
+    const tf = `transform="translate(${n1(x)} ${n1(y)}) rotate(${Math.round(rot)}) scale(${s.toFixed(2)})"`;
+    leafWash  += `<path ${tf} d="M0.6 0.8 Q5 -4.4 11.6 0.8 Q5 5.6 0.6 0.8 Z" fill="${greens[gi % greens.length]}" opacity="0.8"/>`;
+    leafLines += `<path ${tf} d="M0 0 Q4.6 -4.8 11 0 Q4.6 4.8 0 0 M0 0 L9 0"/>`;
+  };
+  // around the outside of the canopy, pointing outward
+  CLUMPS.slice(1, 8).forEach(([cx, cy, rx, ry], ci) => {
+    const out = Math.atan2(cy - 104, cx - 150);
+    for (let j = 0; j < 4; j++) {
+      const a = out + (rnd() - 0.5) * 2.2;
+      leaf(cx + Math.cos(a) * rx * 0.98, cy + Math.sin(a) * ry * 0.98,
+           a * 180 / Math.PI + (rnd() - 0.5) * 50, 0.8 + rnd() * 0.45, ci + j);
+    }
+  });
+  // and a scattering through the middle
+  for (let i = 0; i < 16; i++) {
+    const a = rnd() * Math.PI * 2, k = Math.sqrt(rnd()) * 0.8;
+    leaf(150 + Math.cos(a) * 96 * k, 100 + Math.sin(a) * 62 * k, rnd() * 360, 0.7 + rnd() * 0.4, i);
+  }
+  $('hgLeafWash').innerHTML = leafWash;
+  $('hgLeafLines').innerHTML = leafLines;
+
+  // ── grass along the ground ──
   let grass = '';
-  for (let i = 0; i < 26; i++) {
-    const x = 8 + rnd() * 284;
-    if (x > 118 && x < 186) continue;                 // leave the roots clear
-    const y = 293 + rnd() * 10, h = 5 + rnd() * 7;
-    grass += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} q-2 ${(-h * 0.6).toFixed(1)} -3.5 ${(-h).toFixed(1)} M${x.toFixed(1)} ${y.toFixed(1)} q1.5 ${(-h * 0.7).toFixed(1)} 3 ${(-h * 1.1).toFixed(1)}"/>`;
+  for (let i = 0; i < 28; i++) {
+    const x = 18 + rnd() * 264;
+    if (x > 116 && x < 188) continue;                 // leave the roots clear
+    const y = 295 + rnd() * 9, h = 5 + rnd() * 7;
+    grass += `<path d="M${n1(x)} ${n1(y)} q-2 ${n1(-h * 0.6)} -3.5 ${n1(-h)} M${n1(x)} ${n1(y)} q1.5 ${n1(-h * 0.7)} 3 ${n1(-h * 1.1)}"/>`;
   }
   $('hgGrass').innerHTML = grass;
 }
@@ -1859,7 +1919,7 @@ function render() {
 }
 
 function chapterLink(v) {
-  return `/word/?book=${encodeURIComponent(v.b)}&chapter=${v.c}&verse=${v.wv || v.v}`;
+  return `/word/?book=${encodeURIComponent(v.b)}&chapter=${v.c}&verse=${v.v}`;
 }
 
 // 1 · look
