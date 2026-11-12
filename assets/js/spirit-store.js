@@ -1,298 +1,211 @@
 // ─────────────────────────────────────────────────────────────
-// SpiritStore — shared backend for Hearts Garden
-// Used by / (quest card), /spirit/ (the book), /word/ (the living word).
-// Holds: fruits & weeds (with KJV word lists), the reflection log,
-// the gardening tag palette, book names, and readers for the
-// Living Word annotations — one source of truth for every page.
+// SpiritStore — the heart of Hearts Garden
+// Used by / (the garden). One source of truth for:
+//   · the nine fruits, each with its two weeds (deficient / excess)
+//   · the words of Jesus that sit beside each fruit (KJV)
+//   · what has been planted — words of praise, the only thing kept
+//
+// Nothing is scored. Prayers of surrender are never stored:
+// they are given to God and released (Psalm 103:12).
 // ─────────────────────────────────────────────────────────────
 (function () {
 
   // ── storage keys ────────────────────────────────────────────
-  const LOG_KEY       = 'heartsgarden-spirit-log-v1';    // append-only reflection log
-  const OLD_NOTES_KEY = 'heartsgarden-spirit-notes-v1';  // pre-log store, migrated on first read
-  const RITUAL_KEY    = 'heartsgarden-spirit-ritual-v1'; // weekly focus {fruit, weed, …}
+  const PLANT_KEY     = 'heartsgarden-garden-v1';        // what is planted: [{fruit, note, at}]
+  const LOG_KEY       = 'heartsgarden-spirit-log-v1';    // old reflection log (before the pruning)
+  const OLD_NOTES_KEY = 'heartsgarden-spirit-notes-v1';  // older still
+  const RITUAL_KEY    = 'heartsgarden-spirit-ritual-v1'; // old weekly focus
   const WORD_KEY      = 'heartsgarden-word-v1';          // living word verse annotations
-  const CTAG_KEY      = 'heartsgarden-custom-tags-v1';   // custom gardening tags {name: color}
+  const CTAG_KEY      = 'heartsgarden-custom-tags-v1';   // custom gardening tags
 
-  // ── the fruits — x/y = canopy position on /spirit/ ─────────
-  // `words` are KJV-era forms used to correlate tagged verses
-  const FRUITS = [
-    { key:'love',          label:'love',          color:'#c8909a', x:50, y:12,
-      words:['love','loved','loveth','lovest','charity','beloved'],
-      prompt:'Where did love grow where it was hardest to plant?' },
-    { key:'joy',           label:'joy',           color:'#c8a020', x:31, y:19,
-      words:['joy','joyful','rejoice','rejoiceth','rejoicing','gladness','glad'],
-      prompt:'What brought joy that did not depend on circumstance?' },
-    { key:'peace',         label:'peace',         color:'#5aadcf', x:69, y:19,
-      words:['peace','peaceable','peacemaker','peacemakers','stillness','be still'],
-      prompt:'Where did I choose peace instead of striving?' },
-    { key:'longsuffering', label:'longsuffering', color:'#c47a55', x:20, y:34,
-      words:['longsuffering','patience','patient','patiently','endure','endureth','wait','waiteth'],
-      prompt:'What am I being asked to wait on, patiently?' },
-    { key:'gentleness',    label:'gentleness',    color:'#8a9858', x:80, y:34,
-      words:['gentle','gentleness','kindness','tender','tenderhearted'],
-      prompt:'Where could I have answered softer than I did?' },
-    { key:'goodness',      label:'goodness',      color:'#4a7850', x:41, y:27,
-      words:['goodness','well doing','upright','righteous','righteousness'],
-      prompt:'What good did I do simply because it was good?' },
-    { key:'faith',         label:'faith',         color:'#8090b0', x:59, y:27,
-      words:['faith','faithful','faithfulness','believe','believeth','trust','trusteth'],
-      prompt:'Where did I trust without seeing the outcome?' },
-    { key:'meekness',      label:'meekness',      color:'#d9937a', x:33, y:42,
-      words:['meek','meekness','lowly','humble','humility','humbleth'],
-      prompt:'Where did I hold strength gently instead of forcing it?' },
-    { key:'temperance',    label:'temperance',    color:'#c8c020', x:67, y:42,
-      words:['temperance','temperate','sober','soberly','moderation'],
-      prompt:'What did I say no to, so I could say yes to what matters?' },
-  ];
-
-  // ── the weeds ───────────────────────────────────────────────
-  const WEEDS = [
-    { key:'adultery',       label:'adultery',       words:['adultery','adulterer','adulterers','adulteress'],
-      prompt:'Where have I broken trust — with another, or with what is sacred?' },
-    { key:'fornication',    label:'fornication',    words:['fornication','whoredom','harlot'],
-      prompt:'What boundary around my body or desires needs tending?' },
-    { key:'uncleanness',    label:'uncleanness',    words:['unclean','uncleanness'],
-      prompt:'What am I letting linger that does not belong in the soil?' },
-    { key:'lasciviousness', label:'lasciviousness', words:['lascivious','lasciviousness','lust','lusteth','lusts'],
-      prompt:'Where am I chasing appetite instead of purpose?' },
-    { key:'idolatry',       label:'idolatry',       words:['idol','idols','idolatry','idolater','graven image'],
-      prompt:'What have I let take God’s place at the center?' },
-    { key:'witchcraft',     label:'witchcraft',     words:['witchcraft','sorcery','sorcerer','enchantment','divination'],
-      prompt:'Where am I trying to control what I should surrender?' },
-    { key:'hatred',         label:'hatred',         words:['hate','hated','hateth','hatred'],
-      prompt:'Who is it hard for me to bless right now?' },
-    { key:'variance',       label:'variance',       words:['variance','division','divisions','discord'],
-      prompt:'Where am I stirring division instead of peace?' },
-    { key:'emulations',     label:'emulations',     words:['emulation','emulations','jealous','jealousy'],
-      prompt:'Where does comparison have a grip on me?' },
-    { key:'wrath',          label:'wrath',          words:['wrath','anger','angry','fury','indignation'],
-      prompt:'What keeps lighting my anger — and why?' },
-    { key:'strife',         label:'strife',         words:['strife','contention','contentious','quarrel'],
-      prompt:'What conflict am I feeding instead of starving?' },
-    { key:'seditions',      label:'seditions',      words:['sedition','seditions'],
-      prompt:'Where am I undermining instead of building?' },
-    { key:'heresies',       label:'heresies',       words:['heresy','heresies'],
-      prompt:'What have I let distort the truth I know?' },
-    { key:'envyings',       label:'envyings',       words:['envy','envieth','envying','envyings','covet','coveteth'],
-      prompt:'What does someone else have that I resent them for?' },
-    { key:'murders',        label:'murders',        words:['murder','murders','murderer','slay','slayeth'],
-      prompt:'What am I killing with my words or my silence?' },
-    { key:'drunkenness',    label:'drunkenness',    words:['drunk','drunken','drunkenness','drunkard'],
-      prompt:'What am I using to numb instead of feel?' },
-    { key:'revellings',     label:'revellings',     words:['revelling','revellings','rioting','riotous'],
-      prompt:'Where is indulgence crowding out devotion?' },
-    { key:'such-like',      label:'…and such like', words:[], custom:true,
-      prompt:'Paul ends his list with "and such like" — anything that chokes love, joy, or peace counts. Name your own below.' },
-  ];
-
-  // ── the 66 books — shared by every page that resolves verse IDs
-  const BOOK_NAMES = [
-    'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
-    '1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra',
-    'Nehemiah','Esther','Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon',
-    'Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos',
-    'Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah',
-    'Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians',
-    '2 Corinthians','Galatians','Ephesians','Philippians','Colossians',
-    '1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon',
-    'Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
-  ];
-
-  // ── the 25 gardening tags — palette shared by / and /word/ ──
-  const GARDEN_TAGS = {
-    groups: [
-      { key:'seasons',    label:'The Seasons',       tags:['sunlight','harvest','seeds','fruit','clouds'] },
-      { key:'cycles',     label:'Cycles of Growth',  tags:['life','love','ideas','talk','forgiveness'] },
-      { key:'elements',   label:'The Elements',      tags:['earth','water','fire','wind'] },
-      { key:'heartspace', label:'The Heart Space',   tags:['heart','soul','mind','body','garden','weeds'] },
-      { key:'creation',   label:'Living Things',     tags:['trees','plants','herbs','animals','birds'] },
-    ],
-    colors: {
-      trees:'#4a7850', life:'#8a9858', love:'#c8909a', heart:'#9b6050',
-      mind:'#8090b0', body:'#c47a55', soul:'#5aadcf', ideas:'#a8a818',
-      talk:'#8c8a88', forgiveness:'#d9937a', sunlight:'#c8a020', plants:'#8a9828',
-      herbs:'#6a8840', animals:'#9b7050', earth:'#7a4030', wind:'#7090a0',
-      fire:'#c84820', water:'#4898b8', clouds:'#909890', garden:'#3a7040',
-      birds:'#7080a8', harvest:'#b89010', fruit:'#b84010', weeds:'#80901a',
-      seeds:'#a07040'
-    }
+  // ── the weeds — the works of the flesh, Galatians 5:19–21 ───
+  // To change a weed's wording, edit its line here.
+  const WEEDS = {
+    'adultery':       { label:'adultery',       prompt:'Where have I broken trust — with another, or with what is sacred?' },
+    'fornication':    { label:'fornication',    prompt:'What boundary around my body or desires needs tending?' },
+    'uncleanness':    { label:'uncleanness',    prompt:'What am I letting linger that does not belong in the soil?' },
+    'lasciviousness': { label:'lasciviousness', prompt:'Where am I chasing appetite instead of purpose?' },
+    'idolatry':       { label:'idolatry',       prompt:'What have I let take God’s place at the center?' },
+    'witchcraft':     { label:'witchcraft',     prompt:'Where am I trying to control what I should surrender?' },
+    'hatred':         { label:'hatred',         prompt:'Who is it hard for me to bless right now?' },
+    'variance':       { label:'variance',       prompt:'Where am I stirring division instead of peace?' },
+    'emulations':     { label:'emulations',     prompt:'Where does comparison have a grip on me?' },
+    'wrath':          { label:'wrath',          prompt:'What keeps lighting my anger — and why?' },
+    'strife':         { label:'strife',         prompt:'What conflict am I feeding instead of starving?' },
+    'seditions':      { label:'seditions',      prompt:'Where am I undermining instead of building?' },
+    'heresies':       { label:'heresies',       prompt:'What have I let distort the truth I know?' },
+    'envyings':       { label:'envyings',       prompt:'What does someone else have that I resent them for?' },
+    'murders':        { label:'murders',        prompt:'What am I killing with my words or my silence?' },
+    'drunkenness':    { label:'drunkenness',    prompt:'What am I using to numb instead of feel?' },
+    'revellings':     { label:'revellings',     prompt:'Where is indulgence crowding out devotion?' },
+    'such-like':      { label:'…and such like', open:true,
+                        prompt:'Paul ends his list with “and such like.” This one is yours to name.' },
   };
 
-  function isFruit(key) { return FRUITS.some(f => f.key === key); }
+  // ── the fruits — Galatians 5:22–23 ──────────────────────────
+  // x/y = place in the canopy.
+  // deficient = the fruit is lacking · excess = the fruit out of balance.
+  // To re-pair a weed, change `deficient` / `excess` here.
+  // `jesus` = his own words (KJV, checked against assets/data/kjv.json).
+  const FRUITS = [
+    { key:'love', label:'love', color:'#c8909a', x:50, y:12,
+      deficient:'hatred', excess:'fornication',
+      prompt:'Where did love grow where it was hardest to plant?',
+      jesus:[
+        { ref:'John 15:12', b:'John', c:15, v:12, text:'This is my commandment, That ye love one another, as I have loved you.' },
+        { ref:'John 13:34', b:'John', c:13, v:34, text:'A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.' },
+        { ref:'John 15:9',  b:'John', c:15, v:9,  text:'As the Father hath loved me, so have I loved you: continue ye in my love.' },
+      ] },
+    { key:'joy', label:'joy', color:'#c8a020', x:31, y:19,
+      deficient:'envyings', excess:'revellings',
+      prompt:'What brought joy that did not depend on circumstance?',
+      jesus:[
+        { ref:'John 15:11', b:'John', c:15, v:11, text:'These things have I spoken unto you, that my joy might remain in you, and that your joy might be full.' },
+        { ref:'John 16:22', b:'John', c:16, v:22, text:'And ye now therefore have sorrow: but I will see you again, and your heart shall rejoice, and your joy no man taketh from you.' },
+        { ref:'John 16:24', b:'John', c:16, v:24, text:'Hitherto have ye asked nothing in my name: ask, and ye shall receive, that your joy may be full.' },
+      ] },
+    { key:'peace', label:'peace', color:'#5aadcf', x:69, y:19,
+      deficient:'variance', excess:'drunkenness',
+      prompt:'Where did I choose peace instead of striving?',
+      jesus:[
+        { ref:'John 14:27', b:'John', c:14, v:27, text:'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.' },
+        { ref:'John 16:33', b:'John', c:16, v:33, text:'These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.' },
+        { ref:'Matthew 5:9', b:'Matthew', c:5, v:9, text:'Blessed are the peacemakers: for they shall be called the children of God.' },
+      ] },
+    { key:'longsuffering', label:'longsuffering', color:'#c47a55', x:20, y:34,
+      deficient:'wrath', excess:'seditions',
+      prompt:'What am I being asked to wait on, patiently?',
+      jesus:[
+        { ref:'Luke 21:19', b:'Luke', c:21, v:19, text:'In your patience possess ye your souls.' },
+        { ref:'Matthew 24:13', b:'Matthew', c:24, v:13, text:'But he that shall endure unto the end, the same shall be saved.' },
+        { ref:'Luke 8:15', b:'Luke', c:8, v:15, text:'But that on the good ground are they, which in an honest and good heart, having heard the word, keep it, and bring forth fruit with patience.' },
+      ] },
+    { key:'gentleness', label:'gentleness', color:'#8a9858', x:80, y:34,
+      deficient:'murders', excess:'such-like',
+      prompt:'Where could I have answered softer than I did?',
+      jesus:[
+        { ref:'Matthew 11:28', b:'Matthew', c:11, v:28, text:'Come unto me, all ye that labour and are heavy laden, and I will give you rest.' },
+        { ref:'Luke 6:35', b:'Luke', c:6, v:35, text:'But love ye your enemies, and do good, and lend, hoping for nothing again; and your reward shall be great, and ye shall be the children of the Highest: for he is kind unto the unthankful and to the evil.' },
+        { ref:'Matthew 5:7', b:'Matthew', c:5, v:7, text:'Blessed are the merciful: for they shall obtain mercy.' },
+      ] },
+    { key:'goodness', label:'goodness', color:'#4a7850', x:41, y:27,
+      deficient:'uncleanness', excess:'heresies',
+      prompt:'What good did I do simply because it was good?',
+      jesus:[
+        { ref:'Matthew 5:16', b:'Matthew', c:5, v:16, text:'Let your light so shine before men, that they may see your good works, and glorify your Father which is in heaven.' },
+        { ref:'Luke 6:45', b:'Luke', c:6, v:45, text:'A good man out of the good treasure of his heart bringeth forth that which is good… for of the abundance of the heart his mouth speaketh.' },
+        { ref:'Matthew 7:17', b:'Matthew', c:7, v:17, text:'Even so every good tree bringeth forth good fruit; but a corrupt tree bringeth forth evil fruit.' },
+      ] },
+    { key:'faith', label:'faith', color:'#8090b0', x:59, y:27,
+      deficient:'adultery', excess:'idolatry',
+      prompt:'Where did I trust without seeing the outcome?',
+      jesus:[
+        { ref:'Mark 5:36', b:'Mark', c:5, v:36, text:'Be not afraid, only believe.' },
+        { ref:'Mark 11:22', b:'Mark', c:11, v:22, text:'Have faith in God.' },
+        { ref:'John 20:29', b:'John', c:20, v:29, text:'…blessed are they that have not seen, and yet have believed.' },
+      ] },
+    { key:'meekness', label:'meekness', color:'#d9937a', x:33, y:47,
+      deficient:'strife', excess:'emulations',
+      prompt:'Where did I hold strength gently instead of forcing it?',
+      jesus:[
+        { ref:'Matthew 11:29', b:'Matthew', c:11, v:29, text:'Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls.' },
+        { ref:'Matthew 5:5', b:'Matthew', c:5, v:5, text:'Blessed are the meek: for they shall inherit the earth.' },
+        { ref:'Luke 14:11', b:'Luke', c:14, v:11, text:'For whosoever exalteth himself shall be abased; and he that humbleth himself shall be exalted.' },
+      ] },
+    { key:'temperance', label:'temperance', color:'#c8c020', x:67, y:47,
+      deficient:'lasciviousness', excess:'witchcraft',
+      prompt:'What did I say no to, so I could say yes to what matters?',
+      jesus:[
+        // the site's KJV data numbers this verse 26:40, so the chapter link uses wv
+        { ref:'Matthew 26:41', b:'Matthew', c:26, v:41, wv:40, text:'Watch and pray, that ye enter not into temptation: the spirit indeed is willing, but the flesh is weak.' },
+        { ref:'Luke 9:23', b:'Luke', c:9, v:23, text:'If any man will come after me, let him deny himself, and take up his cross daily, and follow me.' },
+        { ref:'Matthew 4:4', b:'Matthew', c:4, v:4, text:'It is written, Man shall not live by bread alone, but by every word that proceedeth out of the mouth of God.' },
+      ] },
+  ];
 
-  // ── reflection log ──────────────────────────────────────────
-  // Entry: { key, kind:'fruit'|'weed', act:'water'|'pull', note, tag, at }
-  function readLog() {
-    let log;
-    try { log = JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); }
-    catch (e) { log = []; }
-    if (!Array.isArray(log)) log = [];
+  function fruit(key) { return FRUITS.find(f => f.key === key) || null; }
 
-    // One-time migration from the old one-note-per-item store
-    const oldRaw = localStorage.getItem(OLD_NOTES_KEY);
-    if (oldRaw) {
-      try {
-        const notes = JSON.parse(oldRaw);
-        Object.entries(notes).forEach(([key, n]) => {
-          if (!n || (!n.note && !n.customLabel)) return;
-          log.push({
-            key,
-            kind: isFruit(key) ? 'fruit' : 'weed',
-            act:  isFruit(key) ? 'water' : 'pull',
-            note: n.note || '',
-            tag:  n.customLabel || null,
-            at:   n.savedAt || new Date().toISOString()
-          });
-        });
-        log.sort((a, b) => (a.at || '').localeCompare(b.at || ''));
-        localStorage.setItem(LOG_KEY, JSON.stringify(log));
-      } catch (e) { /* old data unreadable — leave it behind */ }
-      localStorage.removeItem(OLD_NOTES_KEY);
+  // which fruit does this weed choke, and from which side?
+  function fruitOfWeed(weedKey) {
+    for (const f of FRUITS) {
+      if (f.deficient === weedKey) return { fruit: f, side: 'deficient' };
+      if (f.excess    === weedKey) return { fruit: f, side: 'excess' };
     }
-    return log;
+    return null;
   }
 
-  function addEntry({ key, kind, act, note, tag }) {
-    const log = readLog();
-    const entry = {
-      key, kind, act,
-      note: (note || '').trim(),
-      tag:  (tag  || '').trim() || null,
-      at:   new Date().toISOString()
-    };
-    log.push(entry);
-    localStorage.setItem(LOG_KEY, JSON.stringify(log));
+  // his words for today — a different verse each day, steady within the day
+  function jesusFor(f, date) {
+    const d = date || new Date();
+    const start = new Date(d.getFullYear(), 0, 0);
+    const dayOfYear = Math.floor((d - start) / 86400000);
+    return f.jesus[(dayOfYear + FRUITS.indexOf(f)) % f.jesus.length];
+  }
+
+  // ── what is planted ─────────────────────────────────────────
+  function parse(key, fallback) {
+    try {
+      const v = JSON.parse(localStorage.getItem(key) || 'null');
+      return v == null ? fallback : v;
+    } catch (e) { return fallback; }
+  }
+
+  function readOldLog() {
+    const log = parse(LOG_KEY, []);
+    return Array.isArray(log) ? log : [];
+  }
+
+  // The first time the new garden opens, carry the fruit reflections she
+  // already wrote into the garden as plantings. This only copies —
+  // nothing old is removed until she chooses to release it.
+  function plantings() {
+    let list = parse(PLANT_KEY, null);
+    if (!Array.isArray(list)) {
+      list = readOldLog()
+        .filter(e => e && e.kind === 'fruit' && e.note && fruit(e.key))
+        .map(e => ({ fruit: e.key, note: e.note, at: e.at || new Date().toISOString() }));
+      localStorage.setItem(PLANT_KEY, JSON.stringify(list));
+    }
+    return list;
+  }
+
+  function plant(fruitKey, note) {
+    const list = plantings();
+    const entry = { fruit: fruitKey, note: (note || '').trim(), at: new Date().toISOString() };
+    list.push(entry);
+    localStorage.setItem(PLANT_KEY, JSON.stringify(list));
     return entry;
   }
 
-  // { love: {waters:3, watches:1, pulls:0, last:'…'}, wrath: {…} }
-  function counts(log) {
-    log = log || readLog();
+  // { love: 3, peace: 1 } — drawn as leaves, never shown as a number
+  function plantedCounts(list) {
     const c = {};
-    log.forEach(e => {
-      if (!c[e.key]) c[e.key] = { waters: 0, watches: 0, pulls: 0, last: null };
-      if      (e.act === 'water') c[e.key].waters++;
-      else if (e.act === 'watch') c[e.key].watches++;
-      else                        c[e.key].pulls++;
-      if (!c[e.key].last || (e.at || '') > c[e.key].last) c[e.key].last = e.at;
-    });
+    (list || plantings()).forEach(p => { c[p.fruit] = (c[p.fruit] || 0) + 1; });
     return c;
   }
 
-  // ── the gardenscape — monarch metamorphosis driven by tending ──
-  // Every act feeds one growth score; a full cycle raises a butterfly.
-  const CYCLE = 24;   // growth points to complete one metamorphosis (~8 days of daily tending)
-  const STAGES = [
-    { min: 0,  key:'stem',    name:'a milkweed pod',       hint:'begin tending — seeds wait to fly' },
-    { min: 3,  key:'leaves',  name:'milkweed unfurls',     hint:'green returns' },
-    { min: 7,  key:'bloom',   name:'milkweed in bloom',    hint:'the blooms open' },
-    { min: 12, key:'cat',     name:'a caterpillar feeds',  hint:'life arrives to be nourished' },
-    { min: 17, key:'chrys',   name:'a chrysalis forms',    hint:'hidden transformation' },
-    { min: 22, key:'flutter', name:'a monarch emerges',    hint:'ready to take wing' },
-  ];
-
-  function stageFor(p) {
-    let s = STAGES[0];
-    for (const stage of STAGES) if (p >= stage.min) s = stage;
-    return s;
+  // ── releasing what was kept before the pruning ──────────────
+  // Old weed reflections are still in this browser until she lets them go.
+  function oldWeedCount() {
+    let n = readOldLog().filter(e => e && e.kind === 'weed').length;
+    const oldNotes = parse(OLD_NOTES_KEY, null);
+    if (oldNotes && typeof oldNotes === 'object') n += Object.keys(oldNotes).length;
+    return n;
   }
 
-  // Local calendar day key — days must bucket in her timezone, not UTC,
-  // or an evening's tending lands on tomorrow's date and breaks the streak.
-  function dayKey(date) {
-    const d = (date instanceof Date) ? date : new Date(date);
-    if (isNaN(d)) return null;
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  }
-
-  // consecutive calendar days (local) with at least one act, ending today or yesterday
-  function streakOf(daySet) {
-    if (!daySet.size) return 0;
-    const d = new Date();
-    if (!daySet.has(dayKey(d))) d.setDate(d.getDate() - 1); // grace: streak alive until tomorrow
-    let s = 0;
-    while (daySet.has(dayKey(d))) { s++; d.setDate(d.getDate() - 1); }
-    return s;
-  }
-
-  // The whole picture of a person's tending — the /grow page renders from this
-  function garden(log) {
-    log = log || readLog();
-    let waters = 0, watches = 0, pulls = 0;
-    const days = new Set();
-    log.forEach(e => {
-      if      (e.act === 'water') waters++;
-      else if (e.act === 'watch') watches++;
-      else                        pulls++;
-      const k = e.at && dayKey(e.at);
-      if (k) days.add(k);   // local calendar day, matching streakOf
-    });
-
-    // watering pours the most; watching and weeding each tend a little
-    const growth  = waters * 2 + watches * 1 + pulls * 1;
-    const cycles  = Math.floor(growth / CYCLE);   // butterflies released
-    const p       = growth % CYCLE;               // progress within the current metamorphosis
-    const stage   = stageFor(p);
-    const idx     = STAGES.indexOf(stage);
-    const next    = STAGES[idx + 1] || null;
-    const toNext  = next ? next.min - p : CYCLE - p; // points until next stage / release
-
-    return {
-      waters, watches, pulls, growth, cycles, p, stage, next, toNext,
-      streak: streakOf(days),
-      tendedToday: days.has(dayKey(new Date())),
-      dayCount: days.size,
-      CYCLE
-    };
-  }
-
-  // Free-text tag → known weed key, if it names one ("wrath", "my wrath at work")
-  function matchWeed(text) {
-    if (!text) return null;
-    const t = text.toLowerCase().trim();
-    if (!t) return null;
-    const w = WEEDS.find(w => w.key !== 'such-like' && (t.includes(w.key) || w.key.includes(t)));
-    return w ? w.key : null;
-  }
-
-  // ── living word annotations ─────────────────────────────────
-  // { "42_14_4": {tags:[…], note:'…', savedAt} } — verse IDs are 0-based b_c_v
-  function readWordAnnotations() {
-    try {
-      const a = JSON.parse(localStorage.getItem(WORD_KEY) || '{}');
-      return (a && typeof a === 'object') ? a : {};
-    } catch (e) { return {}; }
-  }
-
-  // "19_2_4" → { book:'Proverbs', chapter:3, verse:5, label:'Proverbs 3:5' }
-  function verseRef(id) {
-    const parts = String(id).split('_').map(Number);
-    if (parts.length !== 3 || parts.some(isNaN)) return null;
-    const [b, c, v] = parts;
-    if (!BOOK_NAMES[b]) return null;
-    return { book: BOOK_NAMES[b], chapter: c + 1, verse: v + 1,
-             label: `${BOOK_NAMES[b]} ${c + 1}:${v + 1}` };
-  }
-
-  // Case-insensitive whole-word matcher for a fruit/weed's KJV forms
-  function wordsRegex(item) {
-    if (!item || !item.words || !item.words.length) return null;
-    return new RegExp('\\b(' + item.words.join('|') + ')\\b', 'i');
-  }
-
-  // Does this annotated verse speak of this fruit/weed?
-  // Matches if she tagged it with the same name, or the verse text uses its words.
-  function verseSpeaksOf(item, annotation, verseText) {
-    if (annotation && annotation.tags && annotation.tags.includes(item.key)) return true;
-    const re = wordsRegex(item);
-    return !!(re && verseText && re.test(verseText));
+  // Cannot be undone. Fruit reflections were already carried into the garden.
+  function releaseOld() {
+    plantings();   // make sure the fruit notes are carried over first
+    localStorage.removeItem(LOG_KEY);
+    localStorage.removeItem(OLD_NOTES_KEY);
+    localStorage.removeItem(RITUAL_KEY);
   }
 
   window.SpiritStore = {
-    FRUITS, WEEDS, BOOK_NAMES, GARDEN_TAGS, STAGES, CYCLE,
-    isFruit, readLog, addEntry, counts, matchWeed, garden,
-    readWordAnnotations, verseRef, wordsRegex, verseSpeaksOf,
-    RITUAL_KEY, WORD_KEY, CTAG_KEY
+    FRUITS, WEEDS,
+    fruit, fruitOfWeed, jesusFor,
+    plantings, plant, plantedCounts,
+    oldWeedCount, releaseOld,
+    WORD_KEY, CTAG_KEY
   };
 })();

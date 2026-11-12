@@ -33,14 +33,21 @@
       color: var(--ink);
       font-family: var(--serif);
       min-height: 100vh;
+      padding: 0 0 4rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* the opening page — wordmark, the verse on parchment, the book picker */
+    .hero {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 3rem 1.5rem 5rem;
+      padding: 3rem 1.5rem 4rem;
       text-align: center;
       position: relative;
-      overflow-x: hidden;
     }
 
     /* ── watercolor garden — butterfly, milkweed, caterpillar ── */
@@ -80,7 +87,7 @@
     }
 
     /* keep the page content above the garden */
-    body > *:not(.deco) { position: relative; z-index: 1; }
+    .hero > *:not(.deco) { position: relative; z-index: 1; }
 
     /* ── wordmark ─────────────────────────────────── */
     .mark {
@@ -114,147 +121,6 @@
       transition: color 0.2s;
     }
     .tagline a:hover { color: var(--ink); }
-
-    /* ── quest card ───────────────────────────────── */
-    .quest-card {
-      max-width: 440px;
-      width: 100%;
-      margin: 0 auto;
-      background: var(--parch);
-      border: 1px solid var(--border);
-      padding: 1.5rem 1.7rem 1.6rem;
-      text-align: center;
-      box-shadow: 0 3px 16px rgba(60,35,10,0.08);
-    }
-    .quest-label {
-      font-family: var(--mono);
-      font-size: 0.56rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.7rem;
-    }
-    .quest-name {
-      font-family: var(--hand);
-      font-size: 2.1rem;
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-    .quest-name.is-weed { color: #7a4030; }
-    .quest-kind {
-      font-family: var(--mono);
-      font-size: 0.52rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.9rem;
-    }
-    .quest-q {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 1rem;
-      line-height: 1.65;
-      margin-bottom: 1.1rem;
-    }
-    .quest-actions {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.55rem;
-      flex-wrap: wrap;
-    }
-    .quest-btn {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.65rem 1.2rem;
-      background: var(--ink);
-      color: var(--cream);
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .quest-btn:hover { background: var(--accent); }
-    .quest-btn.secondary {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-    .quest-btn.secondary:hover { color: #7a4030; border-color: #7a4030; background: none; }
-    .quest-skip {
-      background: none; border: none; cursor: pointer;
-      color: var(--border); font-size: 0.95rem; line-height: 1;
-      transition: color 0.2s;
-    }
-    .quest-skip:hover { color: var(--accent); }
-
-    .quest-form { display: none; text-align: left; margin-top: 0.4rem; }
-    .quest-form.open { display: block; }
-    .quest-form-hint {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 0.6rem;
-      line-height: 1.55;
-    }
-    .quest-note {
-      width: 100%;
-      min-height: 84px;
-      padding: 0.7rem 0.9rem;
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      background: white;
-      border: 1px solid var(--border);
-      color: var(--ink);
-      resize: vertical;
-      outline: none;
-      margin-bottom: 0.6rem;
-      transition: border-color 0.2s;
-    }
-    .quest-note:focus { border-color: var(--accent); }
-    .quest-note::placeholder { color: #b5b0a8; }
-    .quest-tag {
-      width: 100%;
-      padding: 0.55rem 0.9rem;
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 0.88rem;
-      background: white;
-      border: 1px solid var(--border);
-      color: var(--ink);
-      outline: none;
-      margin-bottom: 0.6rem;
-      transition: border-color 0.2s;
-    }
-    .quest-tag:focus { border-color: var(--accent); }
-    .quest-form-actions { display: flex; gap: 0.5rem; }
-
-    .quest-done { display: none; }
-    .quest-done.open { display: block; }
-    .quest-done-msg {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 0.95rem;
-      color: var(--accent);
-      margin-bottom: 0.7rem;
-    }
-    .quest-done-links {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-    }
-    .quest-done-links a, .quest-done-links button {
-      color: var(--muted);
-      background: none; border: none; cursor: pointer;
-      font: inherit; letter-spacing: inherit;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .quest-done-links a:hover, .quest-done-links button:hover { color: var(--ink); }
 
     /* ── verse section ────────────────────────────── */
     .verse-section {
@@ -438,12 +304,12 @@
 
     /* ── footer ───────────────────────────────────── */
     .foot {
-      position: fixed;
-      bottom: 1.5rem;
+      text-align: center;
+      margin-top: 3rem;
       font-family: var(--mono);
       font-size: 0.6rem;
       letter-spacing: 0.1em;
-      color: var(--border);
+      color: var(--muted);
     }
 
     /* ── loading ──────────────────────────────────── */
@@ -665,9 +531,549 @@
     @media (max-width: 520px) {
       .modal { padding: 1.4rem; }
     }
+
+    /* ══════════════════════════════════════════════════════
+       THE GARDEN — the open book beneath the verse
+       ══════════════════════════════════════════════════════ */
+    .garden-jump {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .garden-jump:hover { color: var(--ink); }
+
+    .garden {
+      --page: #f7f1e4;
+      --soil: #7a4030;
+      --leaf: #5d8a4a;
+      --pencil: #4f5a54;
+      width: 100%;
+      padding: 1rem 1rem 0;
+      font-size: 17px;
+      line-height: 1.7;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+      scroll-margin-top: 1.5rem;
+    }
+
+    .book-wrap { position: relative; max-width: 1020px; margin: 0 auto; }
+    .book-wrap::before, .book-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #efe7d5;
+      border: 1px solid #e0d6bf;
+      border-radius: 4px 6px 6px 4px;
+      z-index: -1;
+    }
+    .book-wrap::before { transform: translate(3px, 4px); }
+    .book-wrap::after  { transform: translate(6px, 8px); opacity: 0.7; }
+
+    .book {
+      display: flex;
+      box-shadow: 0 18px 50px rgba(60,35,10,0.22), 0 4px 12px rgba(60,35,10,0.12);
+      border-radius: 4px 6px 6px 4px;
+    }
+    .page {
+      flex: 1;
+      min-width: 0;
+      padding: 2.4rem 2.6rem 2.6rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .page-left {
+      border-radius: 4px 0 0 4px;
+      background:
+        linear-gradient(to right, rgba(0,0,0,0) 88%, rgba(90,60,30,0.10) 97%, rgba(90,60,30,0.20) 100%),
+        linear-gradient(160deg, #f9f3e7 0%, var(--page) 55%, #f0e8d6 100%);
+      border-right: 1px solid rgba(90,60,30,0.28);
+    }
+    .page-right {
+      border-radius: 0 6px 6px 0;
+      background:
+        linear-gradient(to left, rgba(0,0,0,0) 88%, rgba(90,60,30,0.08) 97%, rgba(90,60,30,0.16) 100%),
+        linear-gradient(200deg, #f9f3e7 0%, var(--page) 55%, #f0e8d6 100%);
+    }
+
+    .running-head {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(138,117,96,0.25);
+      margin-bottom: 1.2rem;
+    }
+    .folio {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-align: center;
+      margin-top: auto;
+      padding-top: 1.6rem;
+    }
+
+    /* ── LEFT PAGE — the painted plate ─────────────── */
+    .tree-scene {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 5 / 5.4;
+    }
+    .tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+    /* Esther's watercolors growing at the foot of the tree */
+    .plate-art {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .plate-milkweed    { width: 30%; left: -5%;  bottom: 1%; }
+    .plate-caterpillar { width: 25%; right: -5%; bottom: 3%; transform: rotate(-4deg); }
+
+    .fruit-node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.2rem;
+      z-index: 5;
+      font: inherit;
+      color: var(--ink);
+    }
+    .fruit-crown { position: relative; width: 23px; height: 23px; }
+    /* a painted fruit: flat wash, pencil outline, a little stem */
+    .fruit-dot {
+      position: absolute; inset: 0;
+      border-radius: 52% 48% 50% 50% / 48% 52% 50% 50%;
+      background:
+        radial-gradient(circle at 32% 28%, rgba(255,255,255,0.7) 0 18%, rgba(255,255,255,0) 42%),
+        var(--node-color);
+      border: 1.3px solid rgba(60,66,60,0.75);
+      transition: transform 0.15s;
+      z-index: 2;
+    }
+    .fruit-crown::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: -5px;
+      width: 1.4px; height: 7px;
+      background: rgba(60,66,60,0.8);
+      transform: rotate(14deg);
+      z-index: 3;
+    }
+    .fruit-node:hover .fruit-dot,
+    .fruit-node:focus-visible .fruit-dot { transform: scale(1.2); }
+    .fruit-node.active .fruit-dot { box-shadow: 0 0 0 4px rgba(250,236,170,0.75); }
+
+    /* the increase — one leaf for every word of praise planted */
+    .leaf {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 8px; height: 12px;
+      background: #c3d68a;
+      border: 1px solid rgba(60,80,50,0.7);
+      border-radius: 0 100% 0 100%;
+      transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(-1 * var(--r)));
+      z-index: 1;
+    }
+    .leaf.new { animation: leaf-in 0.9s ease-out both; }
+    @keyframes leaf-in {
+      from { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateY(0) scale(0.2); }
+      to   { opacity: 1; transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(-1 * var(--r))) scale(1); }
+    }
+    .fruit-label {
+      font-family: var(--hand);
+      font-size: 0.95rem;
+      line-height: 1;
+      color: var(--ink);
+      background: rgba(250,246,239,0.82);
+      padding: 0.12rem 0.4rem 0.06rem;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .fruit-node.active .fruit-label { background: #fff; box-shadow: 0 0 0 1px rgba(79,90,84,0.5); }
+
+    /* at the roots — the two weeds of the fruit being tended */
+    .root-sprout {
+      position: absolute;
+      top: 80%;
+      transform: translate(-50%, 0);
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      animation: sprout-in 0.5s ease-out both;
+    }
+    .root-sprout svg { width: 26px; height: 26px; display: block; }
+    .root-sprout .rs-name {
+      font-family: var(--hand);
+      font-size: 0.95rem;
+      line-height: 1;
+      color: var(--soil);
+      background: rgba(250,246,239,0.9);
+      padding: 0.12rem 0.45rem 0.06rem;
+      border-radius: 10px;
+      border: 1px solid rgba(122,64,48,0.45);
+      white-space: nowrap;
+    }
+    .root-sprout .rs-side {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--soil);
+      margin-top: 0.15rem;
+    }
+    .root-sprout:hover .rs-name, .root-sprout:focus-visible .rs-name,
+    .root-sprout.active .rs-name { background: #fff; border-color: #c84820; color: #c84820; }
+    @keyframes sprout-in {
+      from { opacity: 0; transform: translate(-50%, 10px); }
+      to   { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    .soil-band {
+      background: linear-gradient(to bottom, rgba(122,64,48,0.13), rgba(122,64,48,0.22));
+      border-top: 1.5px solid rgba(79,90,84,0.45);
+      border-radius: 2px 2px 10px 10px;
+      padding: 0.8rem 0.9rem 1rem;
+    }
+    .soil-label {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--soil);
+      opacity: 0.85;
+      margin-bottom: 0.55rem;
+      text-align: center;
+    }
+    .weed-patch {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem 0.45rem;
+    }
+    .weed-chip {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      border: 1px solid rgba(122,64,48,0.4);
+      background: rgba(250,246,239,0.6);
+      color: #6a4432;
+      cursor: pointer;
+      transform: rotate(var(--rot, 0deg));
+      transition: background 0.15s, transform 0.15s, opacity 0.2s;
+    }
+    .weed-chip:hover, .weed-chip:focus-visible { background: #fff; transform: rotate(0deg) scale(1.06); }
+    .weed-chip.active { border-color: #c84820; color: #c84820; background: #fff; }
+    /* each weed carries the colour of the fruit it chokes */
+    .weed-chip::before {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--fruit-color);
+      border: 1px solid rgba(0,0,0,0.2);
+      margin-right: 0.4em;
+      vertical-align: -0.02em;
+    }
+    .weed-patch.has-active .weed-chip { opacity: 0.4; }
+    .weed-patch.has-active .weed-chip.of-active { opacity: 1; background: #fff; }
+
+    .fig-caption {
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.9rem;
+    }
+
+    /* ── RIGHT PAGE — the tending ──────────────────── */
+    .chapter-title {
+      font-family: var(--hand);
+      font-weight: normal;
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 0.35rem;
+    }
+    .chapter-sub {
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.4rem;
+    }
+    .body-text {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      font-style: italic;
+      margin-bottom: 0.4rem;
+    }
+    .vref {
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.56rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    a.vref { text-decoration: underline; text-underline-offset: 2px; }
+    a.vref:hover { color: var(--ink); }
+    .drop-cap::first-letter {
+      font-family: var(--hand);
+      font-size: 3.2em;
+      float: left;
+      line-height: 0.85;
+      padding-right: 0.09em;
+      color: var(--accent);
+    }
+    .section-rule {
+      width: 46px; height: 1px;
+      background: var(--accent);
+      margin: 1.4rem auto;
+      opacity: 0.6;
+    }
+    .practice-label {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.3rem 0.9rem;
+      list-style: none;
+      margin-bottom: 0.8rem;
+    }
+    .steps li {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #b5b0a8;
+    }
+    .steps li.on { color: var(--ink); border-bottom: 1px solid var(--accent); }
+
+    .tend-panel {
+      border: 1px solid rgba(138,117,96,0.35);
+      background: rgba(255,255,255,0.5);
+      padding: 1.2rem 1.3rem 1.3rem;
+      position: relative;
+      overflow: hidden;
+      scroll-margin-top: 1rem;
+    }
+    .tend-name { font-family: var(--hand); font-size: 2rem; line-height: 1; margin-bottom: 0.2rem; }
+    .tend-name.is-weed { color: var(--soil); }
+    .tend-kind {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .his-words {
+      border-left: 2px solid var(--accent);
+      padding: 0.1rem 0 0.1rem 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .his-words p { font-style: italic; font-size: 0.98rem; line-height: 1.65; }
+    .his-words .who {
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+    .tend-q { font-size: 1rem; line-height: 1.6; margin-bottom: 0.9rem; }
+    .tend-hint { font-style: italic; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.8rem; }
+
+    .choices { display: grid; gap: 0.5rem; }
+    .choice {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.8rem;
+      width: 100%;
+      text-align: left;
+      padding: 0.7rem 0.9rem;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      color: var(--ink);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .choice:hover, .choice:focus-visible { border-color: var(--accent); background: #fff; }
+    .choice.grow:hover, .choice.grow:focus-visible { border-color: var(--leaf); }
+    .choice.weed:hover, .choice.weed:focus-visible { border-color: var(--soil); }
+    .choice small {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .field {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      outline: none;
+      margin-bottom: 0.6rem;
+      transition: border-color 0.2s;
+    }
+    textarea.field { min-height: 92px; resize: vertical; display: block; }
+    .field:focus { border-color: var(--accent); }
+    .field::placeholder { color: #b5b0a8; }
+    .not-kept {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+    .err { font-style: italic; font-size: 0.82rem; color: #c84820; min-height: 1.3rem; }
+
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem; }
+    .btn {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.3rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: 1px solid var(--ink);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn:hover { background: var(--accent); border-color: var(--accent); }
+    .btn.quiet { background: none; color: var(--muted); border-color: var(--border); }
+    .btn.quiet:hover { color: var(--ink); border-color: var(--accent); background: none; }
+
+    /* a prayer released — the monarch takes it up */
+    .release-fly {
+      position: absolute;
+      width: 54px;
+      left: 50%; bottom: 0;
+      pointer-events: none;
+      animation: fly-up 2.6s ease-in forwards;
+    }
+    @keyframes fly-up {
+      0%   { transform: translate(-50%, 20%) rotate(-6deg) scale(0.7); opacity: 0; }
+      15%  { opacity: 1; }
+      60%  { transform: translate(-10%, -180%) rotate(8deg) scale(0.9); opacity: 1; }
+      100% { transform: translate(60%, -520%) rotate(-4deg) scale(0.6); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .leaf.new, .root-sprout { animation: none; }
+      .release-fly { display: none; }
+    }
+
+    .planted-entry { border-bottom: 1px dotted rgba(138,117,96,0.4); padding: 0.55rem 0.15rem; }
+    .planted-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-bottom: 0.1rem;
+    }
+    .planted-name { font-family: var(--hand); font-size: 1.15rem; line-height: 1; }
+    .planted-date {
+      font-family: var(--mono);
+      font-size: 0.54rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .planted-note { font-style: italic; font-size: 0.86rem; color: #55534c; line-height: 1.55; overflow-wrap: anywhere; }
+    .planted-empty { font-style: italic; font-size: 0.85rem; color: var(--muted); text-align: center; padding: 0.6rem 0; }
+    .text-toggle {
+      display: block;
+      margin: 0.9rem auto 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .text-toggle:hover { color: var(--ink); }
+
+    .old-notice {
+      margin-top: 1.6rem;
+      padding: 0.9rem 1rem;
+      border: 1px dashed rgba(122,64,48,0.45);
+      background: rgba(122,64,48,0.05);
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+    .old-notice p { margin-bottom: 0.7rem; }
+
+    @media (max-width: 800px) {
+      .garden { padding: 1rem 0.7rem 0; }
+      .book { flex-direction: column; }
+      .page { padding: 1.8rem 1.3rem 2rem; }
+      .page-left {
+        border-radius: 4px 6px 0 0;
+        border-right: none;
+        border-bottom: 1px solid rgba(90,60,30,0.28);
+        background: linear-gradient(160deg, #f9f3e7 0%, var(--page) 55%, #f0e8d6 100%);
+      }
+      .page-right {
+        border-radius: 0 0 6px 6px;
+        background: linear-gradient(200deg, #f9f3e7 0%, var(--page) 55%, #f0e8d6 100%);
+      }
+      .fruit-label { font-size: 0.82rem; padding: 0.1rem 0.3rem 0.04rem; }
+      .weed-chip { font-size: 0.68rem; padding: 0.3rem 0.7rem; }
+    }
   </style>
 </head>
 <body>
+
+  <section class="hero">
 
   <!-- watercolor garden — these appear once the PNGs land in assets/images/spirit/ -->
   <img class="deco deco-butterfly" src="/assets/images/spirit/butterfly.png" alt="" aria-hidden="true" onerror="this.remove()" />
@@ -678,44 +1084,7 @@
   <p class="tagline">a spiritual gardening guide · rooted in the <a href="/word/">living word</a></p>
   <div class="rule"></div>
 
-  <!-- a quest for your spirit — daily question, watered or weeded -->
-  <div class="quest-card" id="questCard">
-    <p class="quest-label">a quest for your spirit</p>
-    <p class="quest-name" id="questName"></p>
-    <p class="quest-kind" id="questKind"></p>
-    <p class="quest-q" id="questQ"></p>
-
-    <div class="quest-actions" id="questActions">
-      <button class="quest-btn" id="btnQuestWater">water · nourish it</button>
-      <button class="quest-btn secondary" id="btnQuestWeed">weed · repent</button>
-      <button class="quest-skip" id="questSkip" title="another question">↻</button>
-    </div>
-
-    <div class="quest-form" id="questForm">
-      <p class="quest-form-hint" id="questFormHint"></p>
-      <textarea class="quest-note" id="questNote"></textarea>
-      <input class="quest-tag" id="questTag" type="text" maxlength="40" style="display:none"
-        placeholder="name the spot — what kind of weed is this?" />
-      <div class="quest-form-actions">
-        <button class="quest-btn" id="questSave">save</button>
-        <button class="quest-btn secondary" id="questCancel">back</button>
-      </div>
-    </div>
-
-    <div class="quest-done" id="questDone">
-      <p class="quest-done-msg" id="questDoneMsg"></p>
-      <p class="quest-done-links">
-        <a href="/spirit/">see your tree →</a>
-        &nbsp;·&nbsp;
-        <button id="questAgain">another question ↻</button>
-      </p>
-    </div>
-  </div>
-
-  <p style="margin-top:1.2rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap">
-    <a href="/grow/" style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);text-decoration:underline;text-underline-offset:3px">grow your spirit →</a>
-    <a href="/spirit/" style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--muted);text-decoration:underline;text-underline-offset:3px">tend the spirit garden →</a>
-  </p>
+  <a class="garden-jump" href="#garden">tend the garden ↓</a>
 
   <div class="verse-section">
 
@@ -752,6 +1121,129 @@
       </select>
       <a class="go-btn" id="goBtn" href="/word/">open →</a>
     </div>
+  </div>
+
+  </section>
+
+  <!-- ══ THE GARDEN — the open book ══ -->
+  <div class="garden" id="garden">
+  <div class="book-wrap">
+  <div class="book">
+
+    <!-- LEFT PAGE: the tree and its soil -->
+    <section class="page page-left" aria-label="The tree">
+      <div class="running-head">the garden of the heart</div>
+
+      <div class="tree-scene" id="treeScene">
+        <!-- drawn in pencil and wash to sit beside Esther's watercolors -->
+        <svg class="tree-svg" viewBox="0 0 300 324" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <filter id="hgWash" x="-15%" y="-15%" width="130%" height="130%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="7" result="warp"/>
+              <feDisplacementMap in="SourceGraphic" in2="warp" scale="11" result="shape"/>
+              <feTurbulence type="fractalNoise" baseFrequency="0.085" numOctaves="2" seed="3" result="grain"/>
+              <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.6" result="mask"/>
+              <feComposite in="shape" in2="mask" operator="in"/>
+            </filter>
+            <filter id="hgPencil" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="11" result="w"/>
+              <feDisplacementMap in="SourceGraphic" in2="w" scale="3.2"/>
+            </filter>
+          </defs>
+
+          <!-- ground wash -->
+          <path filter="url(#hgWash)" d="M-8 297 Q70 281 150 289 Q230 297 308 284 L308 330 L-8 330 Z" fill="#cdb48e" opacity="0.75"/>
+          <path filter="url(#hgWash)" d="M20 300 Q90 290 150 294 Q220 299 285 292 L285 312 Q150 318 20 312 Z" fill="#9aa860" opacity="0.4"/>
+
+          <!-- branches reaching to each fruit -->
+          <g filter="url(#hgPencil)" fill="none" stroke="#7a4d33" stroke-linecap="round" opacity="0.85">
+            <path d="M151 152 Q152 96 150 46" stroke-width="3"/>
+            <path d="M136 182 Q104 132 93 68" stroke-width="2.6"/>
+            <path d="M165 182 Q198 132 207 68" stroke-width="2.6"/>
+            <path d="M147 164 Q131 122 123 93" stroke-width="2.2"/>
+            <path d="M155 164 Q171 124 177 93" stroke-width="2.2"/>
+            <path d="M119 174 Q78 152 60 116" stroke-width="2.4"/>
+            <path d="M185 168 Q224 152 240 116" stroke-width="2.4"/>
+            <path d="M131 180 Q109 172 99 158" stroke-width="2"/>
+            <path d="M171 180 Q192 172 201 158" stroke-width="2"/>
+          </g>
+
+          <!-- foliage — layered washes -->
+          <g filter="url(#hgWash)" style="mix-blend-mode:multiply">
+            <ellipse cx="150" cy="100" rx="108" ry="80" fill="#b7c98a" opacity="0.8"/>
+            <ellipse cx="92"  cy="122" rx="62" ry="50" fill="#93a85e" opacity="0.7"/>
+            <ellipse cx="208" cy="122" rx="62" ry="50" fill="#93a85e" opacity="0.7"/>
+            <ellipse cx="150" cy="58"  rx="68" ry="46" fill="#7d9a52" opacity="0.7"/>
+            <ellipse cx="118" cy="94"  rx="44" ry="34" fill="#5f8a55" opacity="0.55"/>
+            <ellipse cx="184" cy="98"  rx="44" ry="34" fill="#5f8a55" opacity="0.55"/>
+            <ellipse cx="66"  cy="104" rx="34" ry="28" fill="#a9bd6e" opacity="0.6"/>
+            <ellipse cx="236" cy="106" rx="32" ry="28" fill="#a9bd6e" opacity="0.6"/>
+          </g>
+          <g id="hgLeafMarks" filter="url(#hgPencil)"></g>
+          <path id="hgCanopyLine" filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-width="1" stroke-linejoin="round" opacity="0.7"/>
+          <g id="hgScallops" filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-width="0.8" stroke-linecap="round" opacity="0.45"></g>
+
+          <!-- trunk — wash, then pencil -->
+          <path filter="url(#hgWash)" fill="#96643f" opacity="0.9"
+            d="M126 296 C138 281 141 250 141 216 C141 196 128 181 108 169 L112 162 C130 170 143 179 148 191 C149 171 149 156 150 139 L156 139 C156 159 156 173 158 189 C164 177 176 169 194 161 L197 167 C178 177 163 193 162 216 C162 250 166 281 178 296 Z"/>
+          <path filter="url(#hgWash)" fill="#6f4429" opacity="0.45"
+            d="M152 292 C156 262 156 232 158 206 C160 196 166 186 176 178 C168 190 163 202 162 216 C162 250 166 281 178 296 Z"/>
+          <g filter="url(#hgPencil)" fill="none" stroke="#4f5a54" stroke-linecap="round" opacity="0.8">
+            <path stroke-width="1.1" d="M126 296 C138 281 141 250 141 216 C141 196 128 181 108 169 M112 162 C130 170 143 179 148 191 C149 171 149 156 150 139 M156 139 C156 159 156 173 158 189 C164 177 176 169 194 161 M197 167 C178 177 163 193 162 216 C162 250 166 281 178 296"/>
+            <path stroke-width="0.8" d="M147 280 Q149 262 148 244 M154 270 Q156 250 155 228 M150 222 Q151 210 150 200 M144 260 Q145 250 144 240"/>
+            <path stroke-width="1.1" d="M126 296 Q110 300 92 297 M178 296 Q194 302 214 298 M150 297 Q146 304 138 306"/>
+          </g>
+          <g id="hgGrass" filter="url(#hgPencil)" fill="none" stroke="#5f7a4a" stroke-width="1" stroke-linecap="round" opacity="0.75"></g>
+        </svg>
+
+        <img class="plate-art plate-milkweed" src="/assets/images/spirit/milkweed.png" alt="" aria-hidden="true" onerror="this.remove()" />
+        <img class="plate-art plate-caterpillar" src="/assets/images/spirit/caterpillar.png" alt="" aria-hidden="true" onerror="this.remove()" />
+
+        <div id="fruitLayer"></div>
+        <div id="rootSprouts"></div>
+      </div>
+
+      <div class="soil-band">
+        <p class="soil-label">the weeds · tap one you recognise</p>
+        <div class="weed-patch" id="weedPatch"></div>
+      </div>
+
+      <p class="fig-caption">the fruit of the Spirit &amp; the works of the flesh</p>
+      <div class="folio">galatians 5 : 19 – 23</div>
+    </section>
+
+    <!-- RIGHT PAGE: the tending -->
+    <section class="page page-right" aria-label="Today's tending">
+      <div class="running-head">tend the garden</div>
+
+      <h2 class="chapter-title">Tend the Garden</h2>
+      <p class="chapter-sub">with Jesus beside you · given to God</p>
+
+      <p class="body-text drop-cap">I am the vine, ye are the branches: He that abideth in me, and I in him, the same bringeth forth much fruit: for without me ye can do nothing.</p>
+      <p><span class="vref">John 15:5 · the words of Jesus</span></p>
+
+      <div class="section-rule"></div>
+
+      <ol class="steps" id="steps" aria-label="Steps of the tending">
+        <li data-step="look">look</li>
+        <li data-step="tend">tend</li>
+        <li data-step="surrender">surrender</li>
+        <li data-step="plant">plant</li>
+      </ol>
+      <div class="tend-panel" id="tend" aria-live="polite"></div>
+
+      <div class="section-rule"></div>
+
+      <p class="practice-label">what is planted</p>
+      <div id="planted"></div>
+
+      <div id="oldNotice"></div>
+
+      <div class="folio">philippians 4 : 8</div>
+    </section>
+
+  </div>
+  </div>
   </div>
 
   <p class="foot">heartsgarden.cc</p>
@@ -1169,115 +1661,6 @@ document.getElementById('newTagInput').addEventListener('keydown', e => {
 });
 
 // ─────────────────────────────────────────────────────────────
-// QUEST CARD — a daily question, watered or weeded
-// ─────────────────────────────────────────────────────────────
-
-const QUESTS = [
-  ...SpiritStore.FRUITS.map(f => ({ key:f.key, kind:'fruit', label:f.label, prompt:f.prompt })),
-  ...SpiritStore.WEEDS.filter(w => w.key !== 'such-like')
-    .map(w => ({ key:w.key, kind:'weed', label:w.label, prompt:w.prompt }))
-];
-
-let questOffset = 0;
-let questMode   = null;  // 'water' | 'weed'
-
-function currentQuest() {
-  const day = Math.floor(Date.now() / 86400000);
-  return QUESTS[(day + questOffset) % QUESTS.length];
-}
-
-function renderQuest() {
-  const q = currentQuest();
-  document.getElementById('questName').textContent = q.label;
-  document.getElementById('questName').classList.toggle('is-weed', q.kind === 'weed');
-  document.getElementById('questKind').textContent =
-    q.kind === 'fruit' ? 'fruit of the spirit · galatians 5:22' : 'weed of the world · galatians 5:19';
-  document.getElementById('questQ').textContent = q.prompt;
-
-  // weed quests only offer the pull
-  document.getElementById('btnQuestWater').style.display = q.kind === 'fruit' ? '' : 'none';
-  document.getElementById('btnQuestWeed').textContent =
-    q.kind === 'fruit' ? 'weed · repent' : 'pull this weed';
-
-  document.getElementById('questActions').style.display = 'flex';
-  document.getElementById('questForm').classList.remove('open');
-  document.getElementById('questDone').classList.remove('open');
-  document.getElementById('questNote').value = '';
-  document.getElementById('questTag').value = '';
-  questMode = null;
-}
-
-function openQuestForm(mode) {
-  const q = currentQuest();
-  questMode = mode;
-
-  const hint = document.getElementById('questFormHint');
-  const note = document.getElementById('questNote');
-  const tag  = document.getElementById('questTag');
-
-  if (mode === 'water') {
-    hint.textContent = `journal the blood, sweat, or tears you're pouring into ${q.label} — this waters it.`;
-    note.placeholder = 'how are you nourishing this fruit?';
-    tag.style.display = 'none';
-  } else {
-    hint.textContent = q.kind === 'fruit'
-      ? `the question revealed a weed? name it, repent, and ask God for grace — this pulls it.`
-      : `let it go — pray, repent, and ask God for grace and mercy. every pull loosens its grip.`;
-    note.placeholder = 'what needs pulling — and what are you praying?';
-    tag.style.display = '';
-    tag.placeholder = q.kind === 'fruit'
-      ? 'name the spot — what kind of weed is this?'
-      : 'tag the spot — where does this weed grow? (optional)';
-  }
-
-  document.getElementById('questActions').style.display = 'none';
-  document.getElementById('questForm').classList.add('open');
-  setTimeout(() => note.focus(), 60);
-}
-
-function saveQuest() {
-  const q = currentQuest();
-  const noteEl = document.getElementById('questNote');
-  const note = noteEl.value.trim();
-  const tagText = document.getElementById('questTag').value.trim();
-
-  if (!note) {
-    noteEl.placeholder = 'growth needs a few words — write a little…';
-    noteEl.focus();
-    return;
-  }
-
-  let entry, doneMsg;
-  if (questMode === 'water') {
-    entry = { key:q.key, kind:'fruit', act:'water', note, tag:tagText };
-    doneMsg = `✦ watered — ${q.label} grows a little`;
-  } else if (q.kind === 'weed') {
-    entry = { key:q.key, kind:'weed', act:'pull', note, tag:tagText };
-    doneMsg = `✦ pulled — ${q.label} loosens its grip`;
-  } else {
-    // weeding from a fruit question — match the named weed, or file under "such like"
-    const matched = SpiritStore.matchWeed(tagText) || 'such-like';
-    entry = { key:matched, kind:'weed', act:'pull', note, tag:tagText };
-    const label = matched === 'such-like' ? (tagText || 'that weed') : matched;
-    doneMsg = `✦ pulled — ${label} loosens its grip`;
-  }
-
-  SpiritStore.addEntry(entry);
-  document.getElementById('questForm').classList.remove('open');
-  document.getElementById('questDoneMsg').textContent = doneMsg;
-  document.getElementById('questDone').classList.add('open');
-}
-
-document.getElementById('btnQuestWater').addEventListener('click', () => openQuestForm('water'));
-document.getElementById('btnQuestWeed').addEventListener('click', () => openQuestForm('weed'));
-document.getElementById('questSave').addEventListener('click', saveQuest);
-document.getElementById('questCancel').addEventListener('click', renderQuest);
-document.getElementById('questSkip').addEventListener('click', () => { questOffset++; renderQuest(); });
-document.getElementById('questAgain').addEventListener('click', () => { questOffset++; renderQuest(); });
-
-renderQuest();
-
-// ─────────────────────────────────────────────────────────────
 // EVENTS
 // ─────────────────────────────────────────────────────────────
 
@@ -1294,6 +1677,390 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 
 // ─────────────────────────────────────────────────────────────
 init();
+</script>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// THE GARDEN — one daily tending, in the book beneath the verse
+//   look      → name what is in the heart (a fruit, or a weed)
+//   tend      → with Jesus: his words beside the question
+//   surrender → the weed is given to God; the prayer is never stored
+//   plant     → a word of praise, the only thing the garden keeps
+// ─────────────────────────────────────────────────────────────
+(function () {
+
+const { FRUITS, WEEDS } = SpiritStore;
+
+let state = { step: 'look', fruit: null, weed: null, side: null, released: false };
+let lastPlanted = null;      // fruit key whose newest leaf should unfurl
+let plantedExpanded = false;
+const PLANTED_PREVIEW = 6;
+const MAX_LEAVES = 14;
+
+const $ = id => document.getElementById(id);
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── the painted plate — pencil lines drawn once, the same every visit ──
+function drawPlate() {
+  let seed = 20261112;
+  const rnd = () => {           // small seeded generator, so the drawing never shifts
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+
+  // scalloped pencil outline around the canopy
+  const cx = 150, cy = 102, N = 17;
+  const rx = a => 114 + 10 * Math.max(0, Math.sin(a)) ;   // a little wider toward the bottom
+  const ry = 86;
+  const pt = (a, k) => [cx + Math.cos(a) * rx(a) * k, cy + Math.sin(a) * ry * k];
+  let d = '';
+  for (let i = 0; i <= N; i++) {
+    const a  = (i / N) * Math.PI * 2 - Math.PI / 2;
+    const am = ((i - 0.5) / N) * Math.PI * 2 - Math.PI / 2;
+    const [x, y] = pt(a, 0.97 + rnd() * 0.05);
+    if (i === 0) { d += `M${x.toFixed(1)} ${y.toFixed(1)}`; continue; }
+    const [qx, qy] = pt(am, 1.1 + rnd() * 0.06);
+    d += ` Q${qx.toFixed(1)} ${qy.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`;
+  }
+  $('hgCanopyLine').setAttribute('d', d);
+
+  // leaf dabs and little scallops inside the canopy
+  let dabs = '', scallops = '';
+  const greens = ['#4f7a45', '#6f9050', '#c9dc98', '#3f6a40', '#a2b866'];
+  for (let i = 0; i < 70; i++) {
+    const a = rnd() * Math.PI * 2, k = Math.sqrt(rnd()) * 0.9;
+    const [x, y] = pt(a, k);
+    const rot = Math.round(rnd() * 180);
+    dabs += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(2.5 + rnd() * 3).toFixed(1)}" ry="${(1.2 + rnd() * 1.4).toFixed(1)}"
+      transform="rotate(${rot} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${greens[i % greens.length]}" opacity="${(0.28 + rnd() * 0.3).toFixed(2)}"/>`;
+    if (i % 3 === 0) {
+      const w = 7 + rnd() * 8;
+      scallops += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} q${(w / 2).toFixed(1)} ${(-4 - rnd() * 4).toFixed(1)} ${w.toFixed(1)} 0"/>`;
+    }
+  }
+  $('hgLeafMarks').innerHTML = dabs;
+  $('hgScallops').innerHTML = scallops;
+
+  // grass along the ground
+  let grass = '';
+  for (let i = 0; i < 26; i++) {
+    const x = 8 + rnd() * 284;
+    if (x > 118 && x < 186) continue;                 // leave the roots clear
+    const y = 293 + rnd() * 10, h = 5 + rnd() * 7;
+    grass += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} q-2 ${(-h * 0.6).toFixed(1)} -3.5 ${(-h).toFixed(1)} M${x.toFixed(1)} ${y.toFixed(1)} q1.5 ${(-h * 0.7).toFixed(1)} 3 ${(-h * 1.1).toFixed(1)}"/>`;
+  }
+  $('hgGrass').innerHTML = grass;
+}
+
+// ── the tree ──────────────────────────────────────────────────
+function leavesHTML(n, isNew) {
+  let html = '';
+  const shown = Math.min(n, MAX_LEAVES);
+  for (let i = 0; i < shown; i++) {
+    const inner = i < 7;
+    const count = inner ? Math.min(shown, 7) : shown - 7;
+    const idx   = inner ? i : i - 7;
+    const angle = Math.round((360 / count) * idx + (inner ? 28 : 54));
+    const cls   = (isNew && i === shown - 1) ? 'leaf new' : 'leaf';
+    html += `<span class="${cls}" style="--a:${angle}deg;--r:${inner ? 16 : 25}px"></span>`;
+  }
+  return html;
+}
+
+const SPROUT_SVG = `<svg viewBox="0 0 26 26" aria-hidden="true"><g fill="none" stroke="#6b4a36" stroke-width="1.3" stroke-linecap="round">
+  <path d="M13 25 Q12 16 13 8"/><path d="M13 17 Q6 15 4 8 Q10 9 13 15"/><path d="M13 13 Q20 11 22 4 Q15 6 13 11"/></g></svg>`;
+
+function buildTree() {
+  const counts = SpiritStore.plantedCounts();
+  $('fruitLayer').innerHTML = FRUITS.map(f => {
+    const n = counts[f.key] || 0;
+    const active = state.fruit === f.key ? ' active' : '';
+    const told = n ? `${f.label}, praise is planted here` : f.label;
+    return `<button class="fruit-node${active}" data-key="${f.key}" aria-label="${told}"
+      style="left:${f.x}%;top:${f.y}%;--node-color:${f.color}">
+      <span class="fruit-crown">${leavesHTML(n, lastPlanted === f.key)}<span class="fruit-dot"></span></span>
+      <span class="fruit-label">${f.label}</span>
+    </button>`;
+  }).join('');
+  $('fruitLayer').querySelectorAll('.fruit-node').forEach(node =>
+    node.addEventListener('click', () => openFruit(node.dataset.key))
+  );
+
+  // at the roots — the two weeds of the fruit being tended
+  const af = state.fruit ? SpiritStore.fruit(state.fruit) : null;
+  $('rootSprouts').innerHTML = !af ? '' : [['deficient', 33], ['excess', 67]].map(([side, x]) => {
+    const key = af[side], w = WEEDS[key];
+    const active = state.weed === key ? ' active' : '';
+    return `<button class="root-sprout${active}" data-key="${key}" style="left:${x}%" aria-label="${side} of ${af.label}: ${escHtml(w.label)}">
+      ${SPROUT_SVG}
+      <span class="rs-name">${w.open ? 'yours to name' : escHtml(w.label)}</span>
+      <span class="rs-side">${side}</span>
+    </button>`;
+  }).join('');
+  $('rootSprouts').querySelectorAll('.root-sprout').forEach(b =>
+    b.addEventListener('click', () => openWeed(af.key, b.dataset.key))
+  );
+
+  // the soil — each weed sits beside the fruit it chokes
+  let i = 0;
+  $('weedPatch').innerHTML = FRUITS.map(f => [f.deficient, f.excess].map(key => {
+    const w = WEEDS[key];
+    const active = (state.weed === key && state.fruit === f.key) ? ' active' : '';
+    const ofActive = state.fruit === f.key ? ' of-active' : '';
+    const side = f.deficient === key ? 'deficient' : 'excess';
+    const rot = (i++ % 2) ? 1.4 : -1.6;
+    return `<button class="weed-chip${active}${ofActive}" data-key="${key}" data-fruit="${f.key}"
+      title="${side} of ${f.label}" style="--rot:${rot}deg;--fruit-color:${f.color}">${escHtml(w.label)}</button>`;
+  }).join('')).join('');
+  $('weedPatch').classList.toggle('has-active', !!state.fruit);
+  $('weedPatch').querySelectorAll('.weed-chip').forEach(chip =>
+    chip.addEventListener('click', () => openWeed(chip.dataset.fruit, chip.dataset.key))
+  );
+}
+
+// ── moving through the tending ────────────────────────────────
+function go(next) {
+  state = Object.assign({ step:'look', fruit:null, weed:null, side:null, released:false }, next);
+  render();
+}
+
+function openFruit(key) {
+  go({ step: 'tend', fruit: key });
+  bringTendIntoView();
+}
+
+function openWeed(fruitKey, weedKey) {
+  const f = SpiritStore.fruit(fruitKey);
+  go({ step: 'surrender', fruit: fruitKey, weed: weedKey, side: f.deficient === weedKey ? 'deficient' : 'excess' });
+  bringTendIntoView();
+}
+
+function bringTendIntoView() {
+  const panel = $('tend');
+  const r = panel.getBoundingClientRect();
+  if (r.top < 0 || r.top > window.innerHeight * 0.6) {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function render() {
+  document.querySelectorAll('#steps li').forEach(li =>
+    li.classList.toggle('on', li.dataset.step === (state.step === 'done' ? 'plant' : state.step))
+  );
+  buildTree();
+  ({ look: renderLook, tend: renderTend, surrender: renderSurrender, plant: renderPlant, done: renderDone })[state.step]();
+  renderPlanted();
+  renderOldNotice();
+}
+
+function chapterLink(v) {
+  return `/word/?book=${encodeURIComponent(v.b)}&chapter=${v.c}&verse=${v.wv || v.v}`;
+}
+
+// 1 · look
+function renderLook() {
+  $('tend').innerHTML = `
+    <p class="tend-q">What do you see in your heart today?</p>
+    <p class="tend-hint" style="margin-bottom:0">Tap a fruit on the tree that is growing, or a weed in the soil that you recognise.</p>`;
+}
+
+// 2 · tend — his words, then an honest look
+function renderTend() {
+  const f = SpiritStore.fruit(state.fruit);
+  const v = SpiritStore.jesusFor(f);
+  const def = WEEDS[f.deficient], exc = WEEDS[f.excess];
+  const weedChoice = (w, key, side) => `
+    <button class="choice weed" data-weed="${key}">
+      <span>${w.open ? 'something else — yours to name' : escHtml(w.label)}</span>
+      <small>${side}</small>
+    </button>`;
+
+  $('tend').innerHTML = `
+    <p class="tend-name">${f.label}</p>
+    <p class="tend-kind">fruit of the Spirit</p>
+    <div class="his-words">
+      <p>${escHtml(v.text)}</p>
+      <p class="who">the words of Jesus · <a class="vref" href="${chapterLink(v)}">${v.ref} ↗</a></p>
+    </div>
+    <p class="tend-q">With him beside you, what is true of ${f.label} in you today?</p>
+    <div class="choices">
+      <button class="choice grow" id="choiceGrow">
+        <span>it is growing</span><small>plant praise</small>
+      </button>
+      ${weedChoice(def, f.deficient, 'deficient')}
+      ${weedChoice(exc, f.excess, 'excess')}
+    </div>`;
+
+  $('choiceGrow').addEventListener('click', () => go({ step: 'plant', fruit: f.key }));
+  $('tend').querySelectorAll('.choice.weed').forEach(b =>
+    b.addEventListener('click', () => openWeed(f.key, b.dataset.weed))
+  );
+}
+
+// 3 · surrender — given to God, never stored
+function renderSurrender() {
+  const f = SpiritStore.fruit(state.fruit);
+  const w = WEEDS[state.weed];
+
+  $('tend').innerHTML = `
+    <p class="tend-name is-weed">${w.open ? 'and such like' : escHtml(w.label)}</p>
+    <p class="tend-kind">${state.side} of ${f.label}</p>
+    <p class="tend-q">${escHtml(w.prompt)}</p>
+    ${w.open ? `<input class="field" id="weedName" type="text" maxlength="60" placeholder="name it, in your own words" aria-label="Name the weed" />` : ''}
+    <textarea class="field" id="prayer" placeholder="Father, I give you…" aria-label="Your prayer of surrender"></textarea>
+    <p class="not-kept">write it here or pray it aloud · this prayer is given to God and is not kept</p>
+    <div class="his-words">
+      <p>If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness.</p>
+      <p class="who">1 John 1:9</p>
+    </div>
+    <div class="actions">
+      <button class="btn" id="btnGive">give it to God</button>
+      <button class="btn quiet" id="btnBack">back</button>
+    </div>`;
+
+  $('btnGive').addEventListener('click', () => {
+    // the prayer and the weed's name are let go here — nothing is saved
+    go({ step: 'plant', fruit: f.key, released: true });
+  });
+  $('btnBack').addEventListener('click', () => go({ step: 'tend', fruit: f.key }));
+}
+
+// 4 · plant — a word of praise, the only thing kept
+function renderPlant() {
+  const f = SpiritStore.fruit(state.fruit);
+  const released = state.released ? `
+    <img class="release-fly" src="/assets/images/spirit/butterfly.png" alt="" aria-hidden="true" onerror="this.remove()" />
+    <div class="his-words">
+      <p>As far as the east is from the west, so far hath he removed our transgressions from us.</p>
+      <p class="who">Psalm 103:12 · it is released</p>
+    </div>` : '';
+
+  $('tend').innerHTML = `
+    ${released}
+    <p class="tend-name">${f.label}</p>
+    <p class="tend-kind">plant &amp; praise</p>
+    <p class="tend-q">${state.released
+      ? `Now plant something true in its place — a word of praise where ${f.label} will grow.`
+      : escHtml(f.prompt) + ' Plant it as a word of praise.'}</p>
+    <textarea class="field" id="praise" placeholder="Thank you, Lord, for…" aria-label="Your word of praise"></textarea>
+    <p class="err" id="praiseErr"></p>
+    <div class="actions">
+      <button class="btn" id="btnPlant">plant it</button>
+      <button class="btn quiet" id="btnSkip">${state.released ? 'rest here' : 'back'}</button>
+    </div>`;
+
+  $('praise').addEventListener('input', () => { $('praiseErr').textContent = ''; });
+  $('btnPlant').addEventListener('click', () => {
+    const note = $('praise').value.trim();
+    if (!note) {
+      $('praiseErr').textContent = 'Write a few words of praise to plant.';
+      $('praise').focus();
+      return;
+    }
+    SpiritStore.plant(f.key, note);
+    lastPlanted = f.key;
+    go({ step: 'done', fruit: f.key });
+    lastPlanted = null;
+  });
+  $('btnSkip').addEventListener('click', () =>
+    state.released ? go({ step: 'look' }) : go({ step: 'tend', fruit: f.key })
+  );
+}
+
+function renderDone() {
+  const f = SpiritStore.fruit(state.fruit);
+  $('tend').innerHTML = `
+    <p class="tend-name">planted</p>
+    <p class="tend-kind">a new leaf on ${f.label}</p>
+    <div class="his-words">
+      <p>So then neither is he that planteth any thing, neither he that watereth; but God that giveth the increase.</p>
+      <p class="who">1 Corinthians 3:7</p>
+    </div>
+    <div class="actions">
+      <button class="btn quiet" id="btnAgain">tend another</button>
+    </div>`;
+  $('btnAgain').addEventListener('click', () => go({ step: 'look' }));
+}
+
+// ── what is planted ───────────────────────────────────────────
+function renderPlanted() {
+  const all = SpiritStore.plantings().slice().reverse();
+  const wrap = $('planted');
+
+  if (!all.length) {
+    wrap.innerHTML = `<p class="planted-empty">Nothing is planted yet. Your words of praise will gather here.</p>`;
+    return;
+  }
+
+  const shown = plantedExpanded ? all : all.slice(0, PLANTED_PREVIEW);
+  let html = shown.map(p => {
+    const f = SpiritStore.fruit(p.fruit);
+    if (!f) return '';
+    const d = new Date(p.at);
+    const date = isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return `<div class="planted-entry">
+      <div class="planted-head">
+        <span class="planted-name">${f.label}</span>
+        <span class="planted-date">${date}</span>
+      </div>
+      <p class="planted-note">${escHtml(p.note)}</p>
+    </div>`;
+  }).join('');
+
+  if (all.length > PLANTED_PREVIEW) {
+    html += `<button class="text-toggle" id="plantedToggle">${
+      plantedExpanded ? 'show recent ↑' : `see everything planted ↓`}</button>`;
+  }
+  wrap.innerHTML = html;
+
+  const toggle = $('plantedToggle');
+  if (toggle) toggle.addEventListener('click', () => {
+    plantedExpanded = !plantedExpanded;
+    renderPlanted();
+  });
+}
+
+// ── what was kept before the pruning ──────────────────────────
+// Old weed reflections stay in this browser until she lets them go herself.
+let confirmingRelease = false;
+
+function renderOldNotice() {
+  const wrap = $('oldNotice');
+  const n = SpiritStore.oldWeedCount();
+  if (!n) { wrap.innerHTML = ''; return; }
+
+  wrap.innerHTML = `<div class="old-notice">
+    <p>${n} weed reflection${n !== 1 ? 's' : ''} from before ${n !== 1 ? 'are' : 'is'} still kept in this browser.
+       The garden no longer keeps a record of weeds. Your fruit reflections are already planted above.</p>
+    <div class="actions">
+      ${confirmingRelease
+        ? `<button class="btn" id="btnReleaseYes">yes, let them go for good</button>
+           <button class="btn quiet" id="btnReleaseNo">not yet</button>`
+        : `<button class="btn quiet" id="btnRelease">release them</button>`}
+    </div>
+  </div>`;
+
+  if (confirmingRelease) {
+    $('btnReleaseYes').addEventListener('click', () => {
+      SpiritStore.releaseOld();
+      confirmingRelease = false;
+      renderOldNotice();
+    });
+    $('btnReleaseNo').addEventListener('click', () => { confirmingRelease = false; renderOldNotice(); });
+  } else {
+    $('btnRelease').addEventListener('click', () => { confirmingRelease = true; renderOldNotice(); });
+  }
+}
+
+drawPlate();
+render();
+
+})();
 </script>
 
 </body>
